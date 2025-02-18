@@ -5,53 +5,53 @@ const char *in = "./data/gen_input.txt";
 const char *out = "./data/output.txt";
 
 //MARK: - Compare
-int ascending(int *arr, int i, int largest, int n) {
-    if (i < n && arr[i] > arr[largest]) {
-        return i;
+
+int cmp_ascending(int *array, int index, int extreme_index, int size) {
+    if (index < size && array[index] > array[extreme_index]) {
+        return index;
     }
-    return largest;
+    return extreme_index;
 }
 
-int descending(int *arr, int i, int largest, int n) {
-    if (i < n && arr[i] < arr[largest]) {
-        return i;
+int cmp_descending(int *array, int index, int extreme_index, int size) {
+    if (index < size && array[index] < array[extreme_index]) {
+        return index;
     }
-    return largest;
+    return extreme_index;
 }
 
 // MARK: - Heapify
 
-void heapify(int *arr, int n, int i, int (*cmp)(int *, int, int, int)) {
-    int largest = i;
-    int left = 2 * i + 1;
-    int right = 2 * i + 2;
+void heapify(int *array, int size, int root_index, int (*cmp)(int *, int, int, int)) {
+    int largest_index = root_index;
+    int left_child_index = 2 * root_index + 1;
+    int right_child_index = 2 * root_index + 2;
 
-    largest = cmp(arr, left, largest, n);
+    largest_index = cmp(array, left_child_index, largest_index, size);
+    largest_index = cmp(array, right_child_index, largest_index, size);
 
-    largest = cmp(arr, right, largest, n);
+    if (largest_index != root_index) {
+        int temp = array[root_index];
+        array[root_index] = array[largest_index];
+        array[largest_index] = temp;
 
-    if (largest != i) {
-        int temp = arr[i];
-        arr[i] = arr[largest];
-        arr[largest] = temp;
-
-        heapify(arr, n, largest, cmp);
+        heapify(array, size, largest_index, cmp);
     }
 }
 
 // MARK: - Heap Sort
 
-void heap_sort(int *arr, int n, int (*cmp)(int *, int, int, int)) {
-    for (int i = n / 2 - 1; i >= 0; i--) {
-        heapify(arr, n, i, cmp);
+void heap_sort(int *array, int size, int (*cmp)(int *, int, int, int)) {
+    for (int i = size / 2 - 1; i >= 0; i--) {
+        heapify(array, size, i, cmp);
     }
 
-    for (int i = n - 1; i > 0; i--) {
-        int temp = arr[0];
-        arr[0] = arr[i];
-        arr[i] = temp;
+    for (int i = size - 1; i > 0; i--) {
+        int temp = array[0];
+        array[0] = array[i];
+        array[i] = temp;
 
-        heapify(arr, i, 0, cmp);
+        heapify(array, i, 0, cmp);
     }
 }
 
@@ -75,8 +75,8 @@ int main() {
 
     fclose(file);
 
-    // heap_sort(arr, n, ascending);
-    heap_sort(arr, n, descending);
+    // heap_sort(arr, n, cmp_ascending);
+    heap_sort(arr, n, cmp_descending);
 
     FILE *output = fopen(out, "w");
     if (output == NULL) {

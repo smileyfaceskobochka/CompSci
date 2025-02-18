@@ -1,0 +1,78 @@
+\documentclass[oneside,a4paper,14pt]{extarticle}
+\usepackage[T1,T2A,TU]{fontenc}
+\usepackage[a4paper,letterpaper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\usepackage[russian]{babel}
+\usepackage{textcomp}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{mwe}
+\usepackage{wrapfig}
+\usepackage{caption}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage[all]{xy}
+\usepackage[breaklinks]{hyperref}
+\usepackage{titlesec}
+\usepackage{verbatim, fancyvrb}
+
+\titleformat{\section} % Настройка формата заголовков секций
+{\normalsize\bfseries} % Устанавливает размер шрифта на нормальный и делает его жирным
+{\thesection} % Указывает, что номер секции будет отображаться перед заголовком
+{1em} % Устанавливает расстояние между номером секции и заголовком в 1em
+{} % Дополнительные параметры.
+
+\titleformat{\subsection} % Настройка формата заголовков подсекций
+{\normalsize\bfseries} % Устанавливает размер шрифта на нормальный и делает его жирным
+{\thesubsection} % Указывает, что номер подсекции будет отображаться перед заголовком
+{1em} % Устанавливает расстояние между номером подсекции и заголовком в 1em
+{} % Дополнительные параметры.
+
+\titleformat{\subsubsection} % Настройка формата заголовков подподсекций
+{\normalsize\bfseries} % Устанавливает размер шрифта на нормальный и делает его жирным
+{\thesubsection} % Указывает, что номер подподсекции будет отображаться перед заголовком
+{1em} % Устанавливает расстояние между номером подподсекции и заголовком в 1em
+{} % Дополнительные параметры.
+
+\renewcommand\baselinestretch{1.45}\normalsize %межстр интервал
+\setlength{\parindent}{1.25cm} %длина отступа нового абзаца
+
+\begin{document}
+\setcounter{page}{24}
+\newpage\thispagestyle{plain}
+\section*{Приложение 2.1. Програмный код для задания 1.}
+\VerbatimInput[fontsize=\small]{code/1.pas}
+\pagebreak
+\section*{Приложение 2.2. Програмный код для задания 2.}
+\VerbatimInput[fontsize=\small]{code/2.c}
+\pagebreak
+\section*{Приложение 2.3. Програмный код для задания 3.}
+\VerbatimInput[fontsize=\small]{code/3.pas}
+\pagebreak
+\section*{Приложение 2.4. Програмный код для задания 4.}
+\VerbatimInput[fontsize=\small]{code/4.c}
+\section*{Приложение 2.5. Програмный код для задания 5.}
+\VerbatimInput[fontsize=\small]{code/5.pas}
+\pagebreak
+\section*{Приложение 2.6. Програмный код для задания 6.}
+\VerbatimInput[fontsize=\small]{code/6.c}
+\pagebreak
+\section*{Приложение 2.7. Програмный код для задания 7.}
+\VerbatimInput[fontsize=\small]{code/7.pas}
+\pagebreak
+\section*{Приложение 2.8. Програмный код для задания 8.}
+\VerbatimInput[fontsize=\small]{code/8.c}
+\pagebreak
+\section*{Приложение 2.9. Програмный код для задания 9.}
+\VerbatimInput[fontsize=\small]{code/9.pas}
+\pagebreak
+\section*{Приложение 2.10. Програмный код для задания 10.}
+\VerbatimInput[fontsize=\small]{code/10.c}
+\pagebreak
+\section*{Приложение 2.11. Програмный код для задания 11.}
+\VerbatimInput[fontsize=\small]{code/11.pas}
+\pagebreak
+\section*{Приложение 2.12. Програмный код для задания 12.}
+\VerbatimInput[fontsize=\small]{code/12.c}
+\end{document}

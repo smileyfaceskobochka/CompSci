@@ -1,0 +1,447 @@
+\documentclass[oneside,a4paper,14pt]{extarticle} %размер шрифта 14
+\usepackage[T1,T2A]{fontenc}
+\usepackage[a4paper,letterpaper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\usepackage[utf8]{inputenc} %кодировка текста
+\usepackage[russian]{babel} %поддержка русского языка
+\usepackage{textcomp} %текстовые символы
+\usepackage{indentfirst} %корректировка отступов
+\usepackage{graphicx} %работа с изображениям
+\usepackage{mwe} % for blindtext and example-image-a in example
+\usepackage{wrapfig}
+\usepackage{caption}
+\usepackage{amsmath}  % для формул и символов
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage[all]{xy}
+\usepackage[breaklinks]{hyperref}
+%%размеркегляузаголоковразделов 
+\usepackage{titlesec} 
+\titleformat{\section}
+{\normalsize\bfseries} 
+{\thesection} {1em}{} 
+\titleformat{\subsection}
+{\normalsize\bfseries}
+{\thesubsection} {1em}{} 
+\titleformat{\subsubsection}
+{\normalsize\bfseries}
+{\thesubsection} {1em}{}
+
+\renewcommand\baselinestretch{1.33}\normalsize % межстрочный интервал
+\setlength{\parindent}{1.25cm}
+\usepackage{indentfirst}
+
+
+\begin{document}
+    \newpage\thispagestyle{empty}
+    \begin{center}
+        МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ\\
+            РОССИЙСКОЙ ФЕДЕРАЦИИ
+            ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ\\
+            ОБРАЗОВАТЕЛЬНОЕ
+            УЧРЕЖДЕНИЕ ВЫСШЕГО ОБРАЗОВАНИЯ\\
+            «ВЯТСКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ»\\
+            Институт математики и информационных систем\\
+            Факультет автоматики и вычислительной техники\\
+            Кафедра электронных вычислительных машин
+    \end{center}
+    \vspace{20mm}
+    
+    \begin{center}
+        Отчёт по лабораторной работе №2\\
+        по дисциплине\\
+        <<Информатика>>\\
+        <<Арифметические операции в системах счисления>>\\
+    \end{center}
+    \vspace{48mm}
+    
+    Выполнил студент гр. ИВТб-1301-05-00 \hspace{5mm} \rule[-0,5mm]{30mm}{0.15mm}\,/Черкасов А. А./
+    
+    
+    Проверил доцент кафедры ЭВМ \hfill  \rule[-0,5mm]{30mm}{0.15mm}\,/Коржавина А.С./
+    
+    \vfill
+    \begin{center}
+        Киров\\
+        2024
+    \end{center}
+
+    \newpage\thispagestyle{empty}
+    
+   \section{Цель}
+   
+Цель лабораторной работы: закрепить на практике знания о выполнении арифметических операций сложения и умножения чисел в позиционных и непозиционных системах счисления.
+   
+    \section*{Задание}
+    
+ \begin{enumerate}
+     \item В каждом варианте даны 2 пары чисел ($X_1$ и $Y_1$, $X_2$ и $Y_2$).  Выполнить перевод чисел из десятичной системы счисления в двоичную систему счисления (2СС), выполнить сложение и умножение чисел. Проверить полученные результаты.
+\item  В каждом варианте даны 2 пары чисел ($X_3$ и $Y_3$, $X_4$ и $Y_4$). Выполнить перевод чисел из десятичной системы счисления в 16СС.  Выполнить сложение шестнадцатеричных чисел в соответствии с вариантом.\\ 
+Проверить полученные результат.
+\item 
+Выполнить перевод в систему остаточных классов в соответствии с вариантом. В каждом варианте даны 2 числа (А и В) и соответствующие им базисы. Выполнить сложение и умножение чисел. 
+
+Проверить полученные результат.
+
+\item Выполнить перевод в троичную симметричную систему счисления в соответствии с вариантом. В каждом варианте даны 2 числа. Выполнить сложение чисел.\\
+Проверить полученные результат.
+
+\itemВыполнить перевод в двоично-десятичную систему счисления в соответствии с вариантом. В каждом варианте даны 2 пары чисел. Представить первую пару чисел в коде 8421 (код с естественными весами), вторую пару в коде 8421+3.\\
+Выполнить сложение чисел. Проверить полученные результат.
+
+
+ \end{enumerate}
+    \section*{Решение}
+    \begin{enumerate}
+        \item $87 + 73$ и $87 \cdot 73$ в 2СС. Перевод $87$ и $73$:
+            $$
+                \begin{array}[c]{ll}
+                87 = 43\cdot 2 + 1, &\Rightarrow b_{0}=1, \\
+                43 =21 \cdot 2 + 1,  &\Rightarrow b_{1}=1, \\
+                21=10\cdot 2 + 1,   &\Rightarrow b_{2}=1, \\
+                10=5\cdot 2 + 0,    &\Rightarrow b_{3}=0, \\
+                5=2\cdot 2 + 1,     &\Rightarrow b_{4}=1, \\
+                2=1\cdot 2 + 0,      &\Rightarrow b_{5}=0, \\
+                1=0\cdot 2 + 1,       &\Rightarrow b_{6}=1
+                \end{array}
+            $$
+            $$
+                \begin{array}[c]{ll}
+                73 = 36\cdot 2 + 1, &\Rightarrow b_{0}=1, \\
+                36 = 18 \cdot 2 + 0,  &\Rightarrow b_{1}=0, \\
+                18=9\cdot 2 + 0,   &\Rightarrow b_{2}=0, \\
+                9=4\cdot 2 + 1,    &\Rightarrow b_{3}=1, \\
+                4=2\cdot 2 + 0,     &\Rightarrow b_{4}=0, \\
+                2=1\cdot 2 + 0,      &\Rightarrow b_{5}=0, \\
+                1=0\cdot 2 + 1,       &\Rightarrow b_{6}=1
+                \end{array}
+            $$
+            \begin{itemize}
+                \item Сложение:
+            $$    
+                \begin{tabular}{{c}{c}}
+                \texttt{$+$ }&
+                \begin{tabular}{c}
+                \texttt{~~~~~~1010111}\\
+                \texttt{~~~~~~1001001}\\
+                \end{tabular} \\ 
+                \hline
+                & \texttt{~~~~~10100000}\\
+                \end{tabular}
+            $$
+
+            Проверка: $1\cdot2^7+1\cdot2^5 = 87+73 = 160$
+
+                \item Умножение:
+            $$
+                \begin{tabular}{{c}{c}}
+                \texttt{$\times$ }&
+                \begin{tabular}{c}
+                \texttt{~~~~~~~1010111}\\
+                \texttt{~~~~~~~1001001}\\
+                \end{tabular} \\ 
+                \hline
+                & \texttt{~~~~~~~1010111}\\
+                & \texttt{~~~~~0000000~~}\\
+                & \texttt{~~~~0000000~~~}\\
+                & \texttt{~~~1010111~~~~}\\
+                & \texttt{~~0000000~~~~~}\\
+                & \texttt{~0000000~~~~~~}\\
+                & \texttt{1010111~~~~~~~}\\
+                \hline
+                & \texttt{1100011001111}
+                \end{tabular}
+            $$
+
+            Проверка: $2^{12}+2^{11}+2^7+2^6+2^3+2^2+2^1+2^0 = 87 \cdot 73 = 6351$
+
+            \end{itemize}
+
+            $7.3+8.6$ и $7.3\cdot8.6$. Перевод целых частей чисел в 2СС аналогичен.
+
+            $$
+                \begin{array}{cc}
+                    & 7_{10} = 0111_{2}\\
+                    & 8_{10} = 1000_{2}\\ 
+                \end{array}
+            $$
+            Перевод дробной части чисел.
+            $$
+                \begin{array}[c]{ll}
+                    0.3 \cdot 2 = 0.6,   &\Rightarrow b_{-1}=0, \\
+                    0.6 \cdot 2 = 1.2,   &\Rightarrow b_{-2}=1, \\
+                    0.2 \cdot 2 = 0.4,   &\Rightarrow b_{-3}=0, \\
+                    0.4 \cdot 2 = 0.8,   &\Rightarrow b_{-4}=0, \\
+                    0.8 \cdot 2 = 1.6,   &\Rightarrow b_{-5}=1, \\
+                    0.6 \cdot 2 = 1.2,   &\Rightarrow b_{-6}=1, \\
+                    0.2 \cdot 2 = 0.4,   &\Rightarrow b_{-7}=0, \\
+                    0.4 \cdot 2 = 0.8,   &\Rightarrow b_{-8}=0, \\
+                    \cdots
+                \end{array}
+            $$
+            $7.3_{10} = 0111.0[1001]_{2}$\\
+            $8.6_{10} = 1000.[1001]_{2}$
+            \begin{itemize}
+                \item Сложение:
+                $$
+                    \begin{tabular}{{c}{c}}
+                    \texttt{$+$ }&
+                    \begin{tabular}{c}
+                    \texttt{0111.0100}\\
+                    \texttt{1000.1001}\\
+                    \end{tabular} \\ 
+                    \hline
+                    & \texttt{1111.1101}\\
+                    \end{tabular}
+                $$
+                \item Умножение целых частей:
+                $$
+                    \begin{tabular}{{c}{c}}
+                    \texttt{$\times$ }&
+                    \begin{tabular}{c}
+                    \texttt{~~0111}\\
+                    \texttt{~~1000}\\
+                    \end{tabular} \\ 
+                    \hline
+                    & \texttt{111110}\\
+                    \end{tabular}
+                $$
+                \item Умножение дробных частей:
+                $$
+                    \begin{tabular}{{c}{c}}
+                    \texttt{$\times$}&
+                    \begin{tabular}{c}
+                    \texttt{0.0100}\\
+                    \texttt{0.1001}\\
+                    \end{tabular}\\
+                    \hline
+                    & \texttt{~00100} \\
+                    & \texttt{00000~} \\
+                    & \texttt{00000~~~} \\
+                    & \texttt{00100~~~~~} \\
+                    & \texttt{00000~~~~~~~} \\
+                    \hline
+                    & \texttt{0.00100100~~~~~~} \\ 
+                    \end{tabular}
+                $$
+                $7.3_{10}\cdot8.6_{10} = 111110.00100100_{2}$\\
+                Проверка: $2^{5} + 2^{4} + 2^{3} + 2^{2} + 2^{1} + 2^{-3} + 2^{-6} = 62.140625$ и $7.3\cdot8.6 = 62.78$
+            \end{itemize}
+            \pagebreak
+        \item $105 + 120$:
+            \begin{itemize}
+                \item Перевод в 2СС аналогичен 1-й задаче:
+                    $$
+                        \begin{array}{cc}
+                            & 105_{10} = 01101001_{2}\\
+                            & 120_{10} = 01111000_{2}\\
+                        \end{array}
+                    $$
+                \item Перевод из 2СС в 16СС разбивкой битов на группs по 4:
+                    $$
+                        \begin{array}{cc}
+                            & 0110_{2} = 6_{16} | 1001_{2} = 9_{16} = 69_{16}\\
+                            & 0111_{2} = 7_{16} | 1000_{2} = 8_{16} = 78_{16}\\
+                        \end{array}
+                    $$
+                \item Сложение $105_{10} + 120_{10}$ в 16СС:
+                    $$    
+                        \begin{tabular}{{c}{c}}
+                        \texttt{$+$ }&
+                        \begin{tabular}{c}
+                        \texttt{69}\\
+                        \texttt{78}\\
+                        \end{tabular} \\ 
+                        \hline
+                        & \texttt{17}\\
+                        & \texttt{13~~~}\\
+                        \hline
+                        & \texttt{E1} \\
+                        \end{tabular}
+                    $$
+
+                Проверка: $14 \cdot 16^1 + 1 \cdot 16^0 = 105_{10} + 120_{10} = 225_{10}$
+
+                $88_{10} + 80_{10}$:
+                \item Перевод в 2СС:
+                $$
+                    \begin{array}{cc}
+                        & 88_{10} = 01011000_{2}\\
+                        & 80_{10} = 01010000_{2}\\
+                    \end{array}
+                $$
+                \item Перевод из 2СС в 16С:
+                    $$
+                        \begin{array}{cc}
+                            & 0101_{2} = 5_{16} | 1001_{2} = 8_{16} = 58_{16}\\
+                            & 0101_{2} = 5_{16} | 0000_{2} = 0_{16} = 50_{16}\\
+                        \end{array}
+                    $$
+                \item Сложение:
+                    $$    
+                        \begin{tabular}{{c}{c}}
+                        \texttt{$+$ }&
+                        \begin{tabular}{c}
+                        \texttt{58}\\
+                        \texttt{50}\\
+                        \end{tabular} \\ 
+                        \hline
+                        & \texttt{~8}\\
+                        & \texttt{10}\\
+                        \hline
+                        & \texttt{A8} \\
+                        \end{tabular}
+                    $$
+                Проверка: $10 \cdot 16^1 + 8 \cdot 16^0 = 88_{10} + 80_{10} = 168_{10}$
+            \end{itemize}
+        \item $108_{10} + 112_{10}$ в системе остаточных классов:
+            \begin{itemize}
+                \item Перевод $108_{10}$ и $112_{10}$ в систему с остатками \{5, 7, 11, 13\}:
+                    $$
+                        \begin{array}{lr}
+                            108 \textrm{ mod } 5 = 3 \\
+                            108 \textrm{ mod } 7 = 3 \\
+                            108 \textrm{ mod } 11 = 9 \\
+                            108 \textrm{ mod } 13 = 4 \\
+                        \end{array}
+                        \quad B_{1} = \{3, 3, 9, 4\}
+                    $$
+
+                    $$
+                        \begin{array}{lr}
+                            112 \textrm{ mod } 5 = 2 \\
+                            112 \textrm{ mod } 7 = 0 \\
+                            112 \textrm{ mod } 11 = 2 \\
+                            112 \textrm{ mod } 13 = 8 \\
+                        \end{array}
+                        \quad B_{2} = \{2, 0, 2, 8\}
+                    $$
+                \item Сложение:
+                    $$
+                        \begin{tabular}{{c}{c}}
+                        \texttt{$+$ }&
+                        \begin{tabular}{c}
+                        \texttt{\{3, 3, 9, 4\}}\\
+                        \texttt{\{2, 0, 2, 8\}}\\
+                        \end{tabular} \\ 
+                        \hline
+                        & \texttt{\{5, 3, 11, 12\}}\\
+                        \hline
+                        & \texttt{\{0, 3, 0, 12\}} \\
+                        \end{tabular}
+                    $$
+                Проверка: 
+                    $$
+                        108_{10} + 112_{10} = 220_{10} \to B_{res} = \{0, 3, 0, 12\}
+                        \quad B_{res} = B_{1} + B_{2}
+                    $$
+            \end{itemize}
+            \pagebreak
+            \item $111_{10}+118_{10}$ в троичной симметричной СС:
+                \begin{itemize}
+                    \item Перевод в троичную симметричную СС:
+                        $$
+                            \begin{array}[c]{ll}
+                                111 = 37\cdot 3 + 0, &\Rightarrow t_{0}=0, \\
+                                37 = 12 \cdot 3 + 1,  &\Rightarrow t_{1}=p, \\
+                                12=4\cdot 3 + 0,   &\Rightarrow t_{2}=0, \\
+                                4=1\cdot 3 + 1,    &\Rightarrow t_{3}=p, \\
+                                1=0\cdot 3 + 1,     &\Rightarrow t_{4}=p
+                            \end{array}
+                        $$
+                        $111_{10} = pp0p0_{3} \Rightarrow 118_{10} = ppp0p_{3}$
+                    \item Сложение:
+                        $$
+                            \begin{tabular}{{c}{c}}
+                                \texttt{$+$ }&
+                                \begin{tabular}{c}
+                                \texttt{pp0p0}\\
+                                \texttt{ppp0p}\\
+                                \end{tabular} \\ 
+                                \hline
+                                & \texttt{p0nppp~}
+                            \end{tabular}
+                        $$
+                    Проверка: $111_{10}+118_{10}= 1\cdot3^5 -1\cdot3^3+1\cdot3^2+1\cdot3+1\cdot3^0 = 229_{10}$
+                \end{itemize}
+                \pagebreak
+            \item $125_{10} + 73_{10}$ в кодировке 8421:
+            \begin{itemize}
+                \item Перевод чисел:
+                    $$
+                        \begin{array}{c}
+                            125_{10} \Rightarrow 0001|0010|0101_{8421}\\
+                            73_{10} \Rightarrow 0000|0111|0011_{8421}
+                        \end{array}
+                    $$
+                \item Сложение:
+                    $$
+                        \begin{tabular}{{c}{c}}
+                            \texttt{$+$ }&
+                            \begin{tabular}{c}
+                                \texttt{$0001|0010|0101_{8421}$}\\
+                                \texttt{$0000|0111|0011_{8421}$}\\
+                            \end{tabular}\\
+                            \hline
+                            & \texttt{$0001|1001|1000_{8421}$}\\
+                            \hline
+                            & \texttt{$~~1|~~~6|~~~9_{10}$}
+                        \end{tabular}
+                    $$
+
+                Проверка: $125_{10} + 73_{10} = 169_{10}$\\
+            
+            $95_{10} + 74_{10}$ в кодировке 8421+3:
+                \item Перевод:
+                    $$
+                        \begin{array}{c}
+                            95_{10} \Rightarrow 1100|1000_{8421+3}\\
+                            74_{10} \Rightarrow 1010|0111_{8421+3}
+                        \end{array}
+                    $$
+                \item Сложение:
+                    $$
+                        \begin{tabular}{{c}{r}}
+                            \texttt{$+$ }&
+                            \begin{tabular}{c}
+                                \texttt{$1100|1000_{8421+3}$}\\
+                                \texttt{$1010|0111_{8421+3}$}\\
+                            \end{tabular}\\
+                            \hline
+                            & \texttt{$0001|0110|1111~~~~~$}\\
+                            \hline
+                            & \texttt{$0100|1001|1100_{8421+3}$}
+                        \end{tabular}
+                    $$
+            \end{itemize}
+    \end{enumerate}
+    
+   \section*{Выводы}
+   
+   В ходе лабораторной работы были выполнены различные операции с числами в различных системах счисления, что позволило закрепить знания о переводах между системами, а также о выполнении арифметических операций.\\
+    %\newpage
+    %\noindent Достоинства:
+    %\begin{enumerate}
+    %    \item 2СС:
+    %        Легкость выполнения логических операций.
+    %    \item 16СС: 
+    %        Компактность представления больших чисел.
+    %    \item Система остаточных классов: 
+    %        Высокая скорость арифметических операций.
+    %    \item Троичная симметричная система: 
+    %        Более эффективное представление чисел по сравнению с двоичной системой, особенно отрицательных.
+    %    \item Кодировка 8421 (BCD): 
+    %        Простота перевода между двоичной и десятичной системами.
+    %\end{enumerate}
+    %\noindent Недостатки:
+    %\begin{enumerate}
+    %    \item 2СС:
+    %        Увеличение объема данных при представлении больших чисел, а также сложность выполнения арифметических операций с большими числами.
+    %    \item Система остаточных классов: 
+    %        Высокая скорость арифметических операций.
+    %    \item Троичная симметричная система: 
+    %        Более эффективное представление чисел по сравнению с двоичной системой, особенно отрицательных.
+    %    \item Кодировка 8421 (BCD): 
+    %        Простота перевода между двоичной и десятичной системами.
+    %\end{enumerate}
+
+\end{document}

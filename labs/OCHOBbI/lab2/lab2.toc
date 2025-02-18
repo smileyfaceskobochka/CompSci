@@ -1,0 +1,4 @@
+\babel@toc {russian}{}\relax 
+\contentsline {section}{\numberline {1}О друзьях}{3}{}%
+\contentsline {section}{\numberline {A}Название}{3}{}%
+\contentsline {subsection}{\numberline {A.1}Заголовок}{3}{}%

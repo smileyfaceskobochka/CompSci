@@ -1,0 +1,140 @@
+\documentclass[a4paper,14pt]{extarticle}
+
+\usepackage[a4paper,top=5mm,right=5mm,bottom=5mm,left=20mm]{geometry}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{rotating}
+\usepackage{nicematrix}
+\usepackage{enumitem}
+
+\renewcommand{\familydefault}{\sfdefault}
+\renewcommand{\labelenumi}{\arabic{enumi}}
+\renewcommand{\labelenumii}{\arabic{enumi}.\arabic{enumii}}
+\renewcommand{\labelenumiii}{\arabic{enumi}.\arabic{enumii}.\arabic{enumiii}}
+
+\begin{document}
+  
+  \itshape
+  \noindent
+  \begin{NiceTabular}{p{4mm}p{4mm}p{64mm}p{60mm}p{4mm}p{4mm}p{15.6mm}}[hvlines, cell-space-limits=1mm]
+    \rotatebox{90}{\footnotesize № строки} &
+    \Block[m]{1-1}{\rotatebox{90}{\footnotesize Формат}} &
+    \Block[m, c]{1-1}{\large Обозначение} &
+    \Block[m, c]{1-1}{\large Наименование} &
+    \Block[m]{1-1}{\rotatebox{90}{\footnotesize Листов}} &
+    \Block[m]{1-1}{\rotatebox{90}{\footnotesize № экз.}} &
+    \Block[m]{1-1}{\small Примеч} \\
+    
+    \centering 1 & & & \underline{Документация общая} & & & \\
+    \centering 2 & & & Вновь разработанная & & & \\
+    \centering 3 & & & & & & \\
+    \centering 4 & А4 & \centering ТПЖА.712002.051ПЗ & Пояснительная записка & 32 & & \\
+    \centering 5 & & & & & & \\
+    \centering 6 & & & & & & \\
+    \centering 7 & & & \underline{Документация по деталям} & & & \\
+    \centering 8 & & & Вновь разработанная & & & \\
+    \centering 9 & & & & & & \\
+    10 & А2 & \centering ТПЖА.712002.051-01 & Крышка & 1 & & \\
+    11 & А2 & \centering ТПЖА.712002.051-02 & Крышка (отливка) & 1 & & \\
+    12 & & & & & & \\
+    13 & & & & & & \\
+    14 & & & \underline{Документация} & & & \\
+    15 & & & \underline{технологическая} & & & \\
+    16 & & & Вновь разработанная & & & \\
+    17 & & & & & & \\
+    18 & А4 & \centering ТПЖА.02100.05101* & Комплект документов на & & & \\
+    19 & & & единичный технологический & & & \\
+    20 & & & процесс обработки & 12 & & \\
+    21 & А1 & \centering ТПЖА.62141.05101* & Карта наладки на & & & \\
+    22 & & & операцию 115 & 1 & & \\
+    23 & & & & & & \\
+    24 & & & & & & \\
+    25 & & & & & & \\
+    26 & & & & & & \\
+    27 & & & & & &
+  \end{NiceTabular}
+  
+  \vspace{-1px}\noindent
+  \begin{NiceTabular}{p{6mm}m{8mm}p{15mm}p{13mm}m{8mm}p{62.2mm}p{2mm}p{2mm}p{2mm}p{8mm}p{12mm}}[vlines,hlines=2-9]
+    & & & & & \Block{3-6}{\large ТПЖА.712002.051 ДКР} & & & & & \\
+    & & & & & & & & & & \\
+    \footnotesize Изм & \footnotesize Лист & \footnotesize № докум. & \footnotesize Подпись & \footnotesize Дата & & & & & & \\
+    
+    \Block[l]{1-2}{\footnotesize Разраб.} & & \footnotesize Черкасов & & \footnotesize 1.05 & \Block[c]{5-1}{Крышка. Технологический процесс механической обработки} & \Block{1-3}{\footnotesize Литер} & & & \footnotesize Лист & \footnotesize Листов \\
+    
+    \Block[l]{1-2}{\footnotesize Пров.} & & \footnotesize Сергеев & & \footnotesize 5.05 & & \footnotesize П & & & \footnotesize\centering 1 & \begin{center}\footnotesize 2\end{center} \\
+    
+    \Block[l]{1-2}{\footnotesize Т.контр} & & \footnotesize Поляков & & \footnotesize 7.05 & & \Block[c]{3-5}{Кафедра ЭВМ \\Группа ИВТб-1301} & & & & \\
+    
+    \Block[l]{1-2}{\footnotesize Н.контр} & & \footnotesize Куимов & & \footnotesize 9.05 & & & & & & \\
+    
+    \Block[l]{1-2}{\footnotesize Утв.} & & \footnotesize Апатов & & \footnotesize 9.05 & & & & & & \\
+  \end{NiceTabular}
+  
+  \newpage
+  \noindent
+  \begin{tabular}{|p{181.85mm}|}\hline
+    \vspace{3mm}
+    \begin{center}
+      \large{Содержание}\\
+    \end{center}
+    \hspace{5mm}Введение {\leaders\hbox{\hss.\hss}\hfill} 3 \hspace*{3mm}
+    \begin{enumerate}[rightmargin=5mm,itemindent=-2mm,topsep=1mm,parsep=-1mm]
+      \item Кинематический расчет привода {\leaders\hbox{\hss.\hss}\hfill} 4
+      \begin{enumerate}[itemindent=-4mm,parsep=0mm]
+        \item Выбор электрического двигателя{\leaders\hbox{\hss.\hss}\hfill} 4
+        \item Кинематический расчет {\leaders\hbox{\hss.\hss}\hfill} 6
+        \begin{enumerate}[itemindent=0mm,parsep=0mm]
+            \item Определение общих передаточных чисел {\leaders\hbox{\hss.\hss}\hfill} 6
+          \item Выбор чисел зубьев для зубчатых пар {\leaders\hbox{\hss.\hss}\hfill} 8
+        \end{enumerate}
+        \item Определение крутящих моментов на валах привода {\leaders\hbox{\hss.\hss}\hfill} 9
+      \end{enumerate}
+      \item Расчет зубчатой ремённой передачи {\leaders\hbox{\hss.\hss}\hfill} 10
+      \item Расчет цилиндрических зубчатых колёс {\leaders\hbox{\hss.\hss}\hfill} 15
+      \begin{enumerate}[itemindent=-4mm,parsep=0mm]
+        \item Расчет прямозубых передач {\leaders\hbox{\hss.\hss}\hfill} 15
+        \begin{enumerate}[itemindent=0mm,parsep=0mm]
+          \item Выбор материала колёс {\leaders\hbox{\hss.\hss}\hfill} 15
+          \item Проектировочный расчет {\leaders\hbox{\hss.\hss}\hfill} 16
+          \item Проверочный расчет {\leaders\hbox{\hss.\hss}\hfill} 22
+        \end{enumerate}
+      \end{enumerate}
+      \item Расчет валов {\leaders\hbox{\hss.\hss}\hfill} 25
+      \begin{enumerate}[itemindent=-4mm,parsep=0mm]
+        \item Предварительный расчет валов {\leaders\hbox{\hss.\hss}\hfill} 25
+        \item Проверочный расчет {\leaders\hbox{\hss.\hss}\hfill} 28
+        \begin{enumerate}[itemindent=0mm,parsep=0mm]
+          \item Расчет тихоходного вала {\leaders\hbox{\hss.\hss}\hfill} 28
+          \item Расчет промежуточного вала {\leaders\hbox{\hss.\hss}\hfill} 30
+          \item Расчет быстроходного вала {\leaders\hbox{\hss.\hss}\hfill} 32
+        \end{enumerate}
+        \item  Расчет и подбор подшипников {\leaders\hbox{\hss.\hss}\hfill} 33
+      \end{enumerate}
+      \item Подбор муфт {\leaders\hbox{\hss.\hss}\hfill} 35
+      \begin{enumerate}[itemindent=-4mm,parsep=0mm]
+        \item  Подбор и расчёт упругой муфты {\leaders\hbox{\hss.\hss}\hfill} 35
+        \item Подбор многодисковой фрикционной муфты {\leaders\hbox{\hss.\hss}\hfill} 36
+      \end{enumerate}
+    \end{enumerate}
+    \\ \\ \\ \\ \\ \\ \\ \\ \\ \\
+  \end{tabular}
+  
+  \vspace{-1px}\noindent
+  \begin{NiceTabular}{p{6mm}m{8mm}p{15mm}p{13mm}m{8mm}p{62.2mm}p{2mm}p{2mm}p{2mm}p{8mm}p{12mm}}[hvlines]
+    & & & & & \Block{3-6}{\large ТПЖА.712002.051 ДКР} & & & & & \\
+    & & & & & & & & & & \\
+    \footnotesize Изм & \footnotesize Лист & \footnotesize № докум. & \footnotesize Подпись & \footnotesize Дата & & & & & & \\
+    
+    \Block[l]{1-2}{\footnotesize Разраб.} & & \footnotesize Черкасов & & \footnotesize 1.05 & \Block[c]{5-1}{Крышка. Технологический процесс механической обработки} & \Block{1-3}{\footnotesize Литер} & & & \footnotesize Лист & \footnotesize Листов \\
+    
+    \Block[l]{1-2}{\footnotesize Пров.} & & \footnotesize Сергеев & & \footnotesize 5.05 & & \footnotesize П & & & \footnotesize\centering 1 & \begin{center}\footnotesize 2\end{center} \\
+    
+    \Block[l]{1-2}{\footnotesize Т.контр} & & \footnotesize Поляков & & \footnotesize 7.05 & & \Block[c]{3-5}{Кафедра ЭВМ \\Группа ИВТб-1301} & & & & \\
+    
+    \Block[l]{1-2}{\footnotesize Н.контр} & & \footnotesize Куимов & & \footnotesize 9.05 & & & & & & \\
+    
+    \Block[l]{1-2}{\footnotesize Утв.} & & \footnotesize Апатов & & \footnotesize 9.05 & & & & & & \\
+  \end{NiceTabular}
+\end{document}

@@ -1,0 +1,55 @@
+\documentclass[oneside,a4paper,14pt]{extarticle}
+\usepackage[a4paper,letterpaper,top=20mm,bottom=20mm,left=30mm,right=10mm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{cmap}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+
+\begin{document}
+
+$$ 
+    \delta_{ij} =
+    \begin{cases}
+        1, & i=j,\\
+        0, & i\ne j.
+    \end{cases}
+$$
+$$\delta_{ij}=\begin{cases}1,&i=j\\0,&i\ne j\end{cases}$$
+\noindent
+Текст % А
+будет не % комментарий
+прерывен! % пропадет!
+\AA \aa \bf\AA
+\textbf\AA
+\rule[5pt]{25pt}{1pt} \rule[-5pt]{1pt}{10pt} \rule{6pt}{6pt}\\
+$x^2_ij \to x^2_{ij}$\\
+\begin{itshape}
+    Для верстки большого объема текста лучше пользоваться окружениями.
+\end{itshape}
+\textbf{при}мер\\
+{Для начала создадим группу, вложенную в обычный текст.\it \large Здесь изменим шрифт на курсив большого размера. {\sf\small Создадим вложенную группу и установим рубленный шрифт малого размера.} Выйдем из вложенной группы. Восстановился большой курсив.}\\
+
+\newpage
+\title{Заголовок}
+\author{Автор, или перечень авторов}
+\date{Дата создания документа}
+    \begin{abstract}
+        Аннотация ...
+    \end{abstract}
+\maketitle
+
+\section[О друзьях]{Слоны мои друзья!}\label{s:слоны}
+
+\appendix
+\section{Название}\label{}
+Текст приложения\dots
+\subsection{Заголовок}\label{}
+Продолжение\dots
+
+Хахахахах\dots\footnotemark[1]
+
+\footnotetext[1]{Хахаха хихихи}
+\end{document}

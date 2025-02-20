@@ -1,4 +1,5 @@
 ﻿uses crt;
+
 type
   TStringSet = set of string;
 
@@ -11,66 +12,25 @@ var
   Power: Integer; 
 
 procedure ClearAndShowMenu;
-var 
-  AArray := A.ToArray;
-  BArray := B.ToArray;
-  CArray := C.ToArray;
-  DArray := D.ToArray;
-  EArray := E.ToArray;
-  i: Integer;
 begin
   ClrScr;
   WriteLn('Меню:');
   WriteLn('1. Ввести множество A (R - множество действительных чисел)');
-  Write('   Множество A: {');
-  for i := Low(AArray) to High(AArray) do
-  begin
-    Write(AArray[i]);
-    if i < High(AArray) then
-      Write(', ');
-  end;
-  WriteLn('}');
+  WriteLn(A);
   WriteLn('2. Ввести множество B (Q - множество рациональных чисел)');
-  Write('   Множество B: {');
-  for i := Low(BArray) to High(BArray) do
-  begin
-    Write(BArray[i]);
-    if i < High(BArray) then
-      Write(', ');
-  end;
-  WriteLn('}');
+  WriteLn(B);
   WriteLn('3. Ввести множество C (Z - множество целых чисел > 0)');
-  Write('   Множество C: {');
-  for i := Low(CArray) to High(CArray) do
-  begin
-    Write(CArray[i]);
-    if i < High(CArray) then
-      Write(', ');
-  end;
-  WriteLn('}');
+  WriteLn(C);
   WriteLn('4. Ввести множество D (лат.)');
-  Write('   Множество D: {');
-  for i := Low(DArray) to High(DArray) do
-  begin
-    Write(DArray[i]);
-    if i < High(DArray) then
-      Write(', ');
-  end;
-  WriteLn('}');
+  WriteLn(D);
   WriteLn('5. Ввести множество E (рус.)');
-  Write('   Множество E: {');
-  for i := Low(EArray) to High(EArray) do
-  begin
-    Write(EArray[i]);
-    if i < High(EArray) then
-      Write(', ');
-  end;
-  WriteLn('}');
+  WriteLn(E);
   WriteLn('6. Выполнить операции над множествами');
   WriteLn('7. Выход');
   Write('Выберите действие: ');
 end;
 
+// Функция для парсинга рациональных чисел
 function ParseRational(const s: string; var parsedValue: double): boolean;
 var
   posSlash: Integer;
@@ -79,9 +39,7 @@ var
 begin
   posSlash := Pos('/', s);
   if posSlash = 0 then
-  begin
-    ParseRational := TryStrToFloat(s, parsedValue);
-  end
+    ParseRational := TryStrToFloat(s, parsedValue)
   else
   begin
     numerator := Copy(s, 1, posSlash - 1);
@@ -96,6 +54,7 @@ begin
   end;
 end;
 
+// Проверка, является ли символ русской буквой
 function IsRussian(s: string): boolean;
 var
   ch: Char;
@@ -112,6 +71,7 @@ begin
     IsRussian := False;
 end;
 
+// Проверка, является ли символ латинской буквой
 function IsLatin(s: string): boolean;
 var
   ch: Char;
@@ -127,6 +87,7 @@ begin
     IsLatin := False;
 end;
 
+// Извлечение элемента из строки
 function ExtractElement(var input: string): string; 
 var
   posComma, posSpace: Integer; 
@@ -141,16 +102,103 @@ begin
   Delete(input, 1, posComma);
 end;
 
-procedure InputSet(var S: TStringSet; const setName: string; const criteria: string);
+// Вывод множества на экран
+procedure PrintSet(const setName: string; const setArray: array of string);
 var
-  tempInt: Integer; 
+  i: Integer;
+begin
+  Write('   Множество ', setName, ': {');
+  for i := Low(setArray) to High(setArray) do
+  begin
+    Write(setArray[i]);
+    if i < High(setArray) then
+      Write(', ');
+  end;
+  WriteLn('}');
+end;
+
+// Проверка и добавление элемента в множество
+function ValidateAndAddElement(var S: TStringSet; const element: string; const setName: string): boolean;
+var
+  tempInt: Integer;
   tempDouble: Double;
+begin
+  case setName of
+    'A':
+      begin
+        if TryStrToFloat(element, tempDouble) then
+        begin
+          Include(S, element);
+          ValidateAndAddElement := True;
+        end
+        else
+        begin
+          WriteLn('Ошибка: Множество A может содержать только действительные числа.');
+          ValidateAndAddElement := False;
+        end;
+      end;
+    'B':
+      begin
+        if ParseRational(element, tempDouble) then
+        begin
+          Include(S, FloatToStr(tempDouble));
+          ValidateAndAddElement := True;
+        end
+        else
+        begin
+          WriteLn('Ошибка: Множество B может содержать только рациональные числа.');
+          ValidateAndAddElement := False;
+        end;
+      end;
+    'C':
+      begin
+        if TryStrToInt(element, tempInt) and (tempInt > 0) then
+        begin
+          Include(S, element);
+          ValidateAndAddElement := True;
+        end
+        else
+        begin
+          WriteLn('Ошибка: Множество C может содержать только положительные целые числа.');
+          ValidateAndAddElement := False;
+        end;
+      end;
+    'D':
+      begin
+        if IsLatin(element) then
+        begin
+          Include(S, element);
+          ValidateAndAddElement := True;
+        end
+        else
+        begin
+          WriteLn('Ошибка: Множество D может содержать только латинские буквы.');
+          ValidateAndAddElement := False;
+        end;
+      end;
+    'E':
+      begin
+        if IsRussian(element) then
+        begin
+          Include(S, element);
+          ValidateAndAddElement := True;
+        end
+        else
+        begin
+          WriteLn('Ошибка: Множество E может содержать только русские буквы.');
+          ValidateAndAddElement := False;
+        end;
+      end;
+  end;
+end;
+
+// Ввод множества
+procedure InputSet(var S: TStringSet; const setName: string; const criteria: string);
 begin
   Write('Введите элементы множества ', setName, ' (', criteria, '): ');
   ReadLn(input);
   S := [];
-  i := 1;
-  while (i <= 10) and (input <> '') do
+  while input <> '' do
   begin
     element := ExtractElement(input);
     if element = '' then
@@ -158,124 +206,74 @@ begin
       WriteLn('Ошибка: Введена пустая строка.');
       WriteLn('Нажмите любую клавишу для продолжения...');
       ReadKey;
-      Continue; 
+      Continue;
     end;
-    case setName of
-      'A':
-        begin
-          if TryStrToFloat(element, value) then 
-            Include(S, element)
-          else 
-          begin
-            WriteLn('Ошибка: Множество A может содержать только действительные числа.');
-            WriteLn('Нажмите любую клавишу для продолжения...');
-            ReadKey;
-          end;
-        end;
 
-      'B': 
-        begin
-          if ParseRational(element, tempDouble) then Include(S, FloatToStr(tempDouble))
-          else
-          begin
-            WriteLn('Ошибка: Множество B может содержать только рациональные числа.');
-            WriteLn('Нажмите любую клавишу для продолжения...');
-            ReadKey;
-          end;
-        end;
-
-      'C': 
-        begin
-          if TryStrToInt(element, tempInt) and (tempInt > 0) then
-            Include(S, element) 
-          else 
-          begin
-            WriteLn('Ошибка: Множество C может содержать только положительные целые числа.');
-            WriteLn('Нажмите любую клавишу для продолжения...');
-            ReadKey;
-          end;
-        end;
-
-      'D': 
-        begin
-          if IsLatin(element) then Include(S, element)
-          else
-          begin
-            WriteLn('Ошибка: Множество D может содержать только латинские буквы.');
-            WriteLn('Нажмите любую клавишу для продолжения...');
-            ReadKey;
-          end;
-        end;
-
-      'E': 
-        begin
-          if IsRussian(element) then Include(S, element)
-          else
-          begin
-            WriteLn('Ошибка: Множество E может содержать только русские буквы.');
-            WriteLn('Нажмите любую клавишу для продолжения...');
-            ReadKey;
-          end;
-        end;
-      
+    if not ValidateAndAddElement(S, element, setName) then
+    begin
+      WriteLn('Нажмите любую клавишу для продолжения...');
+      ReadKey;
     end;
-    Inc(i);
   end;
 end;
 
+procedure PerformSetOperations;
+var
+  XArray, YArray, KArray: array of string;
+  i: Integer;
+begin
+  X := A * B * C;
+  Y := (E + D) - (E * D);
+  K := X + Y;
+
+  Write('X - пересечение A, B и C = {');
+  XArray := X.ToArray;
+  for i := Low(XArray) to High(XArray) do
+  begin
+    Write(XArray[i]);
+    if i < High(XArray) then
+      Write(', ');
+  end;
+  WriteLn('}');
+
+  Write('Y - симметрическая разность E и D = {');
+  YArray := Y.ToArray;
+  for i := Low(YArray) to High(YArray) do
+  begin
+    Write(YArray[i]);
+    if i < High(YArray) then
+      Write(', ');
+  end;
+  WriteLn('}');
+
+  Write('K - объединение X и Y = {');
+  KArray := K.ToArray;
+  for i := Low(KArray) to High(KArray) do
+  begin
+    Write(KArray[i]);
+    if i < High(KArray) then
+      Write(', ');
+  end;
+  WriteLn('}');
+
+  Power := K.Count;
+  WriteLn('Мощность множества K: ', Power);
+  WriteLn('Нажмите любую клавишу для продолжения...');
+  ReadKey;
+end;
+
+// Основная программа
 begin
   repeat
     ClearAndShowMenu;
     ReadLn(choice);
-
     case choice of
       '1': InputSet(A, 'A', 'R - множество действительных чисел');
       '2': InputSet(B, 'B', 'Q - множество рациональных чисел');
-      '3': InputSet(C, 'C', 'Z - множество целых чисел');
+      '3': InputSet(C, 'C', 'Z - множество целых чисел > 0');
       '4': InputSet(D, 'D', 'лат.');
       '5': InputSet(E, 'E', 'рус.');
-      '6':
-        begin
-          X := A * B * C; 
-          Y := (E + D) - (E * D); 
-          K := X + Y; 
-
-          Write('X - пересечение A, B и C = {');
-          var XArray := X.ToArray;
-          for i := Low(XArray) to High(XArray) do
-          begin
-            Write(XArray[i]);
-            if i < High(XArray) then
-              Write(', ');
-          end;
-          WriteLn('}');
-
-          Write('Y - симметрическая разность E и D = {');
-          var YArray := Y.ToArray;
-          for i := Low(YArray) to High(YArray) do
-          begin
-            Write(YArray[i]);
-            if i < High(YArray) then
-              Write(', ');
-          end;
-          WriteLn('}');
-
-          Write('K - объединение X и Y = {');
-          var KArray := K.ToArray;
-          for i := Low(KArray) to High(KArray) do
-          begin
-            Write(KArray[i]);
-            if i < High(KArray) then
-              Write(', ');
-          end;
-          WriteLn('}');
-          
-          Power := K.Count; 
-          WriteLn('Мощность множества K: ', Power);
-
-          WriteLn('Нажмите любую клавишу для продолжения...');
-          ReadKey;
-        end;
+      '6': PerformSetOperations;
       '7': WriteLn('Программа завершена.');
     else
       WriteLn('Неверный выбор. Попробуйте снова.');

@@ -1,8 +1,8 @@
-PWD c:/Users/livin/Desktop/CompSci/labs/Proga/ProgaTexLab4
+PWD c:/Users/livin/Desktop/CompSci/labs/Proga/lab4
 INPUT c:/Users/livin/.vscode/texlive/2024/texmf.cnf
 INPUT c:/Users/livin/.vscode/texlive/2024/texmf-dist/web2c/texmf.cnf
 INPUT c:/Users/livin/.vscode/texlive/2024/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT c:/Users/livin/Desktop/CompSci/labs/Proga/ProgaTexLab4/report.tex
+INPUT c:/Users/livin/Desktop/CompSci/labs/Proga/lab4/report.tex
 OUTPUT report.log
 INPUT c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/extsizes/extarticle.cls
 INPUT c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/extsizes/extarticle.cls

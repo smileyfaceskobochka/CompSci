@@ -3,7 +3,7 @@
 #include <time.h>
 #include <string.h>
 
-const char *path = "./data/gen_input.txt";
+const char *path = "./data/input.txt";
 
 unsigned int hash_string(const char *str) {
     unsigned int hash = 228;
@@ -48,7 +48,8 @@ int main() {
 
     // Write the random numbers to the file
     for (int i = 0; i < n; i++) {
-        fprintf(file, "%d ", rand());
+        int random_number = (rand() % (RAND_MAX + 1)) - (rand() % (RAND_MAX + 1));
+        fprintf(file, "%d ", random_number);
     }
 
     fclose(file);

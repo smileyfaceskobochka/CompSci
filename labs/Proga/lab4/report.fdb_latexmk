@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1735136383.88272 "c:/Users/livin/Desktop/CompSci/labs/Proga/ProgaTexLab4/report.tex" "report.pdf" "report" 1735136385.5219 0
+["pdflatex"] 1739878353.96138 "c:/Users/livin/Desktop/CompSci/labs/Proga/lab4/report.tex" "report.pdf" "report" 1739878355.94724 0
   "c:/Users/livin/.texlive2024/texmf-var/fonts/tfm/lh/lh-t2a/labx1440.tfm" 1728330280 3304 6a543c07045572737981351171e0505e ""
   "c:/Users/livin/.texlive2024/texmf-var/fonts/tfm/lh/lh-t2a/larm1000.tfm" 1728378575 3220 0e417eaf233b160335902e97259a6c77 ""
   "c:/Users/livin/.texlive2024/texmf-var/fonts/tfm/lh/lh-t2a/larm1200.tfm" 1728388177 3240 c2435f2b5cd66d4930bc29b8df87967e ""
@@ -52,12 +52,12 @@
   "c:/Users/livin/.vscode/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1728329813 5520513 fa75b860fe65a553d5f8f3a0827fe4df ""
   "c:/Users/livin/.vscode/texlive/2024/texmf-var/web2c/pdftex/pdflatex.fmt" 1728329949 3326072 dc2bcc73f764b4477a985f73611de3ac ""
   "c:/Users/livin/.vscode/texlive/2024/texmf.cnf" 1728329792 713 e69b156964470283e0530f5060668171 ""
-  "c:/Users/livin/Desktop/CompSci/labs/Proga/ProgaTexLab4/report.tex" 1735136383 9439 c3c80989b7cd70d5a2fd8a243960ea7f ""
+  "c:/Users/livin/Desktop/CompSci/labs/Proga/lab4/report.tex" 1735136397 9439 c3c80989b7cd70d5a2fd8a243960ea7f ""
   "code/main.c" 1735130511 2551 74280004260c3aa0b6f825cfa7890274 ""
   "pics/flowchart_p1.png" 1735136264 326373 b82173e4e41f72a535d181c5e8412c2d ""
   "pics/flowchart_p2.png" 1735136287 436089 9d91897c69d28d72d4a637cc57edaa9b ""
-  "report.aux" 1735136385 171 895aeae68f01376c785d3039e5b4bce8 "pdflatex"
-  "report.tex" 1735136383 9439 c3c80989b7cd70d5a2fd8a243960ea7f ""
+  "report.aux" 1739878355 171 895aeae68f01376c785d3039e5b4bce8 "pdflatex"
+  "report.tex" 1735136397 9439 c3c80989b7cd70d5a2fd8a243960ea7f ""
   (generated)
   "report.aux"
   "report.log"

@@ -21,7 +21,6 @@ void insertionSort(int *arr, int n, int (*cmp)(int *, int, int)) {
       int j = i - 1;
       int insertIndex = cmp(arr, key, j);
 
-      // Сдвигаем элементы вправо
       while (j >= insertIndex) {
           arr[j + 1] = arr[j];
           j--;

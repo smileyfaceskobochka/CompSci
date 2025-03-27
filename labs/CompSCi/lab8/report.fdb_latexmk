@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1735129178.22881 "c:/Users/livin/Desktop/CompSci/labs/CompSCi/CompSciLab8/report.tex" "report.pdf" "report" 1735129179.58108 0
+["pdflatex"] 1741806506.62351 "c:/Users/livin/Desktop/CompSci/labs/CompSCi/lab8/report.tex" "report.pdf" "report" 1741806510.70645 0
   "c:/Users/livin/.texlive2024/texmf-var/fonts/tfm/lh/lh-t2a/labx1440.tfm" 1728330280 3304 6a543c07045572737981351171e0505e ""
   "c:/Users/livin/.texlive2024/texmf-var/fonts/tfm/lh/lh-t2a/larm1000.tfm" 1728378575 3220 0e417eaf233b160335902e97259a6c77 ""
   "c:/Users/livin/.texlive2024/texmf-var/fonts/tfm/lh/lh-t2a/larm1440.tfm" 1728330277 3256 3daaa33cf35cf3f354983aa3214ecd7f ""
@@ -194,7 +194,7 @@
   "c:/Users/livin/.vscode/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1728329813 5520513 fa75b860fe65a553d5f8f3a0827fe4df ""
   "c:/Users/livin/.vscode/texlive/2024/texmf-var/web2c/pdftex/pdflatex.fmt" 1728329949 3326072 dc2bcc73f764b4477a985f73611de3ac ""
   "c:/Users/livin/.vscode/texlive/2024/texmf.cnf" 1728329792 713 e69b156964470283e0530f5060668171 ""
-  "c:/Users/livin/Desktop/CompSci/labs/CompSCi/CompSciLab8/report.tex" 1735129176 9396 36d83874a1ef0328bd281f7a1e4f3b27 ""
+  "c:/Users/livin/Desktop/CompSci/labs/CompSCi/lab8/report.tex" 1735129176 9396 36d83874a1ef0328bd281f7a1e4f3b27 ""
   "pics/1_1.png" 1734734665 18228 8839436170a34474da8f20aca5d4c7b1 ""
   "pics/1_2.png" 1734734639 16394 e283a30c5a9707f64e73173ff73372e3 ""
   "pics/2.png" 1734734893 18951 0e5e0b2726ffda23685553459aaa7cb9 ""
@@ -202,8 +202,8 @@
   "pics/4.png" 1734735399 31366 06f727cb28e1b02b9ccc39e77dd2c4e9 ""
   "pics/5.png" 1734735640 45877 e6313d8ab519a2c3d579b092f1b1baec ""
   "pics/5_2.png" 1734735722 128376 c2ff61c724e4697c62c4fd63a6014445 ""
-  "report.aux" 1735129179 300 b5a1c3086257989c180c312edde7fddb "pdflatex"
-  "report.out" 1735129179 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "report.aux" 1741806510 300 b5a1c3086257989c180c312edde7fddb "pdflatex"
+  "report.out" 1741806510 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
   "report.tex" 1735129176 9396 36d83874a1ef0328bd281f7a1e4f3b27 ""
   (generated)
   "report.aux"

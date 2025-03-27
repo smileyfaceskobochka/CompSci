@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.10.7)  25 DEC 2024 15:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.10.7)  12 MAR 2025 22:08
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**c:/Users/livin/Desktop/CompSci/labs/CompSCi/CompSciLab8/report.tex
-(c:/Users/livin/Desktop/CompSci/labs/CompSCi/CompSciLab8/report.tex
+**c:/Users/livin/Desktop/CompSci/labs/CompSCi/lab8/report.tex
+(c:/Users/livin/Desktop/CompSci/labs/CompSCi/lab8/report.tex
 LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-09-10>
 (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/extsizes/extarticle.cls
@@ -1126,12 +1126,12 @@ Package rerunfilecheck Info: File `report.out' has not changed.
  ) 
 Here is how much of TeX's memory you used:
  29957 strings out of 473579
- 571689 string characters out of 5722203
+ 571668 string characters out of 5722203
  1084775 words of memory out of 5000000
  52356 multiletter control sequences out of 15000+600000
  564538 words of font info for 59 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 94i,7n,107p,3306b,464s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 94i,7n,107p,3299b,464s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/Users/livin/.vscode/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/Users/livin/.vscode/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/Users/livin/.vscode/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb>
 Output written on report.pdf (8 pages, 355082 bytes).
 PDF statistics:

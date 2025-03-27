@@ -30,7 +30,6 @@ begin
   Write('Выберите действие: ');
 end;
 
-// Функция для парсинга рациональных чисел
 function ParseRational(const s: string; var parsedValue: double): boolean;
 var
   posSlash: Integer;
@@ -44,7 +43,8 @@ begin
   begin
     numerator := Copy(s, 1, posSlash - 1);
     denominator := Copy(s, posSlash + 1, Length(s) - posSlash);
-    if TryStrToFloat(numerator, num) and TryStrToFloat(denominator, den) and (den <> 0) then
+    if TryStrToFloat(numerator, num) and TryStrToFloat(denominator, den) 
+      and (den <> 0) then
     begin
       parsedValue := num / den;
       ParseRational := True;
@@ -54,7 +54,6 @@ begin
   end;
 end;
 
-// Проверка, является ли символ русской буквой
 function IsRussian(s: string): boolean;
 var
   ch: Char;
@@ -71,7 +70,6 @@ begin
     IsRussian := False;
 end;
 
-// Проверка, является ли символ латинской буквой
 function IsLatin(s: string): boolean;
 var
   ch: Char;
@@ -87,7 +85,6 @@ begin
     IsLatin := False;
 end;
 
-// Извлечение элемента из строки
 function ExtractElement(var input: string): string; 
 var
   posComma, posSpace: Integer; 
@@ -102,7 +99,6 @@ begin
   Delete(input, 1, posComma);
 end;
 
-// Вывод множества на экран
 procedure PrintSet(const setName: string; const setArray: array of string);
 var
   i: Integer;
@@ -117,8 +113,8 @@ begin
   WriteLn('}');
 end;
 
-// Проверка и добавление элемента в множество
-function ValidateAndAddElement(var S: TStringSet; const element: string; const setName: string): boolean;
+function ValidateAndAddElement(var S: TStringSet; const element: string;
+  const setName: string): boolean;
 var
   tempInt: Integer;
   tempDouble: Double;
@@ -159,7 +155,8 @@ begin
         end
         else
         begin
-          WriteLn('Ошибка: Множество C может содержать только положительные целые числа.');
+          WriteLn('Ошибка: Множество C может содержать 
+          только положительные целые числа.');
           ValidateAndAddElement := False;
         end;
       end;
@@ -192,7 +189,6 @@ begin
   end;
 end;
 
-// Ввод множества
 procedure InputSet(var S: TStringSet; const setName: string; const criteria: string);
 begin
   Write('Введите элементы множества ', setName, ' (', criteria, '): ');
@@ -262,7 +258,6 @@ begin
   ReadKey;
 end;
 
-// Основная программа
 begin
   repeat
     ClearAndShowMenu;

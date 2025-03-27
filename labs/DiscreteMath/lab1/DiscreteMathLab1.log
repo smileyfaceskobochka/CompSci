@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.10.7)  18 FEB 2025 00:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.10.7)  3 MAR 2025 18:57
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1092,13 +1092,17 @@ File: t2acmtt.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
 [8]
 
 [9]
+
+[10]
+
+[11]
 Underfull \hbox (badness 10000) in paragraph at lines 126--127
 
  []
 
 
 
-[10] (./DiscreteMathLab1.aux)
+[12] (./DiscreteMathLab1.aux)
  ***********
 LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-09-10>
@@ -1107,18 +1111,18 @@ Package rerunfilecheck Info: File `DiscreteMathLab1.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 30833 strings out of 473579
- 589034 string characters out of 5722203
- 1110388 words of memory out of 5000000
+ 30835 strings out of 473579
+ 589048 string characters out of 5722203
+ 1110389 words of memory out of 5000000
  53224 multiletter control sequences out of 15000+600000
  565650 words of font info for 61 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  94i,11n,107p,3314b,663s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/Users/livin/.vscode/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><c:/Users/livin/.vscode/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/livin/.vscode/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/Users/livin/.vscode/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/Users/livin/.vscode/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/Users/livin/.vscode/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb><c:/Users/livin/.vscode/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on DiscreteMathLab1.pdf (10 pages, 132600 bytes).
+Output written on DiscreteMathLab1.pdf (12 pages, 133660 bytes).
 PDF statistics:
- 98 PDF objects out of 1000 (max. 8388607)
- 71 compressed objects within 1 object stream
- 16 named destinations out of 1000 (max. 500000)
+ 106 PDF objects out of 1000 (max. 8388607)
+ 77 compressed objects within 1 object stream
+ 18 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 

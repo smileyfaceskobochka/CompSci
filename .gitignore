@@ -2,3 +2,7 @@
 *.o
 *.pdb
 .vscode
+target
+graph.dot
+graph.png
+cargo.lock

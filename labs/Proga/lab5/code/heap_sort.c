@@ -4,8 +4,6 @@
 const char *in = "./data/gen_input.txt";
 const char *out = "./data/output.txt";
 
-//MARK: - Compare
-
 int cmp_ascending(int *array, int index, int extreme_index, int size) {
     if (index < size && array[index] > array[extreme_index]) {
         return index;
@@ -19,8 +17,6 @@ int cmp_descending(int *array, int index, int extreme_index, int size) {
     }
     return extreme_index;
 }
-
-// MARK: - Heapify
 
 void heapify(int *array, int size, int root_index, int (*cmp)(int *, int, int, int)) {
     int largest_index = root_index;
@@ -38,8 +34,6 @@ void heapify(int *array, int size, int root_index, int (*cmp)(int *, int, int, i
         heapify(array, size, largest_index, cmp);
     }
 }
-
-// MARK: - Heap Sort
 
 void heap_sort(int *array, int size, int (*cmp)(int *, int, int, int)) {
     for (int i = size / 2 - 1; i >= 0; i--) {
@@ -90,9 +84,6 @@ int main() {
 
     fclose(output);
     free(arr);
-
-    system("code ./data/gen_input.txt");
-    system("code ./data/output.txt");
 
     return 0;
 }

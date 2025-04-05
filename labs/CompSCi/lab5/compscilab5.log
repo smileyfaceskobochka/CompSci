@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.10.7)  20 DEC 2024 00:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.10.7)  4 APR 2025 23:03
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**c:/Users/livin/Desktop/CompSci/labs/CompSCi/CompSciLab5/compscilab5.tex
-(c:/Users/livin/Desktop/CompSci/labs/CompSCi/CompSciLab5/compscilab5.tex
+**c:/Users/livin/Desktop/CompSci/labs/CompSCi/lab5/compscilab5.tex
+(c:/Users/livin/Desktop/CompSci/labs/CompSCi/lab5/compscilab5.tex
 LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-09-10>
 (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/extsizes/extarticle.cls
@@ -654,6 +654,109 @@ Package: fancyvrb 2024/01/20 4.5c verbatim text (tvz,hv)
 \c@FancyVerbLine=\count333
 \FV@StepNumber=\count334
 \FV@OutFile=\write4
+) (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/minted/minted.sty
+Package: minted 2024/10/03 v3.1.1 Yet another Pygments shim for LaTeX
+ (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/generic/catchfile/catchfile.sty
+Package: catchfile 2019/12/09 v1.8 Catch the contents of a file (HO)
+ (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/generic/etexcmds/etexcmds.sty
+Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
+)) (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/fvextra/fvextra.sty
+Package: fvextra 2024/09/14 v1.8.0 fvextra - extensions and patches for fancyvrb
+ (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/upquote/upquote.sty
+Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verbatim
+) (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/lineno/lineno.sty
+Package: lineno 2023/05/20 line numbers on paragraphs v5.3
+\linenopenalty=\count335
+\output=\toks41
+\linenoprevgraf=\count336
+\linenumbersep=\dimen272
+\linenumberwidth=\dimen273
+\c@linenumber=\count337
+\c@pagewiselinenumber=\count338
+\c@LN@truepage=\count339
+\c@internallinenumber=\count340
+\c@internallinenumbers=\count341
+\quotelinenumbersep=\dimen274
+\bframerule=\dimen275
+\bframesep=\dimen276
+\bframebox=\box62
+\linenoamsmath@ams@eqpen=\count342
+LaTeX Info: Redefining \\ on input line 3180.
+)
+\c@FancyVerbWriteLine=\count343
+\c@FancyVerbBufferIndex=\count344
+\c@FancyVerbBufferLength=\count345
+\c@FancyVerbBufferLine=\count346
+\c@FV@oldbufferlength=\count347
+\c@FV@TrueTabGroupLevel=\count348
+\c@FV@TrueTabCounter=\count349
+\FV@TabBox@Group=\box63
+\FV@TmpLength=\skip60
+\c@FV@HighlightLinesStart=\count350
+\c@FV@HighlightLinesStop=\count351
+\FV@LoopCount=\count352
+\FV@NCharsBox=\box64
+\FV@BreakIndent=\dimen277
+\FV@BreakIndentNChars=\count353
+\FV@BreakSymbolSepLeft=\dimen278
+\FV@BreakSymbolSepLeftNChars=\count354
+\FV@BreakSymbolSepRight=\dimen279
+\FV@BreakSymbolSepRightNChars=\count355
+\FV@BreakSymbolIndentLeft=\dimen280
+\FV@BreakSymbolIndentLeftNChars=\count356
+\FV@BreakSymbolIndentRight=\dimen281
+\FV@BreakSymbolIndentRightNChars=\count357
+\c@FancyVerbLineBreakLast=\count358
+\FV@LineBox=\box65
+\FV@LineIndentBox=\box66
+\c@FV@BreakBufferDepth=\count359
+\FV@LineWidth=\dimen282
+) (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/latex2pydata/latex2pydata.sty
+Package: latex2pydata 2024/05/16 v0.2.0 latex2pydata - write data to file in Python literal format
+\c@pydata@bufferindex=\count360
+\c@pydata@defaultbufferlength=\count361
+) (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/pgf/utilities/pgfkeys.sty (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
+\pgfkeys@pathtoks=\toks42
+\pgfkeys@temptoks=\toks43
+ (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/generic/pgf/utilities/pgfkeyslibraryfiltered.code.tex
+\pgfkeys@tmptoks=\toks44
+))) (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/pgfopts/pgfopts.sty
+Package: pgfopts 2014/07/10 v2.1a LaTeX package options with pgfkeys
+\pgfopts@list@add@a@toks=\toks45
+\pgfopts@list@add@b@toks=\toks46
+) (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/tools/shellesc.sty
+Package: shellesc 2023/07/08 v1.0d unified shell escape interface for LaTeX
+Package shellesc Info: Restricted shell escape enabled on input line 77.
+) (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count362
+\float@exts=\toks47
+\float@box=\box67
+\@float@everytoks=\toks48
+\@floatcapt=\box68
+)
+\c@minted@tmpcnt=\count363
+\c@minted@tmpcodebufferlength=\count364
+\c@minted@numcachefiles=\count365
+\c@minted@FancyVerbLineTemp=\count366
+\@float@every@listing=\toks49
+\c@listing=\count367
+) (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2024/09/29 v3.02 LaTeX color extensions (UK)
+ (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: pdftex.def on input line 274.
+ (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/graphics/mathcolor.ltx)
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1349.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1353.
+Package xcolor Info: Model `RGB' extended on input line 1365.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1367.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1370.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1371.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1372.
 ) (./compscilab5.aux
 LaTeX Font Info:    Trying to load font information for T2A+cmr on input line 8.
  (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/cyrillic/t2acmr.fd
@@ -661,26 +764,26 @@ File: t2acmr.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
 ))
 \openout1 = `compscilab5.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for T2A/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for T2A/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -716,20 +819,20 @@ LaTeX Font Info:    ... okay on input line 41.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Info: Redefining \th on input line 41.
+LaTeX Info: Redefining \th on input line 42.
 (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count335
-\scratchdimen=\dimen272
-\scratchbox=\box62
-\nofMPsegments=\count336
-\nofMParguments=\count337
-\everyMPshowfont=\toks41
-\MPscratchCnt=\count338
-\MPscratchDim=\dimen273
-\MPnumerator=\count339
-\makeMPintoPDFobject=\count340
-\everyMPtoPDFconversion=\toks42
+\scratchcounter=\count368
+\scratchdimen=\dimen283
+\scratchbox=\box69
+\nofMPsegments=\count369
+\nofMParguments=\count370
+\everyMPshowfont=\toks50
+\MPscratchCnt=\count371
+\MPscratchDim=\dimen284
+\MPnumerator=\count372
+\makeMPintoPDFobject=\count373
+\everyMPtoPDFconversion=\toks51
 ) (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
@@ -737,18 +840,19 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
 Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 41.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 42.
  (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 41.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 42.
  (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Package xypdf Info: Line width: 0.57597pt on input line 41.
-Package hyperref Info: Link coloring OFF on input line 41.
+Package xypdf Info: Line width: 0.57597pt on input line 42.
+Package hyperref Info: Link coloring OFF on input line 42.
  (./compscilab5.out) (./compscilab5.out)
 \@outlinefile=\write5
 \openout5 = `compscilab5.out'.
@@ -765,12 +869,12 @@ Package hyperref Info: Link coloring OFF on input line 41.
 <pics/5_flowchart_p1.png, id=23, 2424.05624pt x 3462.9375pt>
 File: pics/5_flowchart_p1.png Graphic file (type png)
 <use pics/5_flowchart_p1.png>
-Package pdftex.def Info: pics/5_flowchart_p1.png  used on input line 138.
+Package pdftex.def Info: pics/5_flowchart_p1.png  used on input line 139.
 (pdftex.def)             Requested size: 357.60068pt x 510.86923pt.
 <pics/5_flowchart_p2.png, id=25, 2354.7975pt x 3098.57625pt>
 File: pics/5_flowchart_p2.png Graphic file (type png)
 <use pics/5_flowchart_p2.png>
-Package pdftex.def Info: pics/5_flowchart_p2.png  used on input line 144.
+Package pdftex.def Info: pics/5_flowchart_p2.png  used on input line 145.
 (pdftex.def)             Requested size: 465.88486pt x 613.03893pt.
 
 
@@ -779,7 +883,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 <pics/5_flowchart_p3.png, id=26, 2384.91pt x 3041.3625pt>
 File: pics/5_flowchart_p3.png Graphic file (type png)
 <use pics/5_flowchart_p3.png>
-Package pdftex.def Info: pics/5_flowchart_p3.png  used on input line 150.
+Package pdftex.def Info: pics/5_flowchart_p3.png  used on input line 151.
 (pdftex.def)             Requested size: 480.7218pt x 613.03893pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -799,42 +903,54 @@ LaTeX Warning: Text page 6 contains only floats.
 
 
 [6 <./pics/5_flowchart_p3.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 156--160
+Underfull \hbox (badness 10000) in paragraph at lines 157--161
 
  []
 
-LaTeX Font Info:    Trying to load font information for T2A+cmtt on input line 162.
-(c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/cyrillic/t2acmtt.fd
+\pydata@fh@_DD70CF7776437385FA5B2975C5D4C9C7.data.minted=\write6
+\openout6 = `_DD70CF7776437385FA5B2975C5D4C9C7.data.minted'.
+
+runsystem(latexminted config  --timestamp 20250404230343 DD70CF7776437385FA5B2975C5D4C9C7)...executed safely (allowed).
+
+(./_DD70CF7776437385FA5B2975C5D4C9C7.config.minted)
+runsystem(latexminted cleanconfig  --timestamp 20250404230343 DD70CF7776437385FA5B2975C5D4C9C7)...executed safely (allowed).
+
+ (./_minted/default.style.minted)
+\c@minted@tmpdatabufferlength=\count374
+ (./_minted/F02B579EE2C1645265326CC2371E4E98.highlight.minted
+LaTeX Font Info:    Trying to load font information for T2A+cmtt on input line 1.
+ (c:/Users/livin/.vscode/texlive/2024/texmf-dist/tex/latex/cyrillic/t2acmtt.fd
 File: t2acmtt.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
 )
+LaTeX Font Info:    Font shape `T2A/cmtt/bx/n' in size <14> not available
+(Font)              Font shape `T2A/cmtt/m/n' tried instead on input line 4.
+)
 
-[7]
-
-[8]
-
-[9]
-
-[10] (./compscilab5.aux)
+[7] (./compscilab5.aux)
  ***********
 LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-09-10>
  ***********
 Package rerunfilecheck Info: File `compscilab5.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
+\openout6 = `_DD70CF7776437385FA5B2975C5D4C9C7.data.minted'.
+
+runsystem(latexminted clean  --timestamp 20250404230343 DD70CF7776437385FA5B2975C5D4C9C7)...executed safely (allowed).
+
  ) 
 Here is how much of TeX's memory you used:
- 17994 strings out of 473579
- 283646 string characters out of 5722203
- 819619 words of memory out of 5000000
- 40599 multiletter control sequences out of 15000+600000
- 566418 words of font info for 62 fonts, out of 8000000 for 9000
+ 22306 strings out of 473579
+ 402155 string characters out of 5722203
+ 1042368 words of memory out of 5000000
+ 44846 multiletter control sequences out of 15000+600000
+ 565926 words of font info for 62 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 94i,7n,107p,3311b,626s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/Users/livin/.vscode/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/Users/livin/.vscode/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/Users/livin/.vscode/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb><c:/Users/livin/.vscode/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on compscilab5.pdf (10 pages, 624902 bytes).
+ 94i,7n,107p,3304b,599s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<c:/Users/livin/.vscode/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/Users/livin/.vscode/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfit1440.pfb><c:/Users/livin/.vscode/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/Users/livin/.vscode/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb><c:/Users/livin/.vscode/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sftt1440.pfb>
+Output written on compscilab5.pdf (7 pages, 629260 bytes).
 PDF statistics:
- 88 PDF objects out of 1000 (max. 8388607)
- 61 compressed objects within 1 object stream
- 17 named destinations out of 1000 (max. 500000)
+ 81 PDF objects out of 1000 (max. 8388607)
+ 55 compressed objects within 1 object stream
+ 14 named destinations out of 1000 (max. 500000)
  16 words of extra memory for PDF output out of 10000 (max. 10000000)
 

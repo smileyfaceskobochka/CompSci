@@ -16,6 +16,7 @@
 \usepackage[breaklinks]{hyperref}
 \usepackage{titlesec}
 \usepackage{verbatim, fancyvrb}
+\usepackage{minted, fancyvrb}
 
 \titleformat{\section} % Настройка формата заголовков секций
 {\normalsize\bfseries} % Устанавливает размер шрифта на нормальный и делает его жирным
@@ -159,6 +160,25 @@
 представления. Тестирование подтвердило их соответствие требованиям.\\
 
 \section*{Приложеие А1}
-\VerbatimInput[fontsize=\small]{code/main.c}
+\begingroup
+\fontsize{14pt}{10pt}\selectfont
+\linespread{1}
+\begin{minted}{Arduino}
+#define BUZZER_PIN 3
+#define LDR_PIN A0
+int notes[] = {261, 277, 293, 311, 329, 349, 369, 392, 415, 440, 466, 493};
+int size = sizeof(notes) / sizeof(int);
+void setup() {
+pinMode(BUZZER_PIN, OUTPUT);
+}
+void loop() {
+int val, index;
+val = constrain(analogRead(LDR_PIN), 49, 150);
+index = map(val, 49, 150, 0, size);
+tone(BUZZER_PIN, notes[index]);
+}
+\end{minted}
+\endgroup
+
 
 \end{document}

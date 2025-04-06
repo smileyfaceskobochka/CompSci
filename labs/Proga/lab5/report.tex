@@ -78,28 +78,32 @@
 
 \section*{Решение}
 
-Схема алгоритма решения задач представлена на рисунках 1.1 и 1.2. Исходный код представлен в Приложении А1.
+Схемы алгоритмов решения задач представлена на рисунках 1 и 2. Исходный код представлен в Приложении А1.
 
 \newpage
 \begin{figure}[!ht]
 	\centering
-	% \includegraphics[height=0.9\textheight]{pics/flowchart_p1.png}
-	\caption*{Рисунок 1.1 - Схема алгоритма.}
+	\includegraphics[height=0.9\textheight]{pics/flowchart1.png}
+	\caption*{Рисунок 1 - Схема алгоритма Задания 1.}
 \end{figure}
 
 \begin{figure}[!ht]
 	\centering
-	% \includegraphics[height=0.9\textheight]{pics/flowchart_p2.png}
-	\caption*{Рисунок 1.2 - Схема алгоритма.}
+	\includegraphics[height=0.9\textheight]{pics/flowchart2.png}
+	\caption*{Рисунок 2 - Схема алгоритма Задания 2.}
 \end{figure}
 
 \section*{Вывод}
 
-В ходе выполнения работы изучены основы работы с двусвязным списком, реализованы операции добавления и удаления элементов, а также организован интерактивный пользовательский интерфейс для управления списком.
+\setminted{style = algol, fontsize = \small} % https://pygments.org/styles/
 
+В результате работы были реализованы алгоритмы сортировки вставками и пирамидальной сортировки с поддержкой настраиваемого компаратора и обработки текстовых файлов, что позволило оценить их эффективность и сравнить скорость работы.
 \newpage
 \section*{Приложение А1. Исходный код}
 
-\inputminted[fontsize = \small]{C}{code/heap_sort.c}
+\inputminted{C}{code/heap_sort.c}
+
+\section*{Приложение А2. Исходный код}
+\inputminted{C}{code/insertion_sort.c}
 
 \end{document}

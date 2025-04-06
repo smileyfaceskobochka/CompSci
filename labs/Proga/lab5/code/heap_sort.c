@@ -35,12 +35,12 @@ void heapify(int *array, int size, int root_index, int (*cmp)(int *, int, int, i
     }
 }
 
-void heap_sort(int *array, int size, int (*cmp)(int *, int, int, int)) {
-    for (int i = size / 2 - 1; i >= 0; i--) {
-        heapify(array, size, i, cmp);
+void heap_sort(int *array, int n, int (*cmp)(int *, int, int, int)) {
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        heapify(array, n, i, cmp);
     }
 
-    for (int i = size - 1; i > 0; i--) {
+    for (int i = n - 1; i > 0; i--) {
         int temp = array[0];
         array[0] = array[i];
         array[i] = temp;

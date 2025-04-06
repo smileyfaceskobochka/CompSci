@@ -7,9 +7,10 @@ graph.dot
 graph.png
 cargo.lock
 *.bkp
-.aux
-.fdb_latexmk
+*.aux
+*.fdb_latexmk
 *.fls
 *.log
 *.out
 *.synctex.gz
+*.log

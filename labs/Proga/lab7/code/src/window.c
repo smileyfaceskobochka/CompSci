@@ -1,51 +1,75 @@
 #include "window.h"
 
-#include <SDL3/SDL.h>
-#include <stdio.h>
+SDL_Window* window = NULL;
+SDL_Renderer* renderer = NULL;
 
-int create_window(const WindowConfig *config) {
-  // Init SDL
-  int init_result = SDL_Init(SDL_INIT_VIDEO);
-  const char *err = SDL_GetError();
-  if (init_result < 0 && strlen(err) > 0) {
-    fprintf(stderr, "SDL_Init Error: %s\n", err);
+int init_window(WindowConfig *config) {
+  int init_res = SDL_Init(SDL_INIT_VIDEO);
+  const char *err_msg = SDL_GetError();
+  if (init_res != 0 && strlen(err_msg) > 0) {
+    fprintf(stderr, "SDL_Init Error: %s\n", err_msg);
     return 1;
   }
 
-  // Create window
-  SDL_Window *window = SDL_CreateWindow(
-    config -> title,
-    config -> width,
-    config -> height,
-    SDL_WINDOW_RESIZABLE // or other flags as needed
+  window = SDL_CreateWindow(
+    config->w_title,
+    config->w_width,
+    config->w_height,
+    SDL_WINDOW_RESIZABLE
   );
-  if (!window) {
+
+  if (window == NULL) {
     fprintf(stderr, "SDL_CreateWindow Error: %s\n", SDL_GetError());
     SDL_Quit();
     return 1;
   }
 
-  // Create renderer
-  SDL_Renderer *renderer = SDL_CreateRenderer(window, NULL);
-  if (!renderer) {
-    fprintf(stderr, "SDL Error: %s\n", SDL_GetError());
+  renderer = SDL_CreateRenderer(window, "software"); // direct3d11 direct3d12 direct3d opengl opengles2 vulkan gpu software 
+  if (renderer == NULL) {
+    fprintf(stderr, "SDL_CreateRenderer Error: %s\n", SDL_GetError());
+    SDL_DestroyWindow(window);
     SDL_Quit();
     return 1;
   }
-  // Set background color
-  SDL_SetRenderDrawColor(renderer, 
-    config->bg_color.r,
-    config->bg_color.g,
-    config->bg_color.b,
-    config->bg_color.a
-  );
-  SDL_RenderClear(renderer);
-  SDL_RenderPresent(renderer);
-  SDL_Delay(5000);
 
-  // Очистка ресурсов
-  SDL_DestroyRenderer(renderer);
-  SDL_DestroyWindow(window);
-  SDL_Quit();
   return 0;
+}
+
+void handle_events() {
+  SDL_Event event;
+  while (SDL_PollEvent(&event)) {
+    if (event.type == SDL_EVENT_QUIT) {
+      destroy_window();
+      SDL_Quit();
+      exit(0);
+    }
+  }
+}
+
+void update_loop() {
+  while (true) {
+    handle_events();
+
+    // Очистка буфера
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Чёрный цвет
+    SDL_RenderClear(renderer);
+
+    // Здесь можно добавить отрисовку объектов
+
+    // Презентация кадра
+    SDL_RenderPresent(renderer);
+  }
+}
+
+void destroy_window() {
+  if (renderer) {
+    SDL_DestroyRenderer(renderer);
+    renderer = NULL;
+  }
+  if (window) {
+    SDL_DestroyWindow(window);
+    window = NULL;
+  }
+  fprintf(stdout, "Bye!\n");
+  SDL_Quit();
 }

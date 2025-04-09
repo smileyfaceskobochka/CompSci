@@ -1,24 +1,27 @@
+#include <SDL3/SDL.h>
+
 #include <stdio.h>
-#include "window.h"
-#include "args_parser.h"
+#include <string.h>
+
 #include "utils.h"
+#include "args_parser.h"
+#include "window.h"
 
 int main(int argc, char *argv[]) {
-  // Конфигурация по умолчанию
   WindowConfig config = {
-    .title = "Default Window",
-    .width = 800,
-    .height = 600
+    .w_title = "Default Title",
+    .w_width = 800,
+    .w_height = 600
   };
 
-  // Парсинг аргументов
-  if (parse_arguments(argc, argv, &config) != 0) {
+  parse_arguments(argc, argv, &config);
+  
+  if (init_window(&config) != 0) {
+    fprintf(stderr, "Failed to initialize window\n");
     return 1;
   }
 
-  // Установка цвета фона
-  hex_to_rgba("#1e1e2eff", &config.bg_color);
+  update_loop();
 
-  // Запуск приложения
-  return create_window(&config);
+  return 0;
 }

@@ -2,14 +2,23 @@
 #define WINDOW_H
 
 #include <SDL3/SDL.h>
+#include <stdio.h>
 
-typedef struct {
-  const char *title;
-  int width;
-  int height;
-  SDL_Color bg_color; // Background color
+// extern SDL_Window* window;
+// extern SDL_Renderer* renderer;
+
+typedef struct WindowConfig {
+    const char* w_title;
+    int w_width;
+    int w_height;
 } WindowConfig;
 
-int create_window(const WindowConfig *config);
+int init_window(WindowConfig *config);
 
-#endif // WINDOW_H
+void update_loop();
+
+void handle_events();
+
+void destroy_window();
+
+#endif

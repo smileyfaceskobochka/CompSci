@@ -12,9 +12,9 @@ extern int offset_x;
 extern int offset_y;
 
 typedef struct WindowConfig {
-    const char* w_title;
-    int w_width;
-    int w_height;
+  const char* w_title;
+  int w_width;
+  int w_height;
 } WindowConfig;
 
 int init_window(WindowConfig *config);

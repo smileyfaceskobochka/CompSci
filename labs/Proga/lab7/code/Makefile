@@ -14,37 +14,46 @@ ifeq ($(CC),cl)
 	LDLIBS = SDL3.lib /link /SUBSYSTEM:WINDOWS
 else
 	# Для GCC/Clang
-	CFLAGS = $(CFLAGS_COMMON) -Wall -DSDL_MAIN_HANDLED
+	CFLAGS = $(CFLAGS_COMMON) -Wall -DSDL_MAIN_HANDLED -MMD -MP
 	LDLIBS = -lSDL3
 endif
 
-# Тип сборки
+# Тип сборки и директория сборки
 ifeq ($(filter release,$(MAKECMDGOALS)),release)
 	BUILD_DIR = build/release
 	ifeq ($(CC),cl)
-    	CFLAGS += /O2  # Оптимизации для MSVC
+		CFLAGS += /O2  # Оптимизации для MSVC
 	else
-    	CFLAGS += -O3  # Оптимизации для GCC/Clang
+		CFLAGS += -O3  # Оптимизации для GCC/Clang
 	endif
 else
 	BUILD_DIR = build/debug
 	CFLAGS += -g -O0  # Отладочный режим
 endif
 
-# Исходники и цели
-TARGET = $(BUILD_DIR)/main
-SRCS = $(wildcard src/*.c)
-OBJS = $(patsubst src/%.c,$(BUILD_DIR)/%.o,$(SRCS))
+# Исходники, объекты, зависимости и цель
+SRC_DIR = src
+SRCS = $(wildcard $(SRC_DIR)/*.c)
+OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
+DEPS = $(OBJS:.o=.d)
 
-# Правила сборки
-$(TARGET): $(OBJS)
+TARGET = $(BUILD_DIR)/main
+
+# Правило для создания директорий
+$(BUILD_DIR):
 	@mkdir -p $(BUILD_DIR)
+
+# Основная цель: связывание
+$(TARGET): $(BUILD_DIR) $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS) $(LDLIBS)
 
-# Компиляция отдельных файлов
-$(BUILD_DIR)/%.o: src/%.c
+# Компиляция исходников (автоматическая генерация зависимостей)
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+# Включаем зависимости, если они были сгенерированы
+-include $(DEPS)
 
 # Таргеты для удобства
 release: CFLAGS += -DNDEBUG
@@ -56,6 +65,6 @@ run: $(TARGET)
 	./$(TARGET)
 
 clean:
-	rm -rf build/*
+	rm -rf build
 
 .PHONY: clean run release debug

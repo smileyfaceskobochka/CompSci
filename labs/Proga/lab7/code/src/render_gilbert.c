@@ -3,11 +3,10 @@
 #include "utils.h"
 #include <math.h>
 
-#define MAX_DEPTH 4 // Уровень детализации (меньше = проще)
-
 Point *gilbert_points = NULL;
 int point_count = 0;
 int current_point = 0;
+int gilbert_depth = 3;
 
 static int current_index = 0;
 
@@ -45,7 +44,6 @@ static void gen_hilbert(int level, float x, float y, float xi, float xj, float y
 }
 
 void init_gilbert(int depth, int width, int height) {
-    // Освобождаем предыдущее вычисление, если оно существует
     if (gilbert_points) {
         free(gilbert_points);
         gilbert_points = NULL;
@@ -67,27 +65,27 @@ void init_gilbert(int depth, int width, int height) {
     gen_hilbert(depth, margin_x, margin_y, size, 0, 0, size);
 }
 
-void render_gilbert() {
+void render_gilbert(float scale, int offset_x, int offset_y) {
     // Отрисовка квадратной сетки
-    int n = (int)sqrt(point_count);
-    if (n <= 0) return;
+    // int n = (int)sqrt(point_count);
+    // if (n <= 0) return;
     
     // Определяем размер ячейки для сетки
-    SDL_Surface* surface = SDL_GetWindowSurface(window);
-    int grid_size = surface->w / n; // Допускаем, что окно квадратное или используем меньшую сторону
+    // SDL_Surface* surface = SDL_GetWindowSurface(window);
+    // int grid_size = surface->w / n;
 
-    SDL_Color cell_color = hexa_to_rgba(CP_MOCHA_SURFACE_0, 0.7);
-    SDL_SetRenderDrawColor(renderer, cell_color.r, cell_color.g, cell_color.b, cell_color.a);
+    // SDL_Color cell_color = hexa_to_rgba(CP_MOCHA_SURFACE_0, 0.7);
+    // SDL_SetRenderDrawColor(renderer, cell_color.r, cell_color.g, cell_color.b, cell_color.a);
     
-    // Вертикальные линии
-    for (int i = 0; i <= n; i++) {
-        SDL_RenderLine(renderer, i * grid_size, 0, i * grid_size, n * grid_size);
-    }
+    // // Вертикальные линии
+    // for (int i = 0; i <= n; i++) {
+    //     SDL_RenderLine(renderer, i * grid_size * scale + offset_x, offset_y, i * grid_size * scale + offset_x, n * grid_size * scale + offset_y);
+    // }
 
-    // Горизонтальные линии
-    for (int i = 0; i <= n; i++) {
-        SDL_RenderLine(renderer, 0, i * grid_size, n * grid_size, i * grid_size);
-    }
+    // // Горизонтальные линии
+    // for (int i = 0; i <= n; i++) {
+    //     SDL_RenderLine(renderer, offset_x, i * grid_size * scale + offset_y, n * grid_size * scale + offset_x, i * grid_size * scale + offset_y);
+    // }
     
     // Отрисовка кривой Гилберта
     if (point_count < 2) return;
@@ -96,6 +94,10 @@ void render_gilbert() {
     SDL_SetRenderDrawColor(renderer, curve_color.r, curve_color.g, curve_color.b, curve_color.a);
     
     for (int i = 0; i < point_count - 1; i++) {
-        SDL_RenderLine(renderer, gilbert_points[i].x, gilbert_points[i].y, gilbert_points[i+1].x, gilbert_points[i+1].y);
+        int x1 = gilbert_points[i].x * scale + offset_x;
+        int y1 = gilbert_points[i].y * scale + offset_y;
+        int x2 = gilbert_points[i + 1].x * scale + offset_x;
+        int y2 = gilbert_points[i + 1].y * scale + offset_y;
+        SDL_RenderLine(renderer, x1, y1, x2, y2);
     }
 }

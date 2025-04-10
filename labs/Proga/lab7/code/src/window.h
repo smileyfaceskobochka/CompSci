@@ -7,6 +7,10 @@
 extern SDL_Window* window;
 extern SDL_Renderer* renderer;
 
+extern float scale;
+extern int offset_x;
+extern int offset_y;
+
 typedef struct WindowConfig {
     const char* w_title;
     int w_width;

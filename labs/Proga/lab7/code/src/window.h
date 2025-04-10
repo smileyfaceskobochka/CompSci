@@ -4,8 +4,8 @@
 #include <SDL3/SDL.h>
 #include <stdio.h>
 
-// extern SDL_Window* window;
-// extern SDL_Renderer* renderer;
+extern SDL_Window* window;
+extern SDL_Renderer* renderer;
 
 typedef struct WindowConfig {
     const char* w_title;
@@ -17,7 +17,7 @@ int init_window(WindowConfig *config);
 
 void update_loop();
 
-void handle_events();
+void handle_events(bool *running);
 
 void destroy_window();
 

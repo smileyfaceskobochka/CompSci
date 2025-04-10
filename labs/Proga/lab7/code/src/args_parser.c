@@ -13,7 +13,7 @@ int parse_arguments(int argc, char *argv[], WindowConfig *config) {
       }
     } else if (strcmp(argv[i], "-s") == 0 || strcmp(argv[i], "--size") == 0) {
       if (i + 1 < argc && argv[i + 1][0] != '-') {
-        if (sscanf(argv[++i], "%dx%d", &config->w_width, &config->w_height) != 2 || config->w_width <= 160 || config->w_height <= 120) {
+        if (sscanf(argv[++i], "%dx%d", &config->w_width, &config->w_height) != 2 || config->w_width < 160 || config->w_height < 120) {
           fprintf(stderr, "Invalid size. Using 800x600.\n");
           config->w_width = 800;
           config->w_height = 600;

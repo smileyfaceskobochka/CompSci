@@ -1,4 +1,6 @@
 #include "window.h"
+#include "utils.h"
+#include "render_gilbert.h"
 
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
@@ -32,32 +34,52 @@ int init_window(WindowConfig *config) {
     return 1;
   }
 
+  init_gilbert(3, config->w_width, config->w_height);
+
   return 0;
 }
 
-void handle_events() {
+void handle_events(bool *running) {
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
     if (event.type == SDL_EVENT_QUIT) {
       destroy_window();
       SDL_Quit();
       exit(0);
+    } else if (event.type == SDL_EVENT_KEY_DOWN) {
+      if (event.key.key == SDLK_ESCAPE) {
+          *running = false;
+      }
+    } else if (event.type == SDL_EVENT_WINDOW_RESIZED) {
+      int new_width = event.window.data1;
+      int new_height = event.window.data2;
+      init_gilbert(3, new_width, new_height); // Regenerate curve with new dimensions
+      SDL_Log("Window resized to %dx%d", new_width, new_height);
     }
   }
 }
 
 void update_loop() {
-  while (true) {
-    handle_events();
+  bool running = true;
+  Uint32 frame_start_time = 0;
+  while (running) {
+    frame_start_time = SDL_GetTicks();
 
-    // Очистка буфера
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Чёрный цвет
+    handle_events(&running);
+
+    // Buffer clear
+    SDL_Color bg_color = hexa_to_rgba(CP_MOCHA_BASE, 1.0);
+    SDL_SetRenderDrawColor(renderer, bg_color.r, bg_color.g, bg_color.b, bg_color.a);
     SDL_RenderClear(renderer);
+    
+    render_gilbert();
 
-    // Здесь можно добавить отрисовку объектов
-
-    // Презентация кадра
     SDL_RenderPresent(renderer);
+
+    Uint32 frame_time = SDL_GetTicks() - frame_start_time;
+    if (frame_time < 16) { // 1000ms / 60 ≈ 16ms
+      SDL_Delay(16 - frame_time);
+    }
   }
 }
 

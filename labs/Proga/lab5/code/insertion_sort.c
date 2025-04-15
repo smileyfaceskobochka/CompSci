@@ -3,29 +3,29 @@
 
 int ascending(int *arr, int key, int j) {
   while (j >= 0 && arr[j] > key) {
-      j--;
+    j--;
   }
   return j + 1; // Индекс для вставки
 }
 
 int descending(int *arr, int key, int j) {
   while (j >= 0 && arr[j] < key) {
-      j--;
+    j--;
   }
   return j + 1;
 }
 
 void insertionSort(int *arr, int n, int (*cmp)(int *, int, int)) {
   for (int i = 1; i < n; i++) {
-      int key = arr[i];
-      int j = i - 1;
-      int insertIndex = cmp(arr, key, j);
+    int key = arr[i];
+    int j = i - 1;
+    int insertIndex = cmp(arr, key, j);
 
-      while (j >= insertIndex) {
-          arr[j + 1] = arr[j];
-          j--;
-      }
-      arr[j + 1] = key;
+    while (j >= insertIndex) {
+      arr[j + 1] = arr[j];
+      j--;
+    }
+    arr[j + 1] = key;
   }
 }
 

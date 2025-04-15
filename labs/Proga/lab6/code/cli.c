@@ -1,72 +1,9 @@
-#include "cdll.h"
-#include <ctype.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#ifdef _WIN32
-#include <conio.h>
-#include <windows.h>
-#else
-#include <termios.h>
-#include <unistd.h>
-#endif
-
-#define MAX_HISTORY 100
-#define MAX_COMMAND 256
-
-typedef struct {
-  char items[MAX_HISTORY][MAX_COMMAND];
-  int count;
-  int position;
-} History;
-
-History history = {0};
-
-#ifdef _WIN32
-HANDLE hStdin;
-DWORD fdwSaveOldMode;
-#else
-struct termios orig_termios;
-#endif
-
-void enable_raw_mode() {
-#ifdef _WIN32
-  // Сохраняем текущий режим консоли и включаем расширенный ввод
-  hStdin = GetStdHandle(STD_INPUT_HANDLE);
-  GetConsoleMode(hStdin, &fdwSaveOldMode);
-  SetConsoleMode(hStdin, ENABLE_EXTENDED_FLAGS | ENABLE_WINDOW_INPUT);
-#else
-  // Отключаем эхо и канонический режим для терминала
-  struct termios raw = orig_termios;
-  raw.c_lflag &= ~(ECHO | ICANON);
-  tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
-#endif
-}
-
-void disable_raw_mode() {
-#ifdef _WIN32
-  SetConsoleMode(hStdin, fdwSaveOldMode);
-#else
-  tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios);
-#endif
-}
-
-void init_terminal() {
-#ifndef _WIN32
-  tcgetattr(STDIN_FILENO, &orig_termios);
-  atexit(disable_raw_mode);
-#endif
-}
-
-void clear_screen() {
-#ifdef _WIN32
-  system("cls");
-#else
-  printf("\033[H\033[J");
-#endif
-}
+#include "cdll.h"
+#include <readline/history.h>
+#include <readline/readline.h>
 
 void print_help() {
   printf("Доступные команды:\n");
@@ -78,158 +15,30 @@ void print_help() {
   printf("  exit           - Выйти из программы\n");
 }
 
-char *readline(const char *prompt) {
-  static char line[MAX_COMMAND] = {0};
-  printf("%s", prompt);
-  fflush(stdout);
+char *commands[] = {"append", "display", "delete", "clear",
+                    "help",   "exit",    NULL};
 
-  enable_raw_mode();
-  int pos = 0;
-  char seq[3];
-
-  while (1) {
-    char c;
-#ifdef _WIN32
-    if (!_kbhit())
-      continue;
-    c = _getch();
-#else
-    read(STDIN_FILENO, &c, 1);
-#endif
-
-    // Обработка автодополнения
-    if (c == '\t') {
-      const char *commands[] = {"append", "display", "delete",
-                                "clear",  "help",    "exit"};
-      int matches = 0;
-      char *match = NULL;
-
-      for (int i = 0; i < 6; i++) {
-        if (strncmp(commands[i], line, pos) == 0) {
-          if (!match)
-            match = (char *)commands[i];
-          matches++;
-        }
-      }
-
-      if (matches == 1) {
-        strcpy(line, match);
-        pos = strlen(match);
-        printf("\r>> %s", line);
-        fflush(stdout);
-      } else if (matches > 1) {
-        printf("\nВозможные команды:\n");
-        for (int i = 0; i < 6; i++) {
-          if (strncmp(commands[i], line, pos) == 0) {
-            printf("  %s\n", commands[i]);
-          }
-        }
-        printf(">> %s", line);
-        fflush(stdout);
-      }
-      continue;
-    }
-
-    // Обработка ввода Enter
-    if (c == '\r' || c == '\n') {
-      line[pos] = '\0';
-      printf("\n");
-      disable_raw_mode();
-      return line;
-    }
-
-    // Обработка удаления символа
-    if (c == '\b' || c == 127) {
-      if (pos > 0) {
-        pos--;
-        line[pos] = '\0';
-        printf("\b \b");
-        fflush(stdout);
-      }
-      continue;
-    }
-
-#ifdef _WIN32
-    if (c == '\0') {
-      switch (_getch()) {
-      case 72:
-        if (history.position > 0) {
-          history.position--;
-          strcpy(line, history.items[history.position]);
-          pos = strlen(line);
-          printf("\r>> %s", line);
-          fflush(stdout);
-        }
-        break;
-      case 80:
-        if (history.position < history.count - 1) {
-          history.position++;
-          strcpy(line, history.items[history.position]);
-          pos = strlen(line);
-          printf("\r>> %s", line);
-          fflush(stdout);
-        }
-        break;
-      }
-      continue;
-    }
-#else
-    if (c == '\x1B') {
-      if (read(STDIN_FILENO, &seq[0], 1) != 1 || seq[0] != '[')
-        continue;
-      if (read(STDIN_FILENO, &seq[1], 1) != 1)
-        continue;
-
-      switch (seq[1]) {
-      case 'A':
-        if (history.position > 0) {
-          history.position--;
-          strcpy(line, history.items[history.position]);
-          pos = strlen(line);
-          printf("\r>> %s", line);
-          fflush(stdout);
-        }
-        break;
-      case 'B':
-        if (history.position < history.count - 1) {
-          history.position++;
-          strcpy(line, history.items[history.position]);
-          pos = strlen(line);
-          printf("\r>> %s", line);
-          fflush(stdout);
-        }
-        break;
-      }
-      continue;
-    }
-#endif
-
-    if (pos < MAX_COMMAND - 1 && isprint(c)) {
-      line[pos++] = c;
-      printf("%c", c);
-      fflush(stdout);
-    }
+char *command_generator(const char *text, int state) {
+  static int index, len;
+  if (!state) {
+    index = 0;
+    len = strlen(text);
   }
+
+  char *name;
+  while ((name = commands[index++])) {
+    if (strncmp(name, text, len) == 0)
+      return strdup(name);
+  }
+  return NULL;
 }
 
-void add_history(const char *cmd) {
-  if (strlen(cmd) == 0 ||
-      (history.count > 0 &&
-       strcmp(history.items[history.count - 1], cmd) == 0)) {
-    return; // Avoid adding empty or duplicate commands
-  }
-  if (history.count >= MAX_HISTORY) {
-    memmove(history.items[0], history.items[1],
-            sizeof(history.items[0]) * (MAX_HISTORY - 1));
-    history.count--;
-  }
-  strncpy(history.items[history.count++], cmd, MAX_COMMAND - 1);
-  history.items[history.count - 1][MAX_COMMAND - 1] =
-      '\0'; // Ensure null-termination
-  history.position = history.count;
+char **cli_completion(const char *text, int start, int end) {
+  rl_attempted_completion_over = 1;
+  return rl_completion_matches(text, command_generator);
 }
 
-int parseCommand(const char *command) {
+int parse_command(const char *command) {
   if (strncmp(command, "append ", 7) == 0)
     return 1;
   if (strcmp(command, "display") == 0)
@@ -245,55 +54,69 @@ int parseCommand(const char *command) {
   return 0;
 }
 
+void clear_screen() { printf("\033[H\033[J"); }
+
 int main() {
   CDLLists list = {NULL};
-  init_terminal();
+  char *input;
 
-  printf("CDLL CLI. Введите 'help' для вывода списка доступных команд.\n");
+  rl_attempted_completion_function = cli_completion;
 
-  while (1) {
-    char *input = readline(">> ");
-    if (strlen(input) == 0)
+  printf("CDLL CLI. Введите 'help' для списка команд.\n");
+
+  while ((input = readline(">> ")) != NULL) {
+    if (strlen(input) == 0) {
+      free(input);
       continue;
+    }
 
     add_history(input);
 
-    int cmd = parseCommand(input);
+    int cmd = parse_command(input);
     switch (cmd) {
-    case 1: {
-      char data[MAX_COMMAND];
-      if (sscanf(input + 7, "%s", data) != 1) {
-        printf("Ошибка: Неверный ввод для 'append'. append <data>\n");
-        break;
+    case 1: { // append
+      char data[256];
+      if (sscanf(input + 7, "%255s", data) == 1) {
+        append(&list, data);
+      } else {
+        printf("Ошибка формата: append <data>\n");
       }
-      append(&list, data);
-      printf("Добавлено: %s\n", data);
       break;
     }
-    case 2:
+
+    case 2: // display
       display(&list);
       break;
-    case 3: {
-      char data[MAX_COMMAND];
-      if (sscanf(input + 7, "%s", data) != 1) {
-        printf("Ошибка: Неверный ввод для 'delete'. delete <data>\n");
-        break;
+
+    case 3: { // delete
+      char data[256];
+      if (sscanf(input + 7, "%255s", data) == 1) {
+        deleteNode(&list, data);
+      } else {
+        printf("Ошибка формата: delete <data>\n");
       }
-      deleteNode(&list, data);
-      printf("Удалено: %s\n", data);
       break;
     }
-    case 4:
+
+    case 4: // exit
       freeList(&list);
+      free(input);
       return 0;
-    case 5:
+
+    case 5: // clear
       clear_screen();
       break;
-    case 6:
+
+    case 6: // help
       print_help();
       break;
+
     default:
-      printf("'help' для списка доступных команд.\n");
+      printf("Неизвестная команда. Напишите 'help'.\n");
     }
+    free(input);
   }
+
+  freeList(&list);
+  return 0;
 }

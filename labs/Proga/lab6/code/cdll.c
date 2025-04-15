@@ -4,7 +4,6 @@
 #include <string.h>
 
 Node *createNode(const char *data) {
-  // Создаем новый узел и выделяем память для данных
   Node *newNode = (Node *)malloc(sizeof(Node));
   if (!newNode) {
     fprintf(stderr, "Memory allocation failed! :( \n");
@@ -23,16 +22,27 @@ Node *createNode(const char *data) {
 }
 
 void append(CDLLists *list, const char *data) {
-  Node *newNode = createNode(data);
   if (!list->head) {
-    list->head = newNode;
-  } else {
-    Node *tail = list->head->prev;
-    tail->next = newNode;
-    newNode->prev = tail;
-    newNode->next = list->head;
-    list->head->prev = newNode;
+    list->head = createNode(data);
+    printf("Элемент '%s' добавлен в список.\n", data);
+    return;
   }
+
+  Node *current = list->head;
+  do {
+    if (strcmp(current->data, data) == 0) {
+      printf("Элемент '%s' уже существует в списке.\n", data);
+      return;
+    }
+    current = current->next;
+  } while (current != list->head);
+
+  Node *newNode = createNode(data);
+  Node *tail = list->head->prev;
+  tail->next = newNode;
+  newNode->prev = tail;
+  newNode->next = list->head;
+  list->head->prev = newNode;
 }
 
 void display(const CDLLists *list) {
@@ -41,7 +51,6 @@ void display(const CDLLists *list) {
     return;
   }
 
-  // Проходим по списку и выводим данные каждого узла
   Node *current = list->head;
   do {
     printf("%s <-> ", current->data);
@@ -51,8 +60,10 @@ void display(const CDLLists *list) {
 }
 
 void deleteNode(CDLLists *list, const char *data) {
-  if (!list->head)
+  if (!list->head) {
+    printf("Список пуст. Удаление невозможно.\n");
     return;
+  }
 
   Node *current = list->head;
 
@@ -71,12 +82,13 @@ void deleteNode(CDLLists *list, const char *data) {
         free(current->data);
         free(current);
       }
+      printf("Элемент '%s' успешно удалён.\n", data);
       return;
     }
     current = current->next;
   } while (current != list->head);
 
-  printf("Такого элемента нет в списке: '%s'\n", data);
+  printf("Элемент '%s' не найден в списке.\n", data);
 }
 
 void freeList(CDLLists *list) {

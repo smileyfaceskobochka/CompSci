@@ -24,7 +24,6 @@ Node *createNode(const char *data) {
 void append(CDLLists *list, const char *data) {
   if (!list->head) {
     list->head = createNode(data);
-    printf("Элемент '%s' добавлен в список.\n", data);
     return;
   }
 
@@ -61,7 +60,7 @@ void display(const CDLLists *list) {
 
 void deleteNode(CDLLists *list, const char *data) {
   if (!list->head) {
-    printf("Список пуст. Удаление невозможно.\n");
+    printf("Список пуст.\n");
     return;
   }
 
@@ -82,13 +81,13 @@ void deleteNode(CDLLists *list, const char *data) {
         free(current->data);
         free(current);
       }
-      printf("Элемент '%s' успешно удалён.\n", data);
+      printf("Элемент '%s' удалён.\n", data);
       return;
     }
     current = current->next;
   } while (current != list->head);
 
-  printf("Элемент '%s' не найден в списке.\n", data);
+  printf("Элемент '%s' не найден.\n", data);
 }
 
 void freeList(CDLLists *list) {

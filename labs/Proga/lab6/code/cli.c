@@ -1,6 +1,6 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "cdll.h"
 #include <readline/history.h>
 #include <readline/readline.h>
@@ -15,8 +15,7 @@ void print_help() {
   printf("  exit           - Выйти из программы\n");
 }
 
-char *commands[] = {"append", "display", "delete", "clear",
-                    "help",   "exit",    NULL};
+char *commands[] = {"append", "display", "delete", "clear", "help", "exit", NULL};
 
 char *command_generator(const char *text, int state) {
   static int index, len;
@@ -27,14 +26,21 @@ char *command_generator(const char *text, int state) {
 
   char *name;
   while ((name = commands[index++])) {
-    if (strncmp(name, text, len) == 0)
+    if (strncmp(name, text, len) == 0) {
+      if (strcmp(name, "append") == 0 || strcmp(name, "delete") == 0) {
+        char *name_with_space = malloc(strlen(name) + 2);
+        sprintf(name_with_space, "%s ", name);
+        return name_with_space;
+      }
       return strdup(name);
+    }
   }
   return NULL;
 }
 
 char **cli_completion(const char *text, int start, int end) {
   rl_attempted_completion_over = 1;
+  rl_completion_append_character = '\0';
   return rl_completion_matches(text, command_generator);
 }
 

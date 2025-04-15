@@ -9,7 +9,7 @@
 
 int main(int argc, char *argv[]) {
   WindowConfig config = {
-    .w_title = "Default Title",
+    .w_title = "Кривая Гилберта // W/S - увел./уменш. глубину // Z/X - увел./уменьш. масштаб",
     .w_width = 800,
     .w_height = 600
   };

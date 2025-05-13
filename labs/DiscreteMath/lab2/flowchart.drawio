@@ -1,0 +1,407 @@
+<mxfile host="65bd71144e">
+    <diagram id="PtYTKRtOxx6XsB6GWEYa" name="Page-1">
+        <mxGraphModel dx="1102" dy="779" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="13" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="4" target="16" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="250" y="64" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="4" value="Начало" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;container=0;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="14" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="Конец" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;container=0;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="1124" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="16" target="19" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="Ввод n" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=30;container=0;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="150.00000000000023" y="64" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="24" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="19" target="23" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="n &amp;lt; 4 или n &amp;gt; 10" style="rhombus;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="114" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="21" target="28" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="генерация массива 1&lt;br&gt;i &amp;gt;= n" style="shape=loopLimit;whiteSpace=wrap;html=1;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;size=20;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="244" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="58" style="edgeStyle=none;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="22" target="42" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="генерация массива 1" style="shape=loopLimit;whiteSpace=wrap;html=1;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;size=20;direction=west;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="524" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="25" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="23" target="21" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="i = 0" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="194" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="27" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="26" target="22" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="i = i + 1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="474" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="36" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="28" target="33" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="28" value="генерация массива 2&lt;br&gt;j &amp;gt;= n" style="shape=loopLimit;whiteSpace=wrap;html=1;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;size=20;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="304" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="31" style="edgeStyle=none;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="29" target="26" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" value="генерация массива 2" style="shape=loopLimit;whiteSpace=wrap;html=1;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;size=20;direction=west;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="414" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="37" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="33" target="29" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="33" value="arr[i][j] = rand() % 2" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="364" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="34" value="rand() % 2 - возвр.&lt;br style=&quot;font-size: 10px;&quot;&gt;случайное число (0/1)" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_1;align=right;pointerEvents=1;fontFamily=JetBrainsMono Nerd Font;fontSize=10;direction=west;" parent="1" vertex="1">
+                    <mxGeometry x="120" y="364" width="10" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="35" style="edgeStyle=none;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;fontFamily=JetBrainsMono Nerd Font;endArrow=none;endFill=0;dashed=1;fontSize=10;" parent="1" source="33" target="34" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="380" y="379" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="136" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="39" target="135" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="39" value="Вывод массива 1&lt;br&gt;i &amp;gt;= n" style="shape=loopLimit;whiteSpace=wrap;html=1;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;size=20;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="634" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="60" style="edgeStyle=none;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="40" target="59" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="40" value="Вывод массива 1" style="shape=loopLimit;whiteSpace=wrap;html=1;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;size=20;direction=west;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="1014" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="41" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="42" target="39" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="42" value="i = 0" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="584" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="43" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="44" target="40" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="44" value="i = i + 1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="964" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="45" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="46" target="51" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="250" y="808" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="46" value="Вывод массива 2&lt;br&gt;j &amp;gt;= n" style="shape=loopLimit;whiteSpace=wrap;html=1;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;size=20;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="744" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="54" style="edgeStyle=none;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="48" target="52" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="48" value="Вывод массива 2" style="shape=loopLimit;whiteSpace=wrap;html=1;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;size=20;direction=west;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="854" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="49" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="51" target="48" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="250" y="838" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="51" value="Вывод arr[i][j]" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=30;container=0;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="150.00000000000023" y="804" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="55" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="52" target="44" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="52" value="Вывод &#39;\n&#39;" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=30;container=0;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="150.00000000000023" y="914" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="56" value="новая строка" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_1;align=right;pointerEvents=1;fontFamily=JetBrainsMono Nerd Font;fontSize=10;direction=west;" parent="1" vertex="1">
+                    <mxGeometry x="120" y="914" width="10" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="57" style="edgeStyle=none;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;fontFamily=JetBrainsMono Nerd Font;endArrow=none;endFill=0;dashed=1;fontSize=10;" parent="1" source="52" target="56" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="300.0000000000002" y="929" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="59" value="A1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="235" y="1074" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="63" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="61" target="62" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="61" value="A1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="455" y="14" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="102" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="62" target="101" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="62" value="Ввод k" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=30;container=0;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="370.0000000000002" y="64" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="73" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="64" target="72" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="64" value="A&lt;br&gt;j &amp;gt;= n" style="shape=loopLimit;whiteSpace=wrap;html=1;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;size=20;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="264" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="71" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="67" target="64" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="67" value="j = 0" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="214" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="75" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="72" target="74" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="72" value="in_degr = 0" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="324" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="82" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="74" target="76" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="74" value="i = 0" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="374" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="81" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="76" target="80" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="76" value="B&lt;br&gt;i &amp;gt;= n" style="shape=loopLimit;whiteSpace=wrap;html=1;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;size=20;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="424" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="89" style="edgeStyle=none;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="77" target="88" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="77" value="B" style="shape=loopLimit;whiteSpace=wrap;html=1;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;size=20;direction=west;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="584" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="79" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="78" target="77" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="78" value="i = i + 1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="534" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="87" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;fontFamily=JetBrainsMono Nerd Font;" parent="1" source="80" target="78" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="80" value="in_degr = in_degr + arr[i][j]" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="484" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="94" value="1" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="88" target="90" edge="1">
+                    <mxGeometry y="10" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="114" value="0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="88" target="120" edge="1">
+                    <mxGeometry x="-0.9737" y="10" relative="1" as="geometry">
+                        <mxPoint x="470" y="1254" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="600" y="674"/>
+                            <mxPoint x="600" y="344"/>
+                            <mxPoint x="720" y="344"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="88" value="in_degr == k" style="rhombus;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="644" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="96" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="90" target="95" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="90" value="res[res_cnt].vert = j" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="724" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="93" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="91" target="67" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="91" value="res_cnt = 0" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="164" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="109" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="95" target="97" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="95" value="res[res_cnt].source_cnt = 0" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="774" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="108" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="97" target="107" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="97" value="C&lt;br&gt;i &amp;gt;= n" style="shape=loopLimit;whiteSpace=wrap;html=1;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;size=20;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="824" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="99" value="res - структура с полями:&lt;br style=&quot;font-size: 10px;&quot;&gt;vert - номер вершины,&lt;br style=&quot;font-size: 10px;&quot;&gt;sources[10] - массив вершин&lt;br style=&quot;font-size: 10px;&quot;&gt;источников,&lt;br style=&quot;font-size: 10px;&quot;&gt;source_cnt - количество источников&lt;br style=&quot;font-size: 10px;&quot;&gt;в массиве" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_1;align=left;pointerEvents=1;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="64" width="10" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="100" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;fontFamily=JetBrainsMono Nerd Font;endArrow=none;endFill=0;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontSize=10;" parent="1" source="101" target="99" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="650" y="84" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="103" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="101" target="91" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="101" value="res[10]" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="114" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="111" value="1" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="107" target="110" edge="1">
+                    <mxGeometry y="10" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="113" value="0" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;rounded=0;fontSize=10;" parent="1" source="107" edge="1">
+                    <mxGeometry x="-0.9334" y="10" relative="1" as="geometry">
+                        <mxPoint x="470" y="1074" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="590" y="914"/>
+                            <mxPoint x="590" y="1054"/>
+                            <mxPoint x="470" y="1054"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="107" value="arr[i][j] = 1" style="rhombus;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="884" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="112" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="110" target="129" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="470" y="1074" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="110" value="&lt;div style=&quot;border-color: var(--border-color); font-size: 10px;&quot;&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;res&lt;span style=&quot;border-color: var(--border-color); font-size: 10px;&quot; class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;res_cnt&lt;span style=&quot;border-color: var(--border-color); font-size: 10px;&quot; class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;.&lt;span style=&quot;background-color: initial; white-space: normal; font-size: 10px;&quot;&gt;sources&lt;/span&gt;&lt;span style=&quot;background-color: initial; white-space: normal; border-color: var(--border-color); font-size: 10px;&quot; class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;border-color: var(--border-color); font-size: 10px;&quot;&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;span style=&quot;background-color: initial; white-space: normal; font-size: 10px;&quot;&gt;res&lt;/span&gt;&lt;span style=&quot;background-color: initial; white-space: normal; border-color: var(--border-color); font-size: 10px;&quot; class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span style=&quot;background-color: initial; white-space: normal; font-size: 10px;&quot;&gt;res_cnt&lt;/span&gt;&lt;span style=&quot;background-color: initial; white-space: normal; border-color: var(--border-color); font-size: 10px;&quot; class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;.&lt;span style=&quot;background-color: initial; white-space: normal; font-size: 10px;&quot;&gt;source_cnt&lt;/span&gt;&lt;span style=&quot;background-color: initial; white-space: normal; border-color: var(--border-color); font-size: 10px;&quot; class=&quot;token operator&quot;&gt;++&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;border-color: var(--border-color); font-size: 10px;&quot;&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;span style=&quot;background-color: initial; white-space: normal; border-color: var(--border-color); font-size: 10px;&quot; class=&quot;token punctuation&quot;&gt;]&amp;nbsp;&lt;/span&gt;=&lt;span style=&quot;background-color: initial; white-space: normal; font-size: 10px;&quot;&gt; i &lt;/span&gt;&lt;span style=&quot;background-color: initial; white-space: normal; border-color: var(--border-color); font-size: 10px;&quot; class=&quot;token operator&quot;&gt;+&lt;/span&gt;&lt;span style=&quot;background-color: initial; white-space: normal; font-size: 10px;&quot;&gt; &lt;/span&gt;&lt;span style=&quot;background-color: initial; white-space: normal; border-color: var(--border-color); font-size: 10px;&quot; class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;border-color: var(--border-color); font-size: 10px;&quot;&gt;&lt;/div&gt;&lt;div style=&quot;border-color: var(--border-color); font-size: 10px;&quot;&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="964" width="200" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="131" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="118" target="130" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="118" value="A" style="shape=loopLimit;whiteSpace=wrap;html=1;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;size=20;direction=west;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="414" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="119" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="120" target="118" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="120" value="j = j + 1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="364" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="121" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="122" target="126" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="122" value="C" style="shape=loopLimit;whiteSpace=wrap;html=1;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;size=20;direction=west;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="233" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="123" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="124" target="122" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="124" value="i = i + 1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="184" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="125" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="126" target="120" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="126" value="res_cnt = res_cnt + 1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="294" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="128" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="127" target="124" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="127" value="A2" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="705" y="134" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="129" value="A2" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="455" y="1074" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="139" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="130" target="138" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="130" value="Вывод res_cnt" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=30;container=0;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="620.0000000000002" y="474" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="147" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="133" target="146" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="133" value="Вывод результатов 1&lt;br&gt;i &amp;gt;= res_cnt" style="shape=loopLimit;whiteSpace=wrap;html=1;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;size=20;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="574" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="159" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="134" target="5" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="134" value="Вывод результатов 1" style="shape=loopLimit;whiteSpace=wrap;html=1;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;size=20;direction=west;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="1064" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="137" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="135" target="46" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="135" value="j = 0" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="694" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="142" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="138" target="133" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="138" value="i = 0" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="524" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="141" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="140" target="134" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="140" value="i = i + 1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="1014" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="154" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="143" target="144" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="143" value="j = 0" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="694" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="153" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="144" target="152" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="144" value="Вывод результатов 2&lt;br&gt;j &amp;gt;= res[i].sources_cnt" style="shape=loopLimit;whiteSpace=wrap;html=1;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;size=20;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="744" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="157" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="145" target="156" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="145" value="Вывод результатов 2" style="shape=loopLimit;whiteSpace=wrap;html=1;fontFamily=JetBrainsMono Nerd Font;strokeWidth=2;size=20;direction=west;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="904" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="148" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="146" target="143" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="146" value="Вывод&lt;br&gt;&quot;Множество дуг для вершины res[i].vertex: [&quot;" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=30;container=0;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="634" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="151" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="150" target="145" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="150" value="j = j + 1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="854" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="155" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="152" target="150" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="152" value="Вывод results[i].sorces[j]" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=30;container=0;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="620.0000000000002" y="804" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="158" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" source="156" target="140" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="156" value="Вывод &quot;]\n&quot;" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=30;container=0;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="620.0000000000002" y="964" width="200" height="30" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

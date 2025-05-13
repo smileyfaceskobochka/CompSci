@@ -1,9 +1,9 @@
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 #include "cdll.h"
 #include <readline/history.h>
 #include <readline/readline.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 void print_help() {
   printf("Доступные команды:\n");
@@ -15,7 +15,8 @@ void print_help() {
   printf("  exit           - Выйти из программы\n");
 }
 
-char *commands[] = {"append", "display", "delete", "clear", "help", "exit", NULL};
+char *commands[] = {"append", "display", "delete", "clear",
+                    "help",   "exit",    NULL};
 
 char *command_generator(const char *text, int state) {
   static int index, len;

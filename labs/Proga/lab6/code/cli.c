@@ -1,9 +1,9 @@
 #include "cdll.h"
-#include <readline/history.h>
-#include <readline/readline.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <readline/history.h>
+#include <readline/readline.h>
 
 void print_help() {
   printf("Доступные команды:\n");

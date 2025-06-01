@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="12"/>
+    <BuildModes Active="Default"/>
+    <Units>
+      <Unit>
+        <Filename Value="lab8.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="1"/>
+        <CursorPos X="11" Y="15"/>
+        <UsageCount Value="32"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="lab8_unit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="304"/>
+        <CursorPos X="26" Y="311"/>
+        <UsageCount Value="32"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\..\..\..\..\lazarus\lcl\forms.pp"/>
+        <UnitName Value="Forms"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1586"/>
+        <CursorPos X="15" Y="1603"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\..\..\..\..\lazarus\fpc\3.2.2\source\rtl\inc\systemh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1330"/>
+        <CursorPos X="11" Y="1348"/>
+        <UsageCount Value="9"/>
+      </Unit>
+    </Units>
+    <JumpHistory HistoryIndex="29">
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="517" Column="46" TopLine="502"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="427" TopLine="392"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="148" Column="33" TopLine="137"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="427" TopLine="392"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="396" Column="58" TopLine="371"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="383" Column="59" TopLine="371"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="467" TopLine="432"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="17" Column="76"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="459" Column="33" TopLine="443"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="424" Column="72" TopLine="410"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="475" TopLine="440"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="452" Column="79" TopLine="441"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="529" TopLine="494"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="232" Column="45" TopLine="219"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="233" Column="7" TopLine="216"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="510" Column="96" TopLine="495"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="569" TopLine="534"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="298" Column="99" TopLine="286"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="546" Column="72" TopLine="535"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="519" TopLine="484"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="204" Column="69" TopLine="190"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="445" TopLine="410"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="195" Column="40" TopLine="189"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="283" Column="53" TopLine="267"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="397" Column="118" TopLine="385"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="200" Column="5" TopLine="177"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="210" Column="54" TopLine="195"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="394" Column="7" TopLine="395"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="59" Column="70" TopLine="43"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="413" Column="76" TopLine="396"/>
+      </Position>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>

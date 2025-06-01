@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Compiler Value="C:\Users\livin\lazarus\fpc\3.2.2\bin\x86_64-win64\fpc.exe" Date="1520657216"/>
+  <Params Value="-MObjFPC -Scghi -O1 -gw3 -gl -WG -l -vewnhibq -FiC:\Users\livin\Desktop\CompSci\labs\Proga\lab8\lib\x86_64-win64 -FuC:\Users\livin\Desktop\CompSci\labs\Proga\lab8\ -FuC:\Users\livin\lazarus\lcl\units\x86_64-win64\win32 -FuC:\Users\livin\lazarus\lcl\units\x86_64-win64 -FuC:\Users\livin\lazarus\components\freetype\lib\x86_64-win64 -FuC:\Users\livin\lazarus\components\lazutils\lib\x86_64-win64 -FuC:\Users\livin\lazarus\packager\units\x86_64-win64 -FUC:\Users\livin\Desktop\CompSci\labs\Proga\lab8\lib\x86_64-win64\ -FEC:\Users\livin\Desktop\CompSci\labs\Proga\lab8\ -oC:\Users\livin\Desktop\CompSci\labs\Proga\lab8\lab8.exe -dLCL -dLCLwin32 -dUseCThreads lab8.lpr"/>
+</CONFIG>

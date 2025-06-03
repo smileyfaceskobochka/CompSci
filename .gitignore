@@ -1,6 +1,7 @@
 *.exe
 *.o
 *.pdb
+*.dat
 .vscode
 target
 graph.dot

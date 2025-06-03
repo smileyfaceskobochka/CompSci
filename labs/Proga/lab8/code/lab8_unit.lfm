@@ -392,7 +392,7 @@ object Form1: TForm1
   object btnPrev: TButton
     Left = 176
     Height = 25
-    Top = 544
+    Top = 541
     Width = 200
     Caption = 'Пред. стр.'
     TabOrder = 6
@@ -406,5 +406,20 @@ object Form1: TForm1
     Caption = 'След. стр.'
     TabOrder = 7
     OnClick = btnNextClick
+  end
+  object cbDescending: TCheckBox
+    Left = 437
+    Height = 20
+    Top = 3
+    Width = 95
+    Caption = 'По убыванию'
+    TabOrder = 8
+  end
+  object pbProgress: TProgressBar
+    Left = 384
+    Height = 25
+    Top = 541
+    Width = 200
+    TabOrder = 9
   end
 end

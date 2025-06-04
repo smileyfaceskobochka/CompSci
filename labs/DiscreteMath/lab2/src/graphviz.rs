@@ -7,12 +7,10 @@ pub fn save_dot(matrix: &Vec<Vec<usize>>, n: usize, filename: &str) -> io::Resul
     dot.push_str("  rankdir=LR;\n");
     dot.push_str("  node [shape=circle];\n");
 
-    // Добавляем все узлы
     for i in 1..=n {
         dot.push_str(&format!("  {};\n", i));
     }
 
-    // Добавляем рёбра
     for i in 0..n {
         for j in 0..n {
             if matrix[i][j] == 1 {
@@ -22,11 +20,9 @@ pub fn save_dot(matrix: &Vec<Vec<usize>>, n: usize, filename: &str) -> io::Resul
     }
     dot.push_str("}\n");
 
-    // Сохраняем в файл
     let mut file = File::create(filename)?;
     file.write_all(dot.as_bytes())?;
 
-    // Выводим инструкцию для пользователя
     println!("\nГраф сохранён в файле: {}", filename);
     println!("Для просмотра установите Graphviz и выполните:");
     println!("dot -Tpng {} -o graph.png && open graph.png", filename);

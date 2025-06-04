@@ -4,8 +4,6 @@
 *.dat
 .vscode
 target
-graph.dot
-graph.png
 cargo.lock
 *.bkp
 *.aux

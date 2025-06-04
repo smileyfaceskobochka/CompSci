@@ -11,7 +11,6 @@ fn main() {
         args.contains(&"-viz".to_string()) || args.contains(&"--visualize".to_string())
     };
 
-    // Ввод размерности матрицы
     let n = loop {
         println!("Введите размерность матрицы (4-10):");
         let mut input = String::new();
@@ -23,7 +22,6 @@ fn main() {
         }
     };
 
-    // Генерация случайной матрицы смежности
     let mut matrix = vec![vec![0; n]; n];
     let mut rng = rand::rng();
 
@@ -33,7 +31,6 @@ fn main() {
         }
     }
 
-    // Сохранение графа только при необходимости
     if enable_visualization {
         if let Err(e) = graphviz::save_dot(&matrix, n, "graph.dot") {
             eprintln!("Ошибка сохранения графа: {}", e);
@@ -49,7 +46,6 @@ fn main() {
         println!("{:?}", row);
     }
 
-    // Ввод искомой полустепени захода (оставлено без изменений)
     let k = loop {
         println!("\nВведите искомую полустепень захода:");
         let mut input = String::new();
@@ -61,7 +57,6 @@ fn main() {
         }
     };
 
-    // Поиск вершин (оставлено без изменений)
     let mut results = Vec::new();
 
     for j in 0..n {
@@ -79,7 +74,6 @@ fn main() {
         }
     }
 
-    // Вывод результатов (оставлено без изменений)
     println!("\nРезультаты:");
     println!("Найдено вершин: {}", results.len());
 

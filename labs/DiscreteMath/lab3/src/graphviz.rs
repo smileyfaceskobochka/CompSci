@@ -8,7 +8,6 @@ pub fn save_dot(edges: &[(usize, usize, String)], filename: &str) -> io::Result<
     dot.push_str("  rankdir=LR;\n");
     dot.push_str("  node [shape=circle];\n");
 
-    // Добавление всех вершин
     let nodes: HashSet<usize> = edges.iter()
         .flat_map(|(u, v, _)| vec![*u, *v])
         .collect();
@@ -16,7 +15,6 @@ pub fn save_dot(edges: &[(usize, usize, String)], filename: &str) -> io::Result<
         dot.push_str(&format!("  {};\n", node));
     }
 
-    // Добавление рёбер с метками
     for (u, v, label) in edges {
         if *u == *v {
             dot.push_str(&format!("  {} -> {} [label=\"{}\"];\n", u, v, label));
@@ -26,7 +24,6 @@ pub fn save_dot(edges: &[(usize, usize, String)], filename: &str) -> io::Result<
     }
 
     dot.push_str("}\n");
-
     let mut file = File::create(filename)?;
     file.write_all(dot.as_bytes())?;
 

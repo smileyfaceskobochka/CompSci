@@ -10,7 +10,7 @@ uses
 
 const
   RECORD_COUNT    = 8000000;
-  CHUNK_THRESHOLD = 250000;
+  CHUNK_THRESHOLD = 500000;
   PAGE_SIZE       = 100;
   TEMP_SUBDIR     = 'temp_runs';  // подпапка для ран-файлов
 

@@ -15,3 +15,9 @@ cargo.lock
 *.log
 _minted
 build
+labs/Proga/lab8/code/lab8
+labs/Proga/lab8/code/lib/x86_64-linux/lab8.res
+labs/Proga/lab8/code/lib/x86_64-linux/lab8.or
+labs/Proga/lab8/code/lib/x86_64-linux/lab8.compiled
+labs/Proga/lab8/code/lib/x86_64-linux/lab8_unit.ppu
+labs/Proga/lab8/code/lib/x86_64-linux/lab8_unit.lfm

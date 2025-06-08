@@ -1,0 +1,102 @@
+\documentclass[oneside,a4paper,14pt]{extarticle}
+\usepackage[a4paper,letterpaper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\usepackage[russian]{babel}
+\usepackage{indentfirst}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{minted, fancyvrb}
+
+\titleformat{\section} {\normalsize\bfseries} {\thesection} {1em} {}
+\titleformat{\subsection} {\normalsize\bfseries} {\thesubsection} {1em} {}
+\titleformat{\subsubsection} {\normalsize\bfseries} {\thesubsection} {1em} {}
+\renewcommand\baselinestretch{1.45}\normalsize
+\setlength{\parindent}{1.25cm}
+
+\begin{document}
+
+\newpage
+\thispagestyle{empty}
+\begin{center}
+	МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ ОБРАЗОВАТЕЛЬНОЕ УЧРЕЖДЕНИЕ ВЫСШЕГО ОБРАЗОВАНИЯ\\
+	«ВЯТСКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ»\\
+	Институт математики и информационных систем\\
+	Факультет автоматики и вычислительной техники\\
+	Кафедра электронных вычислительных машин
+\end{center}
+\vspace{10mm}
+
+\hfill
+\begin{tabular}{l}
+  \footnotesize Дата сдачи на проверку: \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2025 г.\\
+  \footnotesize Проверено: \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2025 г. \\
+\end{tabular}
+\vfill
+
+\begin{center}
+  ГРАФЫ. ПОИСК ПУТЕЙ В ГРАФАХ.\\
+	Отчёт по лабораторной работе №6\\
+	по дисциплине\\
+	<<Дискретная математика>>\\
+\end{center}
+\vspace{25mm}
+\noindent
+\begin{tabular}{ll}
+	Разработал студент гр. ИВТб-1301-05-00 & \rule[-1mm]{30mm}{0.10mm}\,/Черкасов А. А./   \\
+	                                       & \hspace{8mm}\footnotesize(подпись)            \\
+	Проверила преподаватель                & \rule[-1mm]{30mm}{0.10mm}\,/Пахарева И. В./ \\
+	                                       & \hspace{8mm}\footnotesize(подпись)            \\
+\end{tabular}
+
+\noindent
+  \begin{tabular}{lp{58mm}r}
+    Работа защищена &  & <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{30mm}{0.10mm}\ 2025 г.
+  \end{tabular}
+  \vfill
+
+\begin{center}
+	Киров\\
+	2025
+\end{center}
+
+\newpage\thispagestyle{plain}
+
+\section*{Цель}
+
+Цель работы: изучить методы представления ориентированного графа в виде матрицы инцидентности и освоить приёмы полного перебора путей с помощью поиска в глубину. На их основе разработать программу, способную находить все ориентированные цепи, ведущие в заданную вершину, без повторения дуг.
+\section*{Задание}
+\begin{itemize}
+	\item[$-$] Ориентированный граф \(G\) задаётся матрицей инцидентности, записанной в файле \texttt{input.txt}. Ограничить размерность: число вершин и число дуг (ребер) \(\ge 5\).
+	\item[$-$] Найти возможные ориентированные цепи (дуги в пути не должны повторяться) в вершину, номер которой вводится с клавиатуры.
+\end{itemize}
+
+\section*{Решение}
+
+% Схема алгоритма решения представлена на рисунках 1.1 и 1.2. Примеры работы программы будут показаны в разделе «Результаты» вместе с графом, построенным по заданной матрице инцидентности и матрицей достижимости.
+
+\clearpage
+
+\section*{Вывод}
+
+В результате выполнения лабораторной работы была создана и протестирована программа на языке C, которая:
+
+\begin{itemize}
+    \item[$-$] считывает из файла \texttt{input.txt} матрицу инцидентности ориентированного графа размером не менее 5 вершин и дуг;
+    \item[$-$] запрашивает у пользователя номер целевой вершины и проверяет корректность ввода;
+    \item[$-$] выполняет поиск в глубину (DFS) с учётом запрета на повторное использование дуг для полного перебора всех ориентированных цепей, заканчивающихся в заданной вершине;
+    \item[$-$] формирует и выводит на экран список найденных путей в удобочитаемом виде.
+\end{itemize}
+
+\setminted{style = rainbow_dash, fontsize = \small} % https://pygments.org/styles/
+
+\clearpage
+\section*{Приложение А1. Исходный код}
+% \inputminted{cpp}{code/src/main.c}
+
+
+\end{document}

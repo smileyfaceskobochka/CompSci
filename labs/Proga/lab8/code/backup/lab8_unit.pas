@@ -16,8 +16,8 @@ const
 
 type
   TMicrocontroller = record
-    Manufacturer: string;
-    Model: string;
+    Manufacturer: string[50];
+    Model: string[50];
     ClockMHz: double;
     FlashKB: cardinal;
     RAMKB: cardinal;
@@ -25,7 +25,7 @@ type
     ADCChannels: byte;
     ADCResolutionBits: byte;
     UARTCount: byte;
-    OtherInfo: string;
+    OtherInfo: string[100];
   end;
   TMCUFile = file of TMicrocontroller;
 
@@ -88,7 +88,7 @@ var
 implementation
 {$R *.lfm}
 
-{ GetTempDir: Возвращает путь к временной подпапке для ран-файлов и создает ее, если не существует. }
+{ GetTempDir: возвращает путь "<exe_folder>\temp_runs\" и создает папку при необходимости }
 function TForm1.GetTempDir: string;
 begin
   Result := IncludeTrailingPathDelimiter(ExtractFilePath(Application.ExeName))
@@ -97,7 +97,7 @@ begin
     ForceDirectories(Result);
 end;
 
-{ RemoveTempDir: Удаляет все файлы во временной подпапке и саму подпапку. }
+{ RemoveTempDir: удаляет все файлы в "<exe_folder>\temp_runs\" и саму папку }
 procedure TForm1.RemoveTempDir;
 var
   TempDir: string;
@@ -106,7 +106,6 @@ var
 begin
   TempDir := GetTempDir;
   if not DirectoryExists(TempDir) then Exit;
-
   if FindFirst(IncludeTrailingPathDelimiter(TempDir) + '*', faAnyFile, sr) = 0 then
   begin
     repeat
@@ -121,18 +120,17 @@ begin
     until FindNext(sr) <> 0;
     FindClose(sr);
   end;
-
   RemoveDir(TempDir);
 end;
 
-{ SafeDeleteFile: Безопасно удаляет файл, если он существует. }
+{ SafeDeleteFile: удаляет файл, если он существует }
 procedure TForm1.SafeDeleteFile(const FileName: string);
 begin
   if FileExists(FileName) then
     DeleteFile(FileName);
 end;
 
-{ SetupListView: Настраивает столбцы компонента ListView для отображения данных микроконтроллеров. }
+{ SetupListView: настраивает столбцы ListView для отображения полей микроконтроллера }
 procedure TForm1.SetupListView;
 begin
   lvOut.ViewStyle := vsReport;
@@ -150,32 +148,35 @@ begin
   with lvOut.Columns.Add do Caption := 'Инфо';
 end;
 
-{ InitManufacturers: Инициализирует данные о производителях и моделях микроконтроллеров. }
+{ InitManufacturers: инициализирует массив производителей и их моделей }
 procedure TForm1.InitManufacturers;
 begin
   SetLength(Manufacturers, 7);
-  Manufacturers.Name := 'Espressif';
-  Manufacturers.Models :=;
-  Manufacturers.[1]Name := 'Microchip';
-  Manufacturers.[1]Models :=;
-  Manufacturers.[2]Name := 'ST';
-  Manufacturers.[2]Models :=;
-  Manufacturers.[3]Name := 'NXP';
-  Manufacturers.[3]Models :=;
-  Manufacturers.[4]Name := 'TI';
-  Manufacturers.[4]Models :=;
-  Manufacturers.[5]Name := 'Nordic';
-  Manufacturers.[5]Models :=;
-  Manufacturers.[6]Name := 'Silicon Labs';
-  Manufacturers.[6]Models := ['EFM32GG11', 'EFM32HG322', 'EFM32ZG222'];
+  Manufacturers[0].Name := 'Espressif';
+  Manufacturers[0].Models := ['ESP32', 'ESP32-S3', 'ESP32-C3', 'ESP8266'];
+  Manufacturers[1].Name := 'Microchip';
+  Manufacturers[1].Models := ['PIC16F877A', 'PIC18F4550', 'ATmega328P'];
+  Manufacturers[2].Name := 'ST';
+  Manufacturers[2].Models := ['STM32F103', 'STM32F407', 'STM32L476'];
+  Manufacturers[3].Name := 'NXP';
+  Manufacturers[3].Models := ['LPC1768', 'LPC1114', 'LPC55S69'];
+  Manufacturers[4].Name := 'TI';
+  Manufacturers[4].Models := ['MSP430G2553', 'TMS320F28379D'];
+  Manufacturers[5].Name := 'Nordic';
+  Manufacturers[5].Models := ['nRF52832', 'nRF52840', 'nRF5340'];
+  Manufacturers[6].Name := 'Silicon Labs';
+  Manufacturers[6].Models := ['EFM32GG11', 'EFM32HG322', 'EFM32ZG222'];
 end;
 
-{ FormCreate: Обработчик события создания формы: инициализирует производителей, настраивает UI и переводит элементы на русский язык. }
+{ FormCreate: выполняется при создании формы, инициализирует UI и данные }
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   InitManufacturers;
   rgField.Items.Clear;
-  rgField.Items.AddStrings();
+  rgField.Items.AddStrings([
+    'Manufacturer','Model','ClockMHz','FlashKB','RAMKB',
+    'GPIOCount','ADCChannels','ADCResolutionBits','UARTCount','OtherInfo'
+  ]);
   rgField.ItemIndex := 0;
   SetupListView;
   CurrentPage := 0;
@@ -192,7 +193,7 @@ begin
   cbDescending.Caption := 'По убыванию';
 end;
 
-{ CompareRecords: Сравнивает две записи TMicrocontroller по указанному полю. Возвращает <0, 0, >0. }
+{ CompareRecords: сравнивает две записи TMicrocontroller по выбранному полю }
 function TForm1.CompareRecords(const A, B: TMicrocontroller; fieldIndex: integer): integer;
 begin
   case fieldIndex of
@@ -210,7 +211,7 @@ begin
   end;
 end;
 
-{ QuickSortChunk: Сортирует массив (чанк) записей TMicrocontroller с использованием алгоритма быстрой сортировки. }
+{ QuickSortChunk: сортирует массив записей быстрой сортировкой }
 procedure TForm1.QuickSortChunk(var Arr: array of TMicrocontroller; low, high, fieldIndex: integer);
 var
   i, j: integer;
@@ -232,7 +233,7 @@ begin
   QuickSortChunk(Arr, i, high, fieldIndex);
 end;
 
-{ btnGenClick: Генерирует файл 'mcus.dat' с заданным количеством случайных записей микроконтроллеров. }
+{ btnGenClick: генерирует 'mcus.dat' с RANDOM-записями микроконтроллеров }
 procedure TForm1.btnGenClick(Sender: TObject);
 var
   F: TMCUFile;
@@ -258,11 +259,11 @@ begin
       rec.ADCChannels := 1 + Random(16);
       rec.ADCResolutionBits := 8 + 4 * Random(3);
       rec.UARTCount := 1 + Random(4);
-      rec.OtherInfo := Format('ID:%d',);
+      rec.OtherInfo := Format('ID:%d', [Random(1000000)]);
       Write(F, rec);
       if i mod CHUNK_THRESHOLD = 0 then
       begin
-        statBar.SimpleText := Format('Сгенерировано %d из %d записей',);
+        statBar.SimpleText := Format('Сгенерировано %d из %d записей', [i, RECORD_COUNT]);
         Application.ProcessMessages;
       end;
     end;
@@ -282,7 +283,7 @@ begin
   DisplaySample('После генерации');
 end;
 
-{ btnSortClick: Обработчик кнопки "Сортировать": запускает внешнюю сортировку файла 'mcus.dat'. }
+{ btnSortClick: запускает внешнюю сортировку слиянием для 'mcus.dat' }
 procedure TForm1.btnSortClick(Sender: TObject);
 var
   F: TMCUFile;
@@ -310,18 +311,17 @@ begin
     statBar.SimpleText := 'После сортировки по ' + rgField.Items[rgField.ItemIndex] + ' (возр.)';
 
   DisplaySample(statBar.SimpleText);
-
-  RemoveTempDir; // удаляем папку temp_runs после сортировки
+  RemoveTempDir; // удаляем папку temp_runs
 end;
 
-{ btnShowAllClick: Обработчик кнопки "Показать все": отображает первую страницу записей. }
+{ btnShowAllClick: показывает первую страницу записей }
 procedure TForm1.btnShowAllClick(Sender: TObject);
 begin
   CurrentPage := 0;
   DisplayPage(CurrentPage);
 end;
 
-{ btnNextClick: Обработчик кнопки "След.": переходит на следующую страницу записей. }
+{ btnNextClick: показывает следующую страницу }
 procedure TForm1.btnNextClick(Sender: TObject);
 var
   MaxP: Int64;
@@ -331,18 +331,20 @@ begin
   DisplayPage(CurrentPage);
 end;
 
-{ btnPrevClick: Обработчик кнопки "Пред.": переходит на предыдущую страницу записей. }
+{ btnPrevClick: показывает предыдущую страницу }
 procedure TForm1.btnPrevClick(Sender: TObject);
 begin
   if CurrentPage > 0 then Dec(CurrentPage);
   DisplayPage(CurrentPage);
 end;
 
-{ DisplayPage: Отображает указанную страницу записей (PAGE_SIZE) в ListView. }
+{ DisplayPage: загружает и отображает одну «страницу» данных (PAGE_SIZE записей) }
 procedure TForm1.DisplayPage(Page: Int64);
 var
-  F: TMCUFile; rec: TMicrocontroller;
-  i, startIdx: Int64; item: TListItem;
+  F: TMCUFile;
+  rec: TMicrocontroller;
+  i, startIdx: Int64;
+  item: TListItem;
 begin
   AssignFile(F, 'mcus.dat');
   Reset(F);
@@ -378,8 +380,10 @@ begin
     finally
       lvOut.Items.EndUpdate;
       CloseFile(F);
-      statBar.SimpleText := Format('Страница %d из %d',
-       );
+      statBar.SimpleText := Format('Страница %d из %d', [
+        Page + 1,
+        (TotalRecords + PAGE_SIZE - 1) div PAGE_SIZE
+      ]);
     end;
   except
     CloseFile(F);
@@ -387,10 +391,12 @@ begin
   end;
 end;
 
-{ DisplaySample: Показывает первые и последние 50 записей из файла 'mcus.dat' в ListView. }
+{ DisplaySample: показывает в ListView первые и последние 50 записей файла }
 procedure TForm1.DisplaySample(const ACaption: string);
 var
-  F: TMCUFile; rec: TMicrocontroller; i, total: Int64;
+  F: TMCUFile;
+  rec: TMicrocontroller;
+  i, total: Int64;
   item: TListItem;
 begin
   AssignFile(F, 'mcus.dat');
@@ -453,7 +459,7 @@ begin
   end;
 end;
 
-{ SplitToRuns: Разбивает входной файл на отсортированные чанки (ран-файлы) и сохраняет их во временной директории. }
+{ SplitToRuns: разбивает входной файл на отсортированные чанки (ран-файлы) в папке temp_runs }
 procedure TForm1.SplitToRuns(const InFile: string; fieldIndex: integer; out RunFiles: TStringList; Descending: Boolean);
 var
   FIn, FRun: TMCUFile;
@@ -484,11 +490,11 @@ begin
         Read(FIn, Buffer[cnt]);
         Inc(cnt);
       end;
-      // Быстрая сортировка текущего чанка в памяти
+      // Быстрая сортировка чанка
       QuickSortChunk(Buffer, 0, cnt - 1, fieldIndex);
       if Descending then
       begin
-        // Разворачиваем массив для сортировки по убыванию
+        // Разворачиваем для убывания
         for i := 0 to (cnt div 2) - 1 do
         begin
           tmpRec := Buffer[i];
@@ -497,8 +503,8 @@ begin
         end;
       end;
 
-      // Записываем отсортированный чанк в отдельный ран-файл
-      RunName := Format('%srun_%d.dat',);
+      // Запись ран-файла
+      RunName := Format('%srun_%d.dat', [TempDir, runIdx]);
       AssignFile(FRun, RunName);
       Rewrite(FRun);
       for i := 0 to cnt - 1 do
@@ -522,7 +528,7 @@ begin
   Application.ProcessMessages;
 end;
 
-{ KWayMerge: Выполняет K-путевое слияние отсортированных ран-файлов в один итоговый файл, используя кучу. }
+{ KWayMerge: сливает ран-файлы в один отсортированный, сразу в восх./убыв. порядке }
 procedure TForm1.KWayMerge(const RunFiles: TStringList; fieldIndex: integer; const OutFile: string; Descending: Boolean);
 var
   Files:    array of TMCUFile;
@@ -535,7 +541,7 @@ var
   totalRuns: integer;
   writtenCount, percent: Int64;
 
-  // CompareDir: Вспомогательная функция для сравнения записей с учетом направления сортировки (возрастание/убывание).
+  { CompareDir: сравнение с учётом направления (min-heap vs max-heap) }
   function CompareDir(const A, B: TMicrocontroller): integer;
   begin
     if not Descending then
@@ -551,7 +557,7 @@ begin
   SetLength(HasRec, totalRuns);
   SetLength(Heap, totalRuns);
 
-  // 1) Открываем все ран-файлы и считываем по одной первой записи из каждого.
+  // 1) Открываем все ран-файлы, читаем по одной записи
   statBar.SimpleText := 'Фаза 2: Открытие ран-файлов…';
   Application.ProcessMessages;
   for i := 0 to totalRuns - 1 do
@@ -563,17 +569,17 @@ begin
       Read(Files[i], Curr[i]);
   end;
 
-  // 2) Формируем начальную кучу из первых записей каждого ран-файла.
+  // 2) Формируем начальную кучу из первых записей
   heapSize := 0;
   for i := 0 to totalRuns - 1 do
     if HasRec[i] then
     begin
-      Heap.Rec := Curr[i];
-      Heap.SourceIdx := i;
+      Heap[heapSize].Rec := Curr[i];
+      Heap[heapSize].SourceIdx := i;
       Inc(heapSize);
     end;
 
-  // 3) Выполняем "Heapify" для приведения кучи к корректному виду (min-heap или max-heap).
+  // 3) Heapify (приведение кучи к min-heap или max-heap)
   for idx := (heapSize div 2) - 1 downto 0 do
   begin
     l := 2 * idx + 1; r := 2 * idx + 2; chosen := idx;
@@ -587,7 +593,7 @@ begin
     end;
   end;
 
-  // 4) Открываем итоговый файл для записи отсортированных данных.
+  // 4) Открываем итоговый файл
   AssignFile(FOut, OutFile);
   Rewrite(FOut);
 
@@ -597,19 +603,18 @@ begin
   Application.ProcessMessages;
 
   try
-    // 5) Пока куча не пуста, извлекаем корневой элемент (минимум/максимум),
-    //    записываем его в выходной файл, считываем следующую запись из соответствующего ран-файла
-    //    и восстанавливаем свойство кучи.
+    // 5) Основной цикл: пока куча не пуста, извлекаем корень, записываем, читаем следующую запись из того же файла,
+    //    восстанавливаем кучу
     while heapSize > 0 do
     begin
-      node := Heap;
+      node := Heap[0];
       Write(FOut, node.Rec);
       Inc(writtenCount);
       if writtenCount mod CHUNK_THRESHOLD = 0 then
       begin
         percent := Min(100, (writtenCount * 100) div TotalRecords);
         statBar.SimpleText := Format('Фаза 2: Объединено %d из %d записей (%.0d%%)',
-         );
+          [writtenCount, TotalRecords, percent]);
         pbProgress.Position := percent;
         Application.ProcessMessages;
       end;
@@ -618,15 +623,15 @@ begin
       if not EOF(Files[idx]) then
       begin
         Read(Files[idx], Curr[idx]);
-        Heap.Rec := Curr[idx];
+        Heap[0].Rec := Curr[idx];
       end
       else
       begin
         Dec(heapSize);
-        Heap := Heap;
+        Heap[0] := Heap[heapSize];
       end;
 
-      // 6) Восстанавливаем свойство кучи (heapify) с корня после извлечения/замены элемента.
+      // 6) Восстановление heap-heap
       idx := 0;
       while True do
       begin
@@ -646,7 +651,7 @@ begin
     pbProgress.Position := 0;
     Application.ProcessMessages;
   finally
-    // 7) Закрываем все ран-файлы и удаляем их для очистки временных ресурсов.
+    // Закрываем и удаляем ран-файлы
     for i := 0 to High(Files) do
     begin
       CloseFile(Files[i]);
@@ -656,7 +661,7 @@ begin
   end;
 end;
 
-{ ExternalMergeSort: Оркестрирует процесс внешней сортировки слиянием: разбиение на ран-файлы и их последующее слияние. }
+{ ExternalMergeSort: управляет внешней сортировкой: split→merge }
 procedure TForm1.ExternalMergeSort(const InFile: string; fieldIndex: integer; Descending: Boolean);
 var
   Runs: TStringList;
@@ -664,12 +669,12 @@ var
 begin
   Runs := nil;
   try
-    // Фаза 1: разбить входной файл на отсортированные чанки (ран-файлы)
+    // Фаза 1: разбить исходный файл на отсортированные чанки
     SplitToRuns(InFile, fieldIndex, Runs, Descending);
-    // Фаза 2: выполнить K-путевое слияние ран-файлов в один отсортированный файл
+    // Фаза 2: слияние чанков в один файл, сразу в нужном порядке
     TempOut := InFile + '.tmp';
     KWayMerge(Runs, fieldIndex, TempOut, Descending);
-    // Заменить исходный файл отсортированным временным файлом
+    // Переименовать временный файл в mcus.dat
     SafeDeleteFile(InFile);
     RenameFile(TempOut, InFile);
   finally
@@ -677,7 +682,7 @@ begin
   end;
 end;
 
-{ VerifySorted: Проверяет корректность сортировки файла по заданному полю и направлению. }
+{ VerifySorted: проверяет, правильно ли отсортирован файл (по возр./убыв.) }
 procedure TForm1.VerifySorted(const FileName: string; fieldIndex: integer; Descending: Boolean);
 var
   F: TMCUFile;
@@ -708,3 +713,4 @@ begin
 end;
 
 end.
+

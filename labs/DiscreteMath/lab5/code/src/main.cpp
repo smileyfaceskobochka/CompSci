@@ -138,13 +138,13 @@ void print_matrix(const std::string &title, int n,
 }
 
 int main(int argc, char *argv[]) {
-  // bool visualize = false;
-  // for (int i = 1; i < argc; ++i) {
-  //   if (std::strcmp(argv[i], "-viz") == 0 ||
-  //       std::strcmp(argv[i], "--visualize") == 0) {
-  //     visualize = true;
-  //   }
-  // }
+  bool visualize = false;
+  for (int i = 1; i < argc; ++i) {
+    if (std::strcmp(argv[i], "-viz") == 0 ||
+        std::strcmp(argv[i], "--visualize") == 0) {
+      visualize = true;
+    }
+  }
 
   int n_vertices = 0, n_edges = 0;
   std::vector<std::vector<int>> inc_mat;
@@ -167,16 +167,16 @@ int main(int argc, char *argv[]) {
   std::cout << (one_way ? "Граф является односторонне связным.\n"
                         : "Граф НЕ является односторонне связным.\n");
 
-  // if (visualize) {
-  //   const std::string dot_file = "graph.dot";
-  //   if (generate_dot(n_vertices, edges, dot_file)) {
-  //     if (!dot_to_png(dot_file)) {
-  //       std::cout << "Сгенерирован файл \"" << dot_file << "\".\n"
-  //                 << "Для PNG: dot -Tpng -o graph.png " << dot_file << "\n";
-  //     }
-  //   } else {
-  //     std::cerr << "Не удалось создать DOT-файл.\n";
-  //   }
-  // }
+  if (visualize) {
+    const std::string dot_file = "graph.dot";
+    if (generate_dot(n_vertices, edges, dot_file)) {
+      if (!dot_to_png(dot_file)) {
+        std::cout << "Сгенерирован файл \"" << dot_file << "\".\n"
+                  << "Для PNG: dot -Tpng -o graph.png " << dot_file << "\n";
+      }
+    } else {
+      std::cerr << "Не удалось создать DOT-файл.\n";
+    }
+  }
   return EXIT_SUCCESS;
 }

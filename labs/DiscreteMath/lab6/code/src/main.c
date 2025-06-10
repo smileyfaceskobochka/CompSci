@@ -1,35 +1,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Структуры для представления графа
 typedef struct {
-  int tail; // начальная вершина (1-based)
-  int head; // конечная вершина (1-based)
+  int tail;
+  int head;
 } Edge;
 
 typedef struct {
-  int n;       // число вершин
-  int m;       // число дуг
-  int **inc;   // матрица инцидентности [n][m]
-  Edge *edges; // массив дуг длиной m
+  int n;
+  int m;
+  int **inc;
+  Edge *edges;
 } Graph;
 
-// Глобальные переменные для DFS
-int target;     // номер целевой вершины
-int *used_edge; // флаг использования дуги
-int *path;      // текущий путь (вершины)
+int target;
+int *used_edge;
+int *path;
 
-// Рекурсивный DFS для перебора путей
 void dfs(Graph *g, int v, int depth) {
   if (v == target) {
-    printf("Path: ");
     for (int i = 0; i < depth; i++) {
       printf("%d", path[i]);
       if (i < depth - 1)
         printf(" -> ");
     }
     printf("\n");
-    // не ранний выход — ищем и другие пути
   }
   for (int e = 0; e < g->m; e++) {
     if (!used_edge[e] && g->edges[e].tail == v) {
@@ -41,7 +36,29 @@ void dfs(Graph *g, int v, int depth) {
   }
 }
 
-// Загрузка графа из файла input.txt
+void generate_dot_file(Graph *g, const char *filename) {
+  FILE *f = fopen(filename, "w");
+  if (!f) {
+    perror("Не удалось создать dot-файл");
+    return;
+  }
+
+  fprintf(f, "digraph G {\n");
+
+  for (int i = 1; i <= g->n; i++) {
+    fprintf(f, "  %d;\n", i);
+  }
+
+  for (int i = 0; i < g->m; i++) {
+    fprintf(f, "  %d -> %d;\n", g->edges[i].tail, g->edges[i].head);
+  }
+
+  fprintf(f, "}\n");
+  fclose(f);
+
+  printf("DOT-файл успешно создан: %s\n", filename);
+}
+
 Graph *load_graph(const char *filename) {
   FILE *f = fopen(filename, "r");
   if (!f) {
@@ -55,17 +72,22 @@ Graph *load_graph(const char *filename) {
     exit(EXIT_FAILURE);
   }
 
-  // Выделяем память под матрицу инцидентности
+  printf("Матрица инцидентности:\n");
+
   g->inc = malloc(g->n * sizeof(int *));
   for (int i = 0; i < g->n; i++) {
     g->inc[i] = malloc(g->m * sizeof(int));
     for (int j = 0; j < g->m; j++) {
-      fscanf(f, "%d", &g->inc[i][j]);
+      if (fscanf(f, "%d", &g->inc[i][j]) != 1) {
+        fprintf(stderr, "Некорректный формат: ожидается число в матрице\n");
+        exit(EXIT_FAILURE);
+      }
+      printf("%3d ", g->inc[i][j]);
     }
+    printf("\n");
   }
   fclose(f);
 
-  // Выделяем и заполняем массив дуг
   g->edges = malloc(g->m * sizeof(Edge));
   for (int j = 0; j < g->m; j++) {
     int tail = -1, head = -1;
@@ -83,10 +105,10 @@ Graph *load_graph(const char *filename) {
     g->edges[j].tail = tail;
     g->edges[j].head = head;
   }
+
   return g;
 }
 
-// Очистка памяти
 void free_graph(Graph *g) {
   for (int i = 0; i < g->n; i++)
     free(g->inc[i]);
@@ -98,6 +120,8 @@ void free_graph(Graph *g) {
 int main() {
   Graph *g = load_graph("input.txt");
 
+  generate_dot_file(g, "graph.dot");
+
   printf("Введите номер целевой вершины (1..%d): ", g->n);
   if (scanf("%d", &target) != 1 || target < 1 || target > g->n) {
     fprintf(stderr, "Неверный номер вершины\n");
@@ -108,7 +132,7 @@ int main() {
   used_edge = calloc(g->m, sizeof(int));
   path = malloc((g->m + 1) * sizeof(int));
 
-  // Запускаем DFS из всех вершин
+  printf("\nПути до целевой вершины %d:\n", target);
   for (int v = 1; v <= g->n; v++) {
     path[0] = v;
     dfs(g, v, 1);

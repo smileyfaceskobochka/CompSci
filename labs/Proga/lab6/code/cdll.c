@@ -6,12 +6,12 @@
 Node *createNode(const char *data) {
   Node *newNode = (Node *)malloc(sizeof(Node));
   if (!newNode) {
-    fprintf(stderr, "Memory allocation failed! :( \n");
+    fprintf(stderr, "Mem alloc failed for newNode! :( \n");
     exit(EXIT_FAILURE);
   }
   newNode->data = (char *)malloc(strlen(data) + 1);
   if (!newNode->data) {
-    fprintf(stderr, "Memory allocation for data failed! :( \n");
+    fprintf(stderr, "Mem alloc failed for data! :( \n");
     free(newNode);
     exit(EXIT_FAILURE);
   }

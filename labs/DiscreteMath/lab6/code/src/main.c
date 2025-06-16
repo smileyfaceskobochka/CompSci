@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 typedef struct {
   int tail;
@@ -16,23 +17,33 @@ typedef struct {
 int target;
 int *used_edge;
 int *path;
+bool found_path_for_start_node;
+bool can_move_from_start_node;
 
 void dfs(Graph *g, int v, int depth) {
   if (v == target) {
-    for (int i = 0; i < depth; i++) {
-      printf("%d", path[i]);
-      if (i < depth - 1)
-        printf(" -> ");
-    }
-    printf("\n");
+      if (depth > 1 || (depth == 1 && !can_move_from_start_node)) {
+          found_path_for_start_node = true; // Путь найден
+          printf("%d", path[0]);
+          for (int i = 1; i < depth; i++) {
+              printf(" -> %d", path[i]);
+          }
+          printf("\n");
+      }
   }
+
+  bool moved = false;
   for (int e = 0; e < g->m; e++) {
     if (!used_edge[e] && g->edges[e].tail == v) {
+      moved = true;
       used_edge[e] = 1;
       path[depth] = g->edges[e].head;
       dfs(g, g->edges[e].head, depth + 1);
       used_edge[e] = 0;
     }
+  }
+  if (depth == 1 && v == target && !moved) {
+
   }
 }
 
@@ -130,12 +141,35 @@ int main() {
   }
 
   used_edge = calloc(g->m, sizeof(int));
-  path = malloc((g->m + 1) * sizeof(int));
+  path = malloc((g->n + 1) * sizeof(int));
 
   printf("\nПути до целевой вершины %d:\n", target);
   for (int v = 1; v <= g->n; v++) {
     path[0] = v;
-    dfs(g, v, 1);
+    found_path_for_start_node = false;
+    
+    can_move_from_start_node = false;
+    for (int e = 0; e < g->m; e++) {
+        if (g->edges[e].tail == v) {
+            can_move_from_start_node = true;
+            break;
+        }
+    }
+
+    if (v == target && !can_move_from_start_node) {
+        printf("Из %d: НЕТ ПУТИ\n", v);
+    } else if (v == target && can_move_from_start_node) {
+
+        dfs(g, v, 1);
+        if (!found_path_for_start_node) {
+            printf("Из %d: НЕТ ПУТИ\n", v);
+        }
+    } else {
+        dfs(g, v, 1);
+        if (!found_path_for_start_node) {
+            printf("Из %d: НЕТ ПУТИ\n", v);
+        }
+    }
   }
 
   free(used_edge);

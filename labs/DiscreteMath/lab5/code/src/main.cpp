@@ -115,10 +115,10 @@ compute_reachability(int n, const std::vector<std::vector<int>> &adj) {
   return reach;
 }
 
-bool is_one_way_connected(int n, const std::vector<std::vector<int>> &reach) {
+bool is_strongly_connected(int n, const std::vector<std::vector<int>>& reach) {
   for (int i = 0; i < n; ++i) {
     for (int j = i + 1; j < n; ++j) {
-      if (!reach[i][j] && !reach[j][i])
+      if (!reach[i][j] || !reach[j][i])
         return false;
     }
   }
@@ -163,10 +163,9 @@ int main(int argc, char *argv[]) {
   auto reach = compute_reachability(n_vertices, adj);
   print_matrix("Матрица достижимости", n_vertices, reach);
 
-  bool one_way = is_one_way_connected(n_vertices, reach);
-  std::cout << (one_way ? "Граф является односторонне связным.\n"
-                        : "Граф НЕ является односторонне связным.\n");
-
+  bool strong = is_strongly_connected(n_vertices, reach);
+  std::cout << (strong ? "Граф является односторонне (строго) связным.\n"
+                       : "Граф НЕ является односторонне (строго) связным.\n");
   if (visualize) {
     const std::string dot_file = "graph.dot";
     if (generate_dot(n_vertices, edges, dot_file)) {

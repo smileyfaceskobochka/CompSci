@@ -55,8 +55,8 @@ void handle_events(bool *running) {
         *running = false;
       } break;
 
-      case SDLK_X: {            // Зум-ин (увеличение)
-        float mouse_x, mouse_y; // Исправлено на int
+      case SDLK_X: { // Зум-ин (увеличение)
+        float mouse_x, mouse_y;
         SDL_GetMouseState(&mouse_x, &mouse_y);
         float prev_scale = scale;
         scale = SDL_clamp(scale - 0.1f, 0.1f, 8.0f);
@@ -66,13 +66,13 @@ void handle_events(bool *running) {
         offset_y = mouse_y - (mouse_y - offset_y) * (scale / prev_scale);
       } break;
 
-      case SDLK_Z: {            // Зум-аут (уменьшение)
-        float mouse_x, mouse_y; // Исправлено на int
+      case SDLK_Z: { // Зум-аут (уменьшение)
+        float mouse_x, mouse_y;
         SDL_GetMouseState(&mouse_x, &mouse_y);
         float prev_scale = scale;
         scale = SDL_clamp(scale + 0.1f, 0.1f, 10.0f);
 
-        // Корректируем смещение относительно мыши
+        // Cмещение относительно мыши
         offset_x = mouse_x - (mouse_x - offset_x) * (scale / prev_scale);
         offset_y = mouse_y - (mouse_y - offset_y) * (scale / prev_scale);
       } break;
@@ -156,10 +156,7 @@ void handle_events(bool *running) {
 
 void update_loop() {
   bool running = true;
-  Uint32 frame_start_time = 0;
   while (running) {
-    frame_start_time = SDL_GetTicks();
-
     handle_events(&running);
 
     // Buffer clear
@@ -171,11 +168,6 @@ void update_loop() {
     render_gilbert(scale, offset_x, offset_y);
 
     SDL_RenderPresent(renderer);
-
-    Uint32 frame_time = SDL_GetTicks() - frame_start_time;
-    if (frame_time < 16) { // 1000ms / 60 ≈ 16ms
-      SDL_Delay(16 - frame_time);
-    }
   }
 }
 

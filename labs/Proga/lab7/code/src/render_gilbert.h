@@ -1,8 +1,8 @@
 #ifndef RENDER_GILBERT_H
 #define RENDER_GILBERT_H
 
-#include <SDL3/SDL.h>
 #include "utils.h"
+#include <SDL3/SDL.h>
 
 /**
  * @brief Структура точки с целочисленными координатами.
@@ -45,7 +45,8 @@ extern float g_size;     ///< Размер стороны квадрата
  * @param yi Вертикальный шаг по X.
  * @param yj Вертикальный шаг по Y.
  */
-void gen_hilbert(int level, float x, float y, float xi, float xj, float yi, float yj);
+void gen_hilbert(int level, float x, float y, float xi, float xj, float yi,
+                 float yj);
 
 /**
  * @brief Инициализирует кривую Гилберта.

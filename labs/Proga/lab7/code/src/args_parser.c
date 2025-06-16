@@ -1,6 +1,6 @@
 #include "args_parser.h"
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 
 int parse_arguments(int argc, char *argv[], WindowConfig *config) {
   for (int i = 1; i < argc; i++) {
@@ -13,7 +13,9 @@ int parse_arguments(int argc, char *argv[], WindowConfig *config) {
       }
     } else if (strcmp(argv[i], "-s") == 0 || strcmp(argv[i], "--size") == 0) {
       if (i + 1 < argc && argv[i + 1][0] != '-') {
-        if (sscanf(argv[++i], "%dx%d", &config->w_width, &config->w_height) != 2 || config->w_width < 160 || config->w_height < 120) {
+        if (sscanf(argv[++i], "%dx%d", &config->w_width, &config->w_height) !=
+                2 ||
+            config->w_width < 160 || config->w_height < 120) {
           fprintf(stderr, "Invalid size. Using 800x600.\n");
           config->w_width = 800;
           config->w_height = 600;
@@ -26,7 +28,8 @@ int parse_arguments(int argc, char *argv[], WindowConfig *config) {
       printf("Usage: %s [options]\n", argv[0]);
       printf("Options:\n");
       printf("  -n, --name <title>   Set the window title\n");
-      printf("  -s, --size <WIDTHxHEIGHT>   Set the window size (minimum 160x120)\n");
+      printf("  -s, --size <WIDTHxHEIGHT>   Set the window size (minimum "
+             "160x120)\n");
       printf("  -h, --help          Show this help message\n");
       return 0;
 

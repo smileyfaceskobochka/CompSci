@@ -8,7 +8,7 @@
       <Unit>
         <Filename Value="lab8.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="1"/>
         <CursorPos X="11" Y="15"/>
         <UsageCount Value="33"/>
         <Loaded Value="True"/>
@@ -19,6 +19,7 @@
         <ComponentName Value="Form1"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <CursorPos X="24" Y="13"/>
         <UsageCount Value="33"/>
         <Loaded Value="True"/>
@@ -48,11 +49,9 @@
       </Unit>
       <Unit>
         <Filename Value="..\..\..\..\..\..\..\Downloads\Telegram Desktop\1.pas"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="-1"/>
         <CursorPos X="19" Y="9"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">

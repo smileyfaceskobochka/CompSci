@@ -1,8 +1,8 @@
 #include "render_gilbert.h"
-#include "window.h"
 #include "utils.h"
-#include <stdlib.h>
+#include "window.h"
 #include <math.h>
+#include <stdlib.h>
 
 /* Глобальный массив точек кривой и параметры */
 Point *gilbert_points = NULL;
@@ -42,7 +42,8 @@ static void add_point(float x, float y) {
  * @param yi Вертикальный шаг по X.
  * @param yj Вертикальный шаг по Y.
  */
-void gen_hilbert(int level, float x, float y, float xi, float xj, float yi, float yj) {
+void gen_hilbert(int level, float x, float y, float xi, float xj, float yi,
+                 float yj) {
   if (level <= 0) {
     // Вычисляем центр ячейки
     float mid_x = x + (xi + yi) / 2.0f;
@@ -50,9 +51,12 @@ void gen_hilbert(int level, float x, float y, float xi, float xj, float yi, floa
     add_point(mid_x, mid_y);
   } else {
     gen_hilbert(level - 1, x, y, yi / 2.0f, yj / 2.0f, xi / 2.0f, xj / 2.0f);
-    gen_hilbert(level - 1, x + xi / 2.0f, y + xj / 2.0f, xi / 2.0f, xj / 2.0f, yi / 2.0f, yj / 2.0f);
-    gen_hilbert(level - 1, x + xi / 2.0f + yi / 2.0f, y + xj / 2.0f + yj / 2.0f, xi / 2.0f, xj / 2.0f, yi / 2.0f, yj / 2.0f);
-    gen_hilbert(level - 1, x + xi / 2.0f + yi, y + xj / 2.0f + yj, -yi / 2.0f, -yj / 2.0f, -xi / 2.0f, -xj / 2.0f);
+    gen_hilbert(level - 1, x + xi / 2.0f, y + xj / 2.0f, xi / 2.0f, xj / 2.0f,
+                yi / 2.0f, yj / 2.0f);
+    gen_hilbert(level - 1, x + xi / 2.0f + yi / 2.0f, y + xj / 2.0f + yj / 2.0f,
+                xi / 2.0f, xj / 2.0f, yi / 2.0f, yj / 2.0f);
+    gen_hilbert(level - 1, x + xi / 2.0f + yi, y + xj / 2.0f + yj, -yi / 2.0f,
+                -yj / 2.0f, -xi / 2.0f, -xj / 2.0f);
   }
 }
 
@@ -91,23 +95,25 @@ void init_gilbert(int depth, int width, int height) {
 /**
  * @brief Отрисовывает квадратную сетку и кривую Гилберта.
  *
- * Сетка строится в пределах рабочей области, где каждая ячейка имеет размер g_size/n.
- * Точки кривой, генерируемые функцией gen_hilbert, находятся в центрах ячеек.
- * Применяется масштабирование и смещение.
+ * Сетка строится в пределах рабочей области, где каждая ячейка имеет размер
+ * g_size/n. Точки кривой, генерируемые функцией gen_hilbert, находятся в
+ * центрах ячеек. Применяется масштабирование и смещение.
  *
  * @param scale Коэффициент масштабирования.
  * @param offset_x Горизонтальное смещение.
  * @param offset_y Вертикальное смещение.
  */
 void render_gilbert(float scale, int offset_x, int offset_y) {
-  if (g_size <= 0 || point_count < 2) return;
+  if (g_size <= 0 || point_count < 2)
+    return;
 
   int n = 1 << gilbert_depth;   // Количество ячеек по стороне
   float cell_size = g_size / n; // Размер ячейки
 
   // Рисуем квадратную сетку
   SDL_Color grid_color = hexa_to_rgba(CP_MOCHA_SURFACE_1, 1.0);
-  SDL_SetRenderDrawColor(renderer, grid_color.r, grid_color.g, grid_color.b, grid_color.a);
+  SDL_SetRenderDrawColor(renderer, grid_color.r, grid_color.g, grid_color.b,
+                         grid_color.a);
 
   // Вертикальные линии
   for (int i = 0; i <= n; i++) {
@@ -129,7 +135,8 @@ void render_gilbert(float scale, int offset_x, int offset_y) {
 
   // Рисуем кривую Гилберта (соединяем центры ячеек)
   SDL_Color curve_color = hexa_to_rgba(CP_MOCHA_RED, 1.0);
-  SDL_SetRenderDrawColor(renderer, curve_color.r, curve_color.g, curve_color.b, curve_color.a);
+  SDL_SetRenderDrawColor(renderer, curve_color.r, curve_color.g, curve_color.b,
+                         curve_color.a);
 
   for (int i = 0; i < point_count - 1; i++) {
     int x1 = (int)(gilbert_points[i].x * scale + offset_x);

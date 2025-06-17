@@ -8,9 +8,9 @@
       <Unit>
         <Filename Value="lab8.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
-        <CursorPos X="11" Y="15"/>
-        <UsageCount Value="33"/>
+        <EditorIndex Value="1"/>
+        <CursorPos Y="26"/>
+        <UsageCount Value="37"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -19,8 +19,10 @@
         <ComponentName Value="Form1"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <CursorPos X="24" Y="13"/>
-        <UsageCount Value="33"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="128"/>
+        <CursorPos X="57" Y="149"/>
+        <UsageCount Value="37"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -48,30 +50,12 @@
       </Unit>
       <Unit>
         <Filename Value="..\..\..\..\..\..\..\Downloads\Telegram Desktop\1.pas"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="-1"/>
         <CursorPos X="19" Y="9"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="lab8_unit.pas"/>
-        <Caret Line="529" TopLine="494"/>
-      </Position>
-      <Position>
-        <Filename Value="lab8_unit.pas"/>
-        <Caret Line="232" Column="45" TopLine="219"/>
-      </Position>
-      <Position>
-        <Filename Value="lab8_unit.pas"/>
-        <Caret Line="233" Column="7" TopLine="216"/>
-      </Position>
-      <Position>
-        <Filename Value="lab8_unit.pas"/>
-        <Caret Line="510" Column="96" TopLine="495"/>
-      </Position>
       <Position>
         <Filename Value="lab8_unit.pas"/>
         <Caret Line="569" TopLine="534"/>
@@ -175,6 +159,22 @@
       <Position>
         <Filename Value="lab8_unit.pas"/>
         <Caret Line="158" Column="95" TopLine="141"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="169" Column="59" TopLine="169"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="178" Column="74" TopLine="165"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="699" Column="82" TopLine="280"/>
+      </Position>
+      <Position>
+        <Filename Value="lab8_unit.pas"/>
+        <Caret Line="197" Column="34" TopLine="185"/>
       </Position>
     </JumpHistory>
     <RunParams>

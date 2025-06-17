@@ -10,7 +10,7 @@ uses
 
 const
   RECORD_COUNT    = 8000000;
-  CHUNK_THRESHOLD = 250000;
+  CHUNK_THRESHOLD = 500000;
   PAGE_SIZE       = 100;
   TEMP_SUBDIR     = 'temp_runs';  // подпапка для ран-файлов
 
@@ -135,17 +135,21 @@ procedure TForm1.SetupListView;
 begin
   lvOut.ViewStyle := vsReport;
   lvOut.Columns.Clear;
-  with lvOut.Columns.Add do Caption := 'Индекс';
-  with lvOut.Columns.Add do Caption := 'Производитель';
-  with lvOut.Columns.Add do Caption := 'Модель';
-  with lvOut.Columns.Add do Caption := 'Частота МГц';
-  with lvOut.Columns.Add do Caption := 'Flash КБ';
-  with lvOut.Columns.Add do Caption := 'RAM КБ';
-  with lvOut.Columns.Add do Caption := 'GPIO';
-  with lvOut.Columns.Add do Caption := 'АЦП Кан.';
-  with lvOut.Columns.Add do Caption := 'АЦП Разр.';
-  with lvOut.Columns.Add do Caption := 'UART';
-  with lvOut.Columns.Add do Caption := 'Инфо';
+  with lvOut.Columns do
+  begin
+    with Add do Caption := 'Индекс';
+    with Add do Caption := 'Производитель';
+    with Add do Caption := 'Модель';
+    with Add do Caption := 'Частота(MHz)';
+    with Add do Caption := 'Flash(KB)';
+    with Add do Caption := 'RAM(KB)';
+    with Add do Caption := 'GPIO';
+    with Add do Caption := 'АЦП Кан.';
+    with Add do Caption := 'АЦП Разр.';
+    with Add do Caption := 'UART';
+    with Add do Caption := 'Инфо';
+  end;
+  //lvOut.Columns.Add.Caption := 'Инфо';
 end;
 
 { InitManufacturers: инициализирует массив производителей и их моделей }
@@ -174,8 +178,8 @@ begin
   InitManufacturers;
   rgField.Items.Clear;
   rgField.Items.AddStrings([
-    'Manufacturer','Model','ClockMHz','FlashKB','RAMKB',
-    'GPIOCount','ADCChannels','ADCResolutionBits','UARTCount','OtherInfo'
+    'Производитель','Модель','Частота(MHz)','Flash(KB)','RAM(KB)',
+    'GPIO','АЦП Кан.','АЦП Разр.','UART','Инфо'
   ]);
   rgField.ItemIndex := 0;
   SetupListView;

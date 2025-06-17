@@ -321,7 +321,6 @@ object Form1: TForm1
     0000000000000000000000000000000000000000000000000000000000000000
     0000
   }
-  LCLVersion = '4.0.0.4'
   OnCreate = FormCreate
   object btnGen: TButton
     Left = 176
@@ -410,9 +409,9 @@ object Form1: TForm1
   end
   object cbDescending: TCheckBox
     Left = 437
-    Height = 20
+    Height = 22
     Top = 3
-    Width = 95
+    Width = 110
     Caption = 'По убыванию'
     TabOrder = 8
   end

@@ -409,9 +409,9 @@ object Form1: TForm1
   end
   object cbDescending: TCheckBox
     Left = 437
-    Height = 20
+    Height = 22
     Top = 3
-    Width = 95
+    Width = 110
     Caption = 'По убыванию'
     TabOrder = 8
   end

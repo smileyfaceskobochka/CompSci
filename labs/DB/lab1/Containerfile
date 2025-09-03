@@ -1,0 +1,21 @@
+FROM alpine:latest
+
+# Install PostgreSQL server and client from Alpine repos
+RUN apk add --no-cache postgresql postgresql-contrib su-exec
+
+# Create postgres user and data directory
+RUN mkdir -p /var/lib/postgresql/data && chown -R postgres:postgres /var/lib/postgresql
+
+# Expose postgres port
+EXPOSE 5432
+
+# Switch to postgres user
+USER postgres
+
+# Initialize database cluster on first run
+# Alpine's postgres comes with `initdb` and `pg_ctl`
+RUN initdb -D /var/lib/postgresql/data
+
+# Default command: run postgres
+CMD ["postgres", "-D", "/var/lib/postgresql/data"]
+

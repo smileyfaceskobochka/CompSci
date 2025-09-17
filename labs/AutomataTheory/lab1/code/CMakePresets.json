@@ -1,0 +1,48 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "linux-debug",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/linux-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "linux-release",
+      "inherits": "linux-debug",
+      "binaryDir": "${sourceDir}/build/linux-release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "windows-mingw-debug",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/windows-debug",
+      "toolchainFile": "${sourceDir}/cmake/toolchains/mingw-w64.cmake",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "windows-mingw-release",
+      "inherits": "windows-mingw-debug",
+      "binaryDir": "${sourceDir}/build/windows-release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    }
+  ],
+  "buildPresets": [
+    { "name": "linux-debug", "configurePreset": "linux-debug" },
+    { "name": "linux-release", "configurePreset": "linux-release" },
+    { "name": "windows-mingw-debug", "configurePreset": "windows-mingw-debug" },
+    { "name": "windows-mingw-release", "configurePreset": "windows-mingw-release" }
+  ]
+}
+
+
+
+

@@ -1,21 +1,33 @@
+# Base image
 FROM alpine:latest
 
-# Install PostgreSQL server and client from Alpine repos
-RUN apk add --no-cache postgresql postgresql-contrib su-exec
+# Install PostgreSQL and su-exec
+RUN apk add --no-cache postgresql postgresql-contrib su-exec bash
 
-# Create postgres user and data directory
-RUN mkdir -p /var/lib/postgresql/data && chown -R postgres:postgres /var/lib/postgresql
-
-# Expose postgres port
-EXPOSE 5432
+# Create data and runtime directories
+RUN mkdir -p /var/lib/postgresql/data /run/postgresql && \
+    chown -R postgres:postgres /var/lib/postgresql /run/postgresql
 
 # Switch to postgres user
 USER postgres
 
-# Initialize database cluster on first run
-# Alpine's postgres comes with `initdb` and `pg_ctl`
+# Initialize DB cluster
 RUN initdb -D /var/lib/postgresql/data
 
-# Default command: run postgres
-CMD ["postgres", "-D", "/var/lib/postgresql/data"]
+# Allow TCP connections with password authentication from any host
+RUN echo "host all all 0.0.0.0/0 md5" >> /var/lib/postgresql/data/pg_hba.conf
+
+# Expose the default PostgreSQL port
+EXPOSE 5432
+
+# Copy optional SQL initialization script
+# Place your SQL script (e.g., init.sql) in the same folder as the Containerfile
+# This script will create test_db and tables automatically on first run
+COPY init.sql /docker-entrypoint-initdb.d/init.sql
+
+# Set environment variables for PostgreSQL password (override at runtime if needed)
+ENV POSTGRES_PASSWORD=postgres
+
+# Default command to start PostgreSQL listening on all interfaces
+CMD ["postgres", "-D", "/var/lib/postgresql/data", "-h", "0.0.0.0"]
 

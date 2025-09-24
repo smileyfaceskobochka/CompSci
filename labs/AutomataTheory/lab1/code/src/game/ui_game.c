@@ -8,10 +8,16 @@
 #include <stdlib.h>
 
 void game_ui_init(GameUI *ui) {
-  // Pegs occupy full width from topbar to controls
-  ui->boardArea =
-      (Rectangle){0, UI_BOARD_TOP_MARGIN, GetScreenWidth(),
-                  GetScreenHeight() - UI_BOARD_TOP_MARGIN - UI_CONTROLS_HEIGHT};
+  // Calculate centered board area above the UI controls
+  float screenWidth = GetScreenWidth();
+  float screenHeight = GetScreenHeight();
+  float boardWidth = screenWidth * 0.8f; // Use 80% of screen width
+  float boardHeight = screenHeight - UI_BOARD_TOP_MARGIN - UI_CONTROLS_HEIGHT -
+                      20; // Leave margin above controls
+  float boardX = (screenWidth - boardWidth) / 2.0f; // Center horizontally
+  float boardY = UI_BOARD_TOP_MARGIN;               // Start below topbar
+
+  ui->boardArea = (Rectangle){boardX, boardY, boardWidth, boardHeight};
 
   // Load shader references
   ui->emergencyGlowShader = ui_get_emergency_shader();
@@ -100,6 +106,16 @@ static void draw_pegs(const GameUI *ui, const GameState *state,
 
 void game_ui_draw(GameUI *ui, GameState *state, Options *options) {
   const ThemeColors *theme = options_get_current_theme();
+
+  // Calculate screen shake offset
+  Vector2 shakeOffset = {0, 0};
+  if (state->shakeTimer > 0) {
+    float time = GetTime();
+    float intensity =
+        state->shakeTimer / 0.3f; // Normalize to 0-1 over 0.3 seconds
+    shakeOffset.x = sinf(time * 50.0f) * 8.0f * intensity; // Horizontal shake
+    shakeOffset.y = cosf(time * 45.0f) * 6.0f * intensity; // Vertical shake
+  }
 
   // Bottom controls
   float controlsY = GetScreenHeight() - 50;
@@ -217,8 +233,18 @@ void game_ui_draw(GameUI *ui, GameState *state, Options *options) {
   // Update game state using new function
   game_update(state, GetFrameTime());
 
+  // Apply screen shake to the game board only
+  if (state->shakeTimer > 0) {
+    BeginMode2D((Camera2D){shakeOffset, (Vector2){0, 0}, 0.0f, 1.0f});
+  }
+
   // Board - now occupies space from topbar to controls
   draw_pegs(ui, state, options);
+
+  // End screen shake mode
+  if (state->shakeTimer > 0) {
+    EndMode2D();
+  }
 
   // Update timers using new function
   game_update_timers(state, GetFrameTime());

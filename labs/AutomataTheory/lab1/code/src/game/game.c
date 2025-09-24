@@ -2,8 +2,6 @@
 
 #include <raylib.h>
 
-
-
 void game_init(GameState *state) {
   for (int i = 0; i < NUM_PEGS; i++) {
     state->ringCounts[i] = 0;
@@ -140,7 +138,7 @@ void game_step(GameState *state) {
   int roll = GetRandomValue(0, 99);
   if (roll < state->emergencyChance) {
     // Generator #2 succeeds - activate emergency glow and screen shake
-    state->emergencySuccessTimer = 0.6f; // Longer glow for emergency success
+    state->emergencySuccessTimer = 0.6f; // Glow for emergency success
     state->shakeTimer = 0.3f;            // Screen shake duration
 
     // Generator #3: pick a peg with >=3 rings

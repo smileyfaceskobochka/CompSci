@@ -13,6 +13,7 @@ cargo.lock
 *.out
 *.synctex.gz
 *.log
+*.toc
 _minted
 build
 labs/Proga/lab8/code/lab8

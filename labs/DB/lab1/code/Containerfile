@@ -1,0 +1,7 @@
+FROM docker.io/library/postgres:alpine3.22
+
+ENV POSTGRES_USER=pozordom_user
+ENV POSTGRES_PASSWORD=pozordom_pass
+ENV POSTGRES_DB=pozordom
+
+COPY init.sql /docker-entrypoint-initdb.d/

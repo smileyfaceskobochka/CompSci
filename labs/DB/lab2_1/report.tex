@@ -1,0 +1,210 @@
+\documentclass[oneside,a4paper,14pt]{extarticle}
+\usepackage[a4paper,letterpaper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\usepackage[russian]{babel}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{minted, fancyvrb}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{csvsimple-l3}
+\usepackage{array}
+
+% Форматирование листингов с кодом
+\setminted{style = rainbow_dash, fontsize = \small} % https://pygments.org/styles/
+
+% Форматирование заголовков
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+% Интерлиньяж и абзац
+\renewcommand\baselinestretch{1.33}
+
+\setlength{\parindent}{1.25cm}  % длина красной строки
+
+% Для всех списков
+\setlist[enumerate]{
+  left=\parindent,       % отступ слева
+  label=\arabic*.,       % цифры
+  itemsep=0pt,           % расстояние между пунктами
+  topsep=5pt,            % отступ сверху
+  partopsep=0pt,         % дополнительный отступ сверху, если абзац до списка
+  parsep=0pt             % отступ между абзацами внутри пункта
+}
+
+\setlist[itemize]{
+  left=\parindent,       % отступ слева
+  itemsep=0pt,           % расстояние между пунктами
+  topsep=5pt,            % отступ сверху
+  partopsep=0pt,
+  parsep=0pt
+}
+
+% Гиперссылки
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  pdfborder={0 0 0},
+  pdftitle={Основы DML-запросов в PostgreSQL. Заполнение данных и представления},
+  pdfauthor={Черкасов А.А.}
+}
+
+\begin{document}
+
+\newpage
+\thispagestyle{empty}
+\begin{center}
+  МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ ОБРАЗОВАТЕЛЬНОЕ УЧРЕЖДЕНИЕ ВЫСШЕГО ОБРАЗОВАНИЯ\\
+  «ВЯТСКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ»\\
+  Институт математики и информационных систем\\
+  Факультет автоматики и вычислительной техники\\
+  Кафедра электронных вычислительных машин
+\end{center}
+\vspace{10mm}
+
+\hfill
+\begin{tabular}{l}
+  \footnotesize Дата сдачи на проверку:                                          \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2025 г. \\
+  \footnotesize Проверено:                                                       \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2025 г. \\
+\end{tabular}
+\vfill
+
+\begin{center}
+  Основы DML-запросов в PostgreSQL.\\
+  Отчёт по лабораторной работе №2.1\\
+  по дисциплине\\
+  <<Управление данными>>\\
+\end{center}
+\vspace{25mm}
+\noindent
+\begin{tabular}{ll}
+  Разработал студент гр. ИВТб-2301-05-00 & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Черкасов А. А./ \\
+                                         & \hspace{25.5mm}\footnotesize(подпись)                    \\
+  Старший Преподователь                  & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Клюкин В. Л./   \\
+                                         & \hspace{25.5mm}\footnotesize(подпись)                    \\
+\end{tabular}
+
+\noindent
+\begin{tabular}{lp{58mm}r}
+  Работа защищена &  & \hspace{13mm}<<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{30mm}{0.10mm}\ 2025 г.
+\end{tabular}
+\vfill
+
+\begin{center}
+  Киров\\
+  2025
+\end{center}
+
+\newpage\thispagestyle{plain}
+
+\section*{Цели лабораторной работы}
+\begin{itemize}
+  \item[$-$] освоить основные варианты DML-запросов в PostgreSQL;
+  \item[$-$] научиться создавать SQL-скрипты для заполнения таблиц данными;
+  \item[$-$] научиться использованию команд \texttt{UPDATE} и \texttt{DELETE};
+  \item[$-$] научиться работать с представлениями.
+\end{itemize}
+
+\section*{Задание}
+\begin{enumerate}
+  \item Создать и выполнить SQL-скрипт, который будет заполнять таблицы данными (не менее 3–5 строк в каждую таблицу).
+  \item Создать представления для нескольких таблиц, в которых собираются данные из самой таблицы и других, на которые она ссылается. Хотя бы одно из представлений должно быть сделано с использованием соединений (\texttt{JOIN}).
+  \item Для таблицы, содержащей столбец с числовыми данными, создать представление, отражающее статистику по этому столбцу (минимум, максимум, среднее, сумма).
+\end{enumerate}
+
+\clearpage
+\section*{Тема БД: <<Система управления умным домом>>}
+База данных предназначена для хранения информации о пользователях, хабах и устройствах умного дома, а также событий, которые генерируют эти устройства. Она обеспечивает:
+\begin{itemize}
+  \item[$-$] регистрацию и управление пользователями;
+  \item[$-$] хранение информации о хабах и их местоположении;
+  \item[$-$] классификацию устройств по типам и отслеживание их состояния;
+  \item[$-$] фиксацию событий устройств для мониторинга и анализа.
+\end{itemize}
+
+
+\section*{Заполнение таблиц данными}
+
+Для заполнения таблиц были использованы команды \texttt{INSERT}. Для обеспечения ссылочной целостности использовались возвращаемые значения первичных ключей через \texttt{RETURNING}. Ниже приведён фрагмент скрипта \texttt{init\_data.sql}.
+
+\section*{Представления}
+
+Были созданы три представления, описанные в файле \texttt{views.sql}.
+
+\subsection*{1. Полная информация об устройствах}
+
+Представление \texttt{device\_full\_info} объединяет данные из таблиц \texttt{devices}, \\
+\texttt{device\_types}, \texttt{hubs} и \texttt{users}, предоставляя полную информацию об устройстве, его типе, хабе и владельце.
+
+\begin{table}[H]
+  \centering
+  \csvreader[
+    respect all,
+    tabular=|c|c|c|c|c|,
+    table head=\hline ID & Устройство & Тип & Хаб & Владелец \\ \hline,
+    late after line=\\\hline
+  ]{code/device_full_info.csv}{}{%
+    \csvcoli & \csvcolii & \csvcoliii & \csvcoliv & \csvcolv
+  }
+  \caption{Полная информация об устройствах}
+  \label{tab:device_full_info}
+\end{table}
+
+\subsection*{2. Информация о событиях}
+
+Представление \texttt{event\_info} показывает события вместе с именем устройства и хаба, к которому оно относится.
+
+\begin{table}[H]
+  \centering
+  \footnotesize
+  \csvreader[
+  respect all,
+  tabular=|c|c|>{\ttfamily}c|c|c|,
+  table head=\hline ID события & Тип события & \multicolumn{1}{c|}{Данные} & Устройство & Хаб \\ \hline,
+  late after line=\\\hline
+  ]{code/event_info.csv}{}{%
+  \csvcoli & \csvcolii & \csvcoliii & \csvcoliv & \csvcolv
+  }
+  \caption{Информация о событиях}
+  \label{tab:event_info}
+\end{table}
+
+\subsection*{3. Статистика по числовому столбцу}
+
+Представление \texttt{device\_id\_stats} отображает минимальное, максимальное, среднее значение и сумму по столбцу \texttt{id} в таблице \texttt{devices}.
+
+\begin{table}[H]
+  \centering
+  \csvreader[
+    respect all,
+    tabular=|l|c|c|,
+    table head=\hline Метрика & Значение & ID записи \\ \hline,
+    late after line=\\\hline
+  ]{code/device_id_stats.csv}{}{%
+    \csvcoli & \csvcolii & \csvcoliii
+  }
+  \caption{Статистика по идентификаторам устройств}
+  \label{tab:device_id_stats}
+\end{table}
+
+\section*{Вывод}
+
+В ходе выполнения лабораторной работы №2\_1 были освоены основные DML-запросы в PostgreSQL. Был создан и выполнен скрипт для заполнения таблиц тестовыми данными с соблюдением ссылочной целостности. Реализованы команды \texttt{UPDATE} и \texttt{DELETE} для изменения и удаления записей. Также были созданы три представления: два с использованием \texttt{JOIN} для получения полной информации об устройствах и событиях, и одно — для отображения статистики по числовому столбцу. Работа позволила закрепить навыки написания SQL-скриптов и подготовила основу для последующих лабораторных работ.
+
+\newpage
+
+\section*{Приложение А1. Исходный код}
+\inputminted{Dockerfile}{../Containerfile}
+
+\section*{Приложение А2. SQL-скрипты}
+\inputminted{sql}{code/init_data.sql}
+
+\section*{Приложение А3. Представления}
+\inputminted{sql}{code/views.sql}
+
+\end{document}

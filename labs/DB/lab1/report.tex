@@ -9,6 +9,9 @@
 \usepackage{hyperref}
 \usepackage{enumitem}
 
+% Форматирование листингов с кодом
+\setminted{style = rainbow_dash, fontsize = \small} % https://pygments.org/styles/
+
 % Форматирование заголовков
 \titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
 \titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
@@ -43,8 +46,8 @@
   linkcolor=black,
   urlcolor=blue,
   pdfborder={0 0 0},
-  pdftitle={Техническое задание на разработку системы "ПозорДом"},
-  pdfauthor={Черкасов А.А., Макаров С.А.}
+  pdftitle={Основы DDL-запросов в PostgreSQL},
+  pdfauthor={Черкасов А.А.}
 }
 
 \begin{document}
@@ -189,10 +192,8 @@ ER-диаграмма для разработанной структуры БД 
 В ходе лабораторной работы были изучены пользователи, роли и типы данных в PostgreSQL. Была спроектирована структура базы данных для системы управления умным домом и создана соответствующая ER-диаграмма. Также выполнены SQL-скрипты для создания таблиц с ограничениями и индексами, включая таблицы пользователей, хабов, типов устройств, устройств и событий. В результате закреплены навыки проектирования и создания реляционной базы данных.
 \newpage
 
-\setminted{style = rainbow_dash, fontsize = \small} % https://pygments.org/styles/
-
 \section*{Приложение А1. Исходный код}
-\inputminted{Dockerfile}{code/Containerfile}
+\inputminted{Dockerfile}{../Containerfile}
 
 \section*{Приложение А2. Исходный код}
 \inputminted{sql}{code/init.sql}

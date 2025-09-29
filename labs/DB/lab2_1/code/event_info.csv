@@ -1,0 +1,4 @@
+"event_id","event_type","event_data","device_name","hub_name"
+1,"switch_on","{""power"": ""on""}","Ceiling Lamp","Living Room Hub"
+2,"temperature_change","{""temperature"": 23.0}","ThermoSensor","Living Room Hub"
+4,"motion_detected","{""movement"": true}","Security Camera","Bedroom Hub"

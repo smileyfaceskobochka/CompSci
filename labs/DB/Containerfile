@@ -1,0 +1,12 @@
+# Общий Containerfile
+FROM docker.io/library/postgres:alpine3.22
+
+ENV POSTGRES_USER=pozordom_user
+ENV POSTGRES_PASSWORD=pozordom_pass
+ENV POSTGRES_DB=pozordom
+
+# Лаб 1 - Создание таблиц
+COPY lab1/code/init.sql /docker-entrypoint-initdb.d/
+# Лаб 2.1 - Наполнение таблиц и представления
+COPY lab2_1/code/init_data.sql /docker-entrypoint-initdb.d/
+COPY lab2_1/code/views.sql /docker-entrypoint-initdb.d/

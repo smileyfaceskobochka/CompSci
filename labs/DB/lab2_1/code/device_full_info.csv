@@ -1,0 +1,5 @@
+"device_id","device_name","type_name","hub_name","owner"
+2,"ThermoSensor","Thermometer","Living Room Hub","lisachenko"
+3,"Kitchen Lamp","Lamp","Kitchen Hub","lisachenko"
+4,"Security Camera","Camera","Bedroom Hub","bobby"
+1,"Ceiling Lamp","Lamp","Living Room Hub","lisachenko"

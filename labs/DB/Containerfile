@@ -6,7 +6,9 @@ ENV POSTGRES_PASSWORD=pozordom_pass
 ENV POSTGRES_DB=pozordom
 
 # Лаб 1 - Создание таблиц
-COPY lab1/code/init.sql /docker-entrypoint-initdb.d/
+COPY lab1/code/init.sql /docker-entrypoint-initdb.d/01_init.sql
 # Лаб 2.1 - Наполнение таблиц и представления
-COPY lab2_1/code/init_data.sql /docker-entrypoint-initdb.d/
-COPY lab2_1/code/views.sql /docker-entrypoint-initdb.d/
+COPY lab2_1/code/init_data.sql /docker-entrypoint-initdb.d/02_init_data.sql
+COPY lab2_1/code/views.sql /docker-entrypoint-initdb.d/03_views.sql
+# Лаб 3 — пользовательские функции и триггеры
+COPY lab3/code/functions_triggers.sql /docker-entrypoint-initdb.d/04_functions_triggers.sql

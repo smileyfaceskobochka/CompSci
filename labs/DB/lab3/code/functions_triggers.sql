@@ -1,3 +1,5 @@
+-- functions_triggers.sql
+
 -- 1. функция save_devices: вставка или обновление устройства
 create or replace function save_devices(
   _id bigint,
@@ -17,15 +19,17 @@ begin
   else
     update devices
     set hub_id = _hub_id,
-      type_id = _type_id,
-      name = _name,
-      status = _status
+        type_id = _type_id,
+        name = _name,
+        status = _status
     where id = _id;
     used_id := _id;
   end if;
   return used_id;
 end;
 $$ language plpgsql;
+
+---------------------------------------------------------------------
 
 -- 2. функция delete_hubs с проверкой внешних ссылок
 alter table devices drop constraint if exists devices_hub_id_fkey;
@@ -42,17 +46,24 @@ exception
 end;
 $$ language plpgsql;
 
+---------------------------------------------------------------------
+
 -- 3. функция фильтрации устройств по id
 create or replace function filter_devices_by_id(min_id bigint)
 returns setof devices as $$
 begin
   return query
-  select * from devices where id >= min_id
+  select * from devices
+  where id >= min_id
   order by id;
 end;
 $$ language plpgsql;
 
+---------------------------------------------------------------------
+
 -- 4. составной тип и функция фильтрации массива
+drop type if exists device_info;
+
 create type device_info as (
   id bigint,
   name varchar(100),
@@ -74,6 +85,9 @@ begin
 end;
 $$ language plpgsql;
 
+
+---------------------------------------------------------------------
+
 -- 5. таблица лога и триггер
 create table if not exists log_devices (
   id bigserial primary key,
@@ -86,14 +100,14 @@ create table if not exists log_devices (
 create or replace function log_device_change()
 returns trigger as $$
 begin
-  if tg_op = 'insert' then
+  if tg_op = 'INSERT' then
     insert into log_devices (device_id, new_name)
-    values (new.id, new.name);
-  elsif tg_op = 'update' then
+    values (NEW.id, NEW.name);
+  elsif tg_op = 'UPDATE' then
     insert into log_devices (device_id, old_name, new_name)
-    values (new.id, old.name, new.name);
+    values (NEW.id, OLD.name, NEW.name);
   end if;
-  return new;
+  return NEW;
 end;
 $$ language plpgsql;
 
@@ -103,7 +117,9 @@ after insert or update on devices
 for each row
 execute function log_device_change();
 
--- 6. функция с динамическим SQL
+---------------------------------------------------------------------
+
+-- 6. функция с динамическим SQL для получения значения столбца
 create or replace function get_column_value(
   table_name text,
   column_name text,
@@ -113,7 +129,10 @@ returns text as $$
 declare
   result text;
 begin
-  execute format('select %I from %I where id = $1', column_name, table_name)
+  execute format(
+    'select %I from %I where id = $1',
+    column_name, table_name
+  )
   into result
   using record_id;
   return result;

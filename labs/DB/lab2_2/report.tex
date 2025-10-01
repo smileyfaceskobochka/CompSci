@@ -134,6 +134,13 @@ select count(*) from devices;
 select count(*) from events;
 \end{minted}
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.425\textwidth]{pics/devices_count.png}
+  \includegraphics[width=0.425\textwidth]{pics/events_count.png}
+  \caption*{Рисунок 1 - Вывод примера 1.}
+\end{figure}
+
 \subsection*{Пример 2: Статистика по идентификаторам устройств}
 
 Запрос выводит сумму, минимум, максимум и среднее значение по столбцу \texttt{id} в таблице \texttt{devices}. Результат аналогичен представлению \texttt{device\_id\_stats}, но в одной строке.
@@ -147,6 +154,12 @@ select
 from devices;
 \end{minted}
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{pics/id_stats.png}
+  \caption*{Рисунок 2 - Вывод примера 2.}
+\end{figure}
+
 \subsection*{Пример 3: Группировка событий по типу}
 
 Запрос группирует события по их типу и подсчитывает количество событий каждого типа.
@@ -157,6 +170,12 @@ from events
 group by event_type
 order by event_count desc;
 \end{minted}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\textwidth]{pics/event_group.png}
+  \caption*{Рисунок 3 - Вывод примера 3.}
+\end{figure}
 
 \subsection*{Пример 4: Фильтрация групп с помощью HAVING}
 
@@ -170,7 +189,12 @@ group by dt.type_name
 having count(d.id) > 1;
 \end{minted}
 
-\clearpage
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\textwidth]{pics/group_filter.png}
+  \caption*{Рисунок 4 - Вывод примера 4.}
+\end{figure}
+
 \section*{Операторы, встроенные функции и работа с датами}
 
 В PostgreSQL доступен широкий набор операторов и функций для обработки данных.
@@ -187,6 +211,13 @@ select not 1 < 2 and 3 < 4 or 5 = 5; -- true
 select 1 is null or 5 is not null; -- true
 \end{minted}
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.425\textwidth]{pics/logic_1.png}
+  \includegraphics[width=0.425\textwidth]{pics/logic_2.png}
+  \caption*{Рисунок 5 - Вывод примера 5.}
+\end{figure}
+
 \subsection*{Пример 6: Работа со строками}
 
 Использование функций для конкатенации, изменения регистра и проверки по шаблону.
@@ -201,6 +232,14 @@ select lower(email) from users;
 -- Поиск по шаблону (пользователи с почтой на example.com)
 select username from users where email like '%@example.com';
 \end{minted}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.31\textwidth]{pics/string_1.png}
+  \includegraphics[width=0.31\textwidth]{pics/string_2.png}
+  \includegraphics[width=0.31\textwidth]{pics/string_3.png}
+  \caption*{Рисунок 6 - Вывод примера 6.}
+\end{figure}
 
 \subsection*{Пример 7: Работа с датами}
 
@@ -217,6 +256,14 @@ where created_at > now() - interval '1 day';
 -- Разница между датами (в днях)
 select (now() - created_at) as age from events;
 \end{minted}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.425\textwidth]{pics/dates_1.png}\\
+  \includegraphics[width=0.95\textwidth]{pics/dates_2.png}\\
+  \includegraphics[width=0.425\textwidth]{pics/dates_3.png}
+  \caption*{Рисунок 7 - Вывод примера 7.}
+\end{figure}
 
 \section*{Подзапросы и предложение WITH}
 
@@ -238,6 +285,12 @@ where id in (
 );
 \end{minted}
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.425\textwidth]{pics/subquery.png}
+  \caption*{Рисунок 8 - Вывод примера 8.}
+\end{figure}
+
 \subsection*{Пример 9: Использование WITH (CTE)}
 
 Тот же запрос, переписанный с использованием CTE для улучшения читаемости.
@@ -255,10 +308,16 @@ from users
 where id in (select user_id from lamp_hubs);
 \end{minted}
 
-\clearpage
-\section*{Предложение RETURNING}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.425\textwidth]{pics/subquery.png}
+  \caption*{Рисунок 9 - Вывод примера 9.}
+\end{figure}
 
-Предложение \texttt{RETURNING} позволяет получить данные об изменённых или вставленных строках в одном запросе.
+% \clearpage
+\section*{RETURNING}
+
+\texttt{RETURNING} позволяет получить данные об изменённых или вставленных строках в одном запросе.
 
 \subsection*{Пример 10: Вставка с RETURNING}
 
@@ -270,6 +329,12 @@ values ('Smart Socket')
 returning id;
 \end{minted}
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.425\textwidth]{pics/returning.png}
+  \caption*{Рисунок 10 - Вывод примера 10.}
+\end{figure}
+
 \subsection*{Пример 11: Обновление с RETURNING}
 
 Обновление статуса устройства и возврат его нового состояния.
@@ -280,6 +345,12 @@ set status = '{"power": "off", "brightness": 50}'
 where name = 'Ceiling Lamp' 
 returning *;
 \end{minted}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{pics/returning_2.png}
+  \caption*{Рисунок 11 - Вывод примера 11.}
+\end{figure}
 
 \section*{Анализ плана выполнения запросов (EXPLAIN)}
 
@@ -293,6 +364,12 @@ returning *;
 explain (analyze, buffers) select * from devices;
 \end{minted}
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{pics/explain_1.png}
+  \caption*{Рисунок 12 - Вывод примера 12.}
+\end{figure}
+
 \subsection*{Пример 13: Индексное сканирование}
 
 План запроса на выборку устройства по его уникальному идентификатору. Здесь используется индексное сканирование (Index Scan), так как столбец \texttt{id} является первичным ключом и имеет индекс.
@@ -300,6 +377,12 @@ explain (analyze, buffers) select * from devices;
 \begin{minted}{sql}
 explain (analyze, buffers) select * from devices where id = 1;
 \end{minted}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{pics/explain_2.png}
+  \caption*{Рисунок 13 - Вывод примера 13.}
+\end{figure}
 
 \subsection*{Пример 14: Соединение таблиц}
 
@@ -310,11 +393,140 @@ explain (analyze, format json)
 select * from device_full_info;
 \end{minted}
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{pics/join.png}
+  \caption*{Рисунок 14 - Вывод примера 14.}
+\end{figure}
+
+\begin{minted}{json}
+[
+  {
+    "Plan": {
+      "Node Type": "Hash Join",
+      "Parallel Aware": false,
+      "Async Capable": false,
+      "Join Type": "Inner",
+      "Startup Cost": 46.65,
+      "Total Cost": 61.71,
+      "Plan Rows": 280,
+      "Plan Width": 676,
+      "Actual Startup Time": 0.100,
+      "Actual Total Time": 0.104,
+      "Actual Rows": 4.00,
+      "Actual Loops": 1,
+      "Disabled": false,
+      "Inner Unique": true,
+      "Hash Cond": "(h.user_id = u.id)",
+      "Shared Hit Blocks": 4,
+      "Shared Read Blocks": 0,
+      "Shared Dirtied Blocks": 1,
+      "Shared Written Blocks": 0,
+      "Local Hit Blocks": 0,
+      "Local Read Blocks": 0,
+      "Local Dirtied Blocks": 0,
+      "Local Written Blocks": 0,
+      "Temp Read Blocks": 0,
+      "Temp Written Blocks": 0,
+      "Plans": [
+        {
+          "Node Type": "Hash Join",
+          "Parent Relationship": "Outer",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Join Type": "Inner",
+          "Startup Cost": 34.62,
+          "Total Cost": 48.92,
+          "Plan Rows": 280,
+          "Plan Width": 562,
+          "Actual Startup Time": 0.077,
+          "Actual Total Time": 0.080,
+          "Actual Rows": 4.00,
+          "Actual Loops": 1,
+          "Disabled": false,
+          "Inner Unique": true,
+          "Hash Cond": "(d.hub_id = h.id)",
+          "Shared Hit Blocks": 3,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 1,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0,
+          "Plans": [
+            { ...
+\end{minted}
+
+\subsection*{Пример 15: Анализ плана соединения четырёх таблиц}
+
+Запрос из Примера 10 соединяет четыре таблицы. PostgreSQL может выбрать разные стратегии соединения. Рассмотрим их.
+
+\subsubsection*{По умолчанию (обычно Hash Join или Nested Loop)}
+\begin{minted}{sql}
+explain (analyze, buffers)
+select e.id, u.username
+from events e
+join devices d on e.device_id = d.id
+join hubs h on d.hub_id = h.id
+join users u on h.user_id = u.id;
+\end{minted}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.75\textwidth]{pics/hash_join.png}
+  \caption*{Рисунок 15.1 - Вывод примера 15 с Hash Join.}
+\end{figure}
+
+\subsubsection*{Принудительное использование Nested Loop}
+\begin{minted}{sql}
+set enable_hashjoin = off;
+set enable_mergejoin = off;
+explain (analyze, buffers)
+select e.id, u.username
+from events e
+join devices d on e.device_id = d.id
+join hubs h on d.hub_id = h.id
+join users u on h.user_id = u.id;
+-- reset
+set enable_hashjoin = on;
+set enable_mergejoin = on;
+\end{minted}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.75\textwidth]{pics/nested_loop.png}
+  \caption*{Рисунок 15.2 - Вывод примера 15 с Nested Loop.}
+\end{figure}
+
+\clearpage
+\subsubsection*{Принудительное использование Merge Join}
+\begin{minted}{sql}
+set enable_hashjoin = off;
+set enable_nestloop = off;
+explain (analyze, buffers)
+select e.id, u.username
+from events e
+join devices d on e.device_id = d.id
+join hubs h on d.hub_id = h.id
+join users u on h.user_id = u.id;
+-- reset
+set enable_hashjoin = on;
+set enable_nestloop = on;
+\end{minted}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.75\textwidth]{pics/merge_join.png}
+  \caption*{Рисунок 15.3 - Вывод примера c Merge Join.}
+\end{figure}
+
 \clearpage
 \section*{Вывод}
 
-В ходе выполнения лабораторной работы №2\_2 были освоены ключевые аспекты языка DML в PostgreSQL. Были изучены и применены на практике агрегатные функции (\texttt{count}, \texttt{sum}, \texttt{avg}, \texttt{min}, \texttt{max}) и предложение \texttt{HAVING} для фильтрации сгруппированных данных. Продемонстрировано использование различных операторов, встроенных функций для работы со строками и датами. Рассмотрены механизмы подзапросов и общих табличных выражений (\texttt{WITH}) для повышения читаемости сложных запросов. Также изучено предложение \texttt{RETURNING} для получения информации об изменённых строках. Наконец, с помощью команды \texttt{EXPLAIN} был проведен анализ планов выполнения запросов, что является важным инструментом для оптимизации производительности базы данных.
-
+В ходе выполнения лабораторной работы №2\_2 были освоены ключевые аспекты языка DML в PostgreSQL. Были изучены и применены на практике агрегатные функции (\texttt{count}, \texttt{sum}, \texttt{avg}, \texttt{min}, \texttt{max}) и предложение \texttt{HAVING} для фильтрации сгруппированных данных. Продемонстрировано использование различных операторов, встроенных функций для работы со строками и датами. Рассмотрены механизмы подзапросов и общих табличных выражений (\texttt{WITH}) для повышения читаемости сложных запросов. Также изучено предложение \texttt{RETURNING} для получения информации об изменённых строках. Наконец, с помощью команды \texttt{EXPLAIN} был проведен анализ планов выполнения запросов, включая сравнение различных стратегий соединения (Nested Loop, Hash Join, Merge Join) для запросов с участием нескольких таблиц, что является важным инструментом для оптимизации производительности базы данных.
 \newpage
 
 \setminted{style = rainbow_dash, fontsize = \small} % https://pygments.org/styles/  
@@ -322,7 +534,7 @@ select * from device_full_info;
 \section*{Приложение А1. Исходный код}
 \inputminted{Dockerfile}{../Containerfile}
 
-\section*{Приложение А2. SQL-скрипты для отчёта}
+\section*{Приложение А2. SQL-скрипты}
 
 \subsection*{Агрегатные функции и HAVING}
 \begin{minted}{sql}
@@ -397,20 +609,27 @@ where id in (select user_id from lamp_hubs);
 
 \subsection*{RETURNING и EXPLAIN}
 \begin{minted}{sql}
--- Пример 10
+-- Пример 11
 insert into device_types(type_name) values ('Smart Socket') returning id;
 
--- Пример 11
+-- Пример 12
 update devices set status = '{"power": "off", "brightness": 50}' where name = 'Ceiling Lamp' returning *;
 
--- Пример 12
+-- Пример 13
 explain (analyze, buffers) select * from devices;
 
--- Пример 13
+-- Пример 14
 explain (analyze, buffers) select * from devices where id = 1;
 
--- Пример 14
-explain (analyze, format json) select * from device_full_info;
+-- Пример 15 — Nested Loop
+set enable_hashjoin = off; set enable_mergejoin = off;
+explain (analyze, buffers) select e.id, u.username from events e join devices d on e.device_id = d.id join hubs h on d.hub_id = h.id join users u on h.user_id = u.id;
+set enable_hashjoin = on; set enable_mergejoin = on;
+
+-- Пример 15 — Merge Join
+set enable_hashjoin = off; set enable_nestloop = off;
+explain (analyze, buffers) select e.id, u.username from events e join devices d on e.device_id = d.id join hubs h on d.hub_id = h.id join users u on h.user_id = u.id;
+set enable_hashjoin = on; set enable_nestloop = on;
 \end{minted}
 
 \end{document}

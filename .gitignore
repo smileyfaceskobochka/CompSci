@@ -16,6 +16,8 @@ cargo.lock
 *.toc
 _minted
 build
+dist
+__pycache__
 labs/Proga/lab8/code/lab8
 labs/Proga/lab8/code/lib/x86_64-linux/lab8.res
 labs/Proga/lab8/code/lib/x86_64-linux/lab8.or

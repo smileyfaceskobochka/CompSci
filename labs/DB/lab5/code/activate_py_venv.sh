@@ -5,10 +5,9 @@ VENV_PATH=$HOME/Documents/Development/py_venv
 
 if [ -d "$VENV_PATH" ]; then
   if [ -f "$VENV_PATH/bin/activate" ]; then
-    source "$VENV_PATH/bin/activate"
-    echo "✅ Activated virtual environment: $(basename $VENV_PATH)"
     echo "Python: $(which python)"
     echo "Pip: $(which pip)"
+    echo "Run: source $VENV_PATH/bin/activate to activate py_venv"
   else
     echo "❌ Activation script not found in $VENV_PATH"
     exit 1

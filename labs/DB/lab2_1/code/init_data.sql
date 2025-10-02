@@ -1,11 +1,12 @@
 -- Лаб 2.1 — наполнение БД
 
 -- Добавляем пользователей
-insert into users(username, email, password_hash)
-values 
-('lisachenko', 'me@lsnko.com', 'hash1'),
-('bobby', 'bob@example.com', 'hash2'),
-('alice', 'alice@example.com', 'hash3');
+insert into users(username, email, password_hash, is_admin)
+values
+('lisachenko', 'me@lsnko.com', 'hash1', false),
+('bobby', 'bob@example.com', 'hash2', false),
+('alice', 'alice@example.com', 'hash3', false),
+('admin', 'admin@example.com', 'admin123', true);
 
 -- Добавляем хабы
 insert into hubs(user_id, name, location, serial_number)

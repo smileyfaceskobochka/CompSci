@@ -4,6 +4,7 @@ create table users (
   username varchar(50) unique not null, -- Логин пользователя (уникальный)
   email varchar(100) unique not null,   -- Электронная почта (уникальная)
   password_hash varchar(255) not null,  -- Хэш пароля
+  is_admin boolean default false,       -- Флаг администратора
   created_at timestamp default now()    -- Дата и время создания записи
 );
 

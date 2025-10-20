@@ -14,6 +14,8 @@ public:
   int emergencyChance = 0; // 0-100
   bool isRunning = false;
   bool isPaused = false;
+  bool emergencyPending = false; // Флаг для отложенной аварии
+  int emergencyTarget = -1; // Индекс пирамидки для аварии
 
   Simulation();
   void reset();

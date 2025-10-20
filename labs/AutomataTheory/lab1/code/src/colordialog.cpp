@@ -93,11 +93,12 @@ ColorDialog::ColorDialog(const std::vector<QColor> &currentColors,
 
   QHBoxLayout *buttonLayout = new QHBoxLayout();
   QPushButton *randomButton = new QPushButton("Случайно");
-  QPushButton *okButton = new QPushButton("OK");
   QPushButton *cancelButton = new QPushButton("Отмена");
+  QPushButton *okButton = new QPushButton("OK");
   buttonLayout->addWidget(randomButton);
-  buttonLayout->addWidget(okButton);
+  buttonLayout->addStretch();
   buttonLayout->addWidget(cancelButton);
+  buttonLayout->addWidget(okButton);
   layout->addLayout(buttonLayout);
 
   connect(randomButton, &QPushButton::clicked, this,

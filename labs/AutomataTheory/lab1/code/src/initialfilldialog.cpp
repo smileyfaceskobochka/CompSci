@@ -26,7 +26,7 @@ InitialFillDialog::InitialFillDialog(const std::vector<int> &currentValues,
   for (int i = 0; i < NUM_PYRAMIDS; ++i) {
     QLabel *label = new QLabel(QString("Пирамидка %1:").arg(i));
     QSpinBox *spin = new QSpinBox();
-    spin->setRange(0, 9);
+    spin->setRange(0, 11);
     spin->setWrapping(true);
     spin->setValue(i < static_cast<int>(currentValues.size())
                        ? currentValues[i]
@@ -40,12 +40,13 @@ InitialFillDialog::InitialFillDialog(const std::vector<int> &currentValues,
   QHBoxLayout *buttonLayout = new QHBoxLayout();
   QPushButton *randomButton = new QPushButton("Случайно");
   QPushButton *resetButton = new QPushButton("Сброс");
-  QPushButton *okButton = new QPushButton("OK");
   QPushButton *cancelButton = new QPushButton("Отмена");
+  QPushButton *okButton = new QPushButton("OK");
   buttonLayout->addWidget(randomButton);
   buttonLayout->addWidget(resetButton);
-  buttonLayout->addWidget(okButton);
+  buttonLayout->addStretch();
   buttonLayout->addWidget(cancelButton);
+  buttonLayout->addWidget(okButton);
   layout->addLayout(buttonLayout);
 
   connect(randomButton, &QPushButton::clicked, this,
@@ -65,9 +66,9 @@ std::vector<int> InitialFillDialog::getValues() const {
 }
 
 void InitialFillDialog::randomizeValues() {
-  // Generate random values for each pyramid (0-9)
+  // Generate random values for each pyramid (0-11)
   for (auto *spin : ringSpins) {
-    int randomValue = rand() % 10; // Random value from 0 to 9
+    int randomValue = rand() % 12; // Random value from 0 to 11
     spin->setValue(randomValue);
   }
 }

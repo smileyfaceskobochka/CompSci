@@ -45,13 +45,19 @@ void MainWindow::startStopSimulation() {
   } else {
     simulation.reset();
     simulation.isRunning = true;
-    simulation.isPaused = false;
+    // Don't reset pause state when starting - preserve it
     simulationFinished = false;
     startStopButton->setText("Стоп");
-    pauseContinueButton->setText("Пауза");
 
-    // Only start timer if speed > 0
-    if (speedSlider->value() > 0) {
+    // Set button text based on current pause state
+    if (simulation.isPaused) {
+      pauseContinueButton->setText("Продолжить");
+    } else {
+      pauseContinueButton->setText("Пауза");
+    }
+
+    // Only start timer if not paused and speed > 0
+    if (!simulation.isPaused && speedSlider->value() > 0) {
       timer->start(1000 / speedSlider->value());
     }
   }
@@ -195,17 +201,10 @@ void MainWindow::simulationStep() {
     if (!simulation.step()) {
       if (!simulationFinished) {
         simulationFinished = true;
-        // Show auto-closing message
-        QMessageBox *msgBox = new QMessageBox(this);
-        msgBox->setWindowTitle("Симуляция завершена");
-        msgBox->setText("Все пирамидки заполнены!\n\nНажмите 'Стоп' для "
-                        "остановки симуляции.");
-        msgBox->setStandardButtons(QMessageBox::Ok);
-        msgBox->setDefaultButton(QMessageBox::Ok);
-        msgBox->show();
-
-        // Auto-close after 1 second
-        QTimer::singleShot(1000, msgBox, &QMessageBox::accept);
+        // Show victory message (no auto-close)
+        QMessageBox::information(this, "Симуляция завершена",
+                                "Все пирамидки заполнены!\n\nНажмите 'Стоп' для "
+                                "остановки симуляции.");
       }
     } else {
       simulationFinished = false; // Reset flag if simulation continues
@@ -250,7 +249,7 @@ void MainWindow::setupUI() {
   // Speed controls
   QLabel *speedLabel = new QLabel("Скорость (тиков/сек):");
   speedSlider = new QSlider(Qt::Horizontal);
-  speedSlider->setRange(0, 255);
+  speedSlider->setRange(0, 100);
   speedSlider->setValue(10);
   speedSpin = new QLineEdit();
   speedSpin->setText("10");
@@ -559,8 +558,11 @@ void MainWindow::validateSpeedInput(const QString &text) {
   static QString lastValidText = "10";
   QString currentText = text;
 
-  // Allow empty input temporarily
+  // Handle empty input - fallback to 0
   if (currentText.isEmpty()) {
+    speedSpin->setText("0");
+    lastValidText = "0";
+    speedSlider->setValue(0);
     return;
   }
 
@@ -571,63 +573,32 @@ void MainWindow::validateSpeedInput(const QString &text) {
     // Invalid character detected - show error and revert to last valid
     QMessageBox::warning(this, "Ошибка ввода",
                         "Неверный формат числа. Используйте только цифры.");
+
+    // Сохраняем позицию каретки перед восстановлением текста
+    int cursorPos = speedSpin->cursorPosition();
     speedSpin->setText(lastValidText);
+
+    // Восстанавливаем позицию каретки
+    cursorPos = qMin(cursorPos, lastValidText.length());
+    speedSpin->setCursorPosition(cursorPos);
     return;
   }
 
-  // Check for leading zeros
-  if (currentText.startsWith('0') && currentText.length() > 1 && value != 0) {
+  // Проверяем ведущие нули - считаем ошибкой любое значение с ведущими нулями кроме "0"
+  // Но разрешаем "01", "02" и т.д. как естественный ввод после "0"
+  if (currentText.length() > 1 && currentText.startsWith('0') && currentText != "0" && value >= 10) {
     QMessageBox::warning(this, "Ошибка ввода",
                         QString("Ведущие нули недопустимы. Исправлено на: %1").arg(value));
+
+    // Сохраняем позицию каретки перед исправлением
+    int cursorPos = speedSpin->cursorPosition();
     speedSpin->setText(QString::number(value));
     lastValidText = QString::number(value);
     speedSlider->setValue(value);
-    return;
-  }
 
-  // Check range
-  if (value < 0 || value > 255) {
-    QMessageBox::warning(this, "Ошибка ввода",
-                        QString("Число должно быть в диапазоне 0-255. Введено: %1").arg(value));
-    value = qBound(0, value, 255);
-    speedSpin->setText(QString::number(value));
-    lastValidText = QString::number(value);
-    speedSlider->setValue(value);
-    return;
-  }
-
-  // Valid input - update last valid text and slider
-  lastValidText = currentText;
-  speedSlider->setValue(value);
-}
-
-void MainWindow::validateEmergencyInput(const QString &text) {
-  static QString lastValidText = "0";
-  QString currentText = text;
-
-  // Allow empty input temporarily
-  if (currentText.isEmpty()) {
-    return;
-  }
-
-  bool ok;
-  int value = currentText.toInt(&ok);
-
-  if (!ok) {
-    // Invalid character detected - show error and revert to last valid
-    QMessageBox::warning(this, "Ошибка ввода",
-                        "Неверный формат числа. Используйте только цифры.");
-    emergencySpin->setText(lastValidText);
-    return;
-  }
-
-  // Check for leading zeros
-  if (currentText.startsWith('0') && currentText.length() > 1 && value != 0) {
-    QMessageBox::warning(this, "Ошибка ввода",
-                        QString("Ведущие нули недопустимы. Исправлено на: %1").arg(value));
-    emergencySpin->setText(QString::number(value));
-    lastValidText = QString::number(value);
-    emergencySlider->setValue(value);
+    // Восстанавливаем позицию каретки (оставляем на месте ошибки)
+    cursorPos = qMin(cursorPos, QString::number(value).length());
+    speedSpin->setCursorPosition(cursorPos);
     return;
   }
 
@@ -636,13 +607,109 @@ void MainWindow::validateEmergencyInput(const QString &text) {
     QMessageBox::warning(this, "Ошибка ввода",
                         QString("Число должно быть в диапазоне 0-100. Введено: %1").arg(value));
     value = qBound(0, value, 100);
-    emergencySpin->setText(QString::number(value));
+
+    // Сохраняем позицию каретки перед исправлением
+    int cursorPos = speedSpin->cursorPosition();
+    speedSpin->setText(QString::number(value));
     lastValidText = QString::number(value);
-    emergencySlider->setValue(value);
+    speedSlider->setValue(value);
+
+    // Восстанавливаем позицию каретки
+    cursorPos = qMin(cursorPos, QString::number(value).length());
+    speedSpin->setCursorPosition(cursorPos);
     return;
   }
 
   // Valid input - update last valid text and slider
-  lastValidText = currentText;
+  if (value == 0 && currentText != "0") {
+    // Normalize to "0" and preserve cursor position
+    int cursorPos = speedSpin->cursorPosition();
+    speedSpin->setText("0");
+    // Set cursor to position 1 (after "0") if it was beyond that
+    speedSpin->setCursorPosition(qMin(cursorPos, 1));
+    lastValidText = "0";
+  } else {
+    lastValidText = currentText;
+  }
+  speedSlider->setValue(value);
+}
+
+void MainWindow::validateEmergencyInput(const QString &text) {
+  static QString lastValidText = "0";
+  QString currentText = text;
+
+  // Handle empty input - fallback to 0
+  if (currentText.isEmpty()) {
+    emergencySpin->setText("0");
+    lastValidText = "0";
+    emergencySlider->setValue(0);
+    return;
+  }
+
+  bool ok;
+  int value = currentText.toInt(&ok);
+
+  if (!ok) {
+    // Invalid character detected - show error and revert to last valid
+    QMessageBox::warning(this, "Ошибка ввода",
+                        "Неверный формат числа. Используйте только цифры.");
+
+    // Сохраняем позицию каретки перед восстановлением текста
+    int cursorPos = emergencySpin->cursorPosition();
+    emergencySpin->setText(lastValidText);
+
+    // Восстанавливаем позицию каретки
+    cursorPos = qMin(cursorPos, lastValidText.length());
+    emergencySpin->setCursorPosition(cursorPos);
+    return;
+  }
+
+  // Проверяем ведущие нули - считаем ошибкой любое значение с ведущими нулями кроме "0"
+  // Но разрешаем "01", "02" и т.д. как естественный ввод после "0"
+  if (currentText.length() > 1 && currentText.startsWith('0') && currentText != "0" && value >= 10) {
+    QMessageBox::warning(this, "Ошибка ввода",
+                        QString("Ведущие нули недопустимы. Исправлено на: %1").arg(value));
+
+    // Сохраняем позицию каретки перед исправлением
+    int cursorPos = emergencySpin->cursorPosition();
+    emergencySpin->setText(QString::number(value));
+    lastValidText = QString::number(value);
+    emergencySlider->setValue(value);
+
+    // Восстанавливаем позицию каретки (оставляем на месте ошибки)
+    cursorPos = qMin(cursorPos, QString::number(value).length());
+    emergencySpin->setCursorPosition(cursorPos);
+    return;
+  }
+
+  // Check range
+  if (value < 0 || value > 100) {
+    QMessageBox::warning(this, "Ошибка ввода",
+                        QString("Число должно быть в диапазоне 0-100. Введено: %1").arg(value));
+    value = qBound(0, value, 100);
+
+    // Сохраняем позицию каретки перед исправлением
+    int cursorPos = emergencySpin->cursorPosition();
+    emergencySpin->setText(QString::number(value));
+    lastValidText = QString::number(value);
+    emergencySlider->setValue(value);
+
+    // Восстанавливаем позицию каретки
+    cursorPos = qMin(cursorPos, QString::number(value).length());
+    emergencySpin->setCursorPosition(cursorPos);
+    return;
+  }
+
+  // Valid input - update last valid text and slider
+  if (value == 0 && currentText != "0") {
+    // Normalize to "0" and preserve cursor position
+    int cursorPos = emergencySpin->cursorPosition();
+    emergencySpin->setText("0");
+    // Set cursor to position 1 (after "0") if it was beyond that
+    emergencySpin->setCursorPosition(qMin(cursorPos, 1));
+    lastValidText = "0";
+  } else {
+    lastValidText = currentText;
+  }
   emergencySlider->setValue(value);
 }

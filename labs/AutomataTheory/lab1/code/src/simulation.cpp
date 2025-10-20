@@ -66,6 +66,18 @@ bool Simulation::step() {
   if (arrayP.empty())
     return false;
 
+  // Если есть отложенная авария, выполняем её
+  if (emergencyPending) {
+    if (emergencyTarget >= 0 && emergencyTarget < static_cast<int>(arrayP.size())) {
+      arrayP[emergencyTarget].second -= 3;
+      if (arrayP[emergencyTarget].second < 0)
+        arrayP[emergencyTarget].second = 0;
+    }
+    emergencyPending = false;
+    emergencyTarget = -1;
+    return !arrayP.empty();
+  }
+
   // Generator 1: Add ring to random pyramid in P
   if (!arrayP.empty()) {
     int idx =
@@ -78,8 +90,22 @@ bool Simulation::step() {
   }
 
   // Generator 2: Check emergency
-  if (QRandomGenerator::global()->bounded(100) < emergencyChance) {
-    // Generator 3: Remove 3 rings from random pyramid in P with >=3 rings
+  if (emergencyChance >= 100) {
+    // При шансе 100% планируем аварию на следующий тик
+    std::vector<int> candidates;
+    for (int i = 0; i < static_cast<int>(arrayP.size()); ++i) {
+      if (arrayP[i].second >= 3) {
+        candidates.push_back(i);
+      }
+    }
+    if (!candidates.empty()) {
+      int idx = QRandomGenerator::global()->bounded(
+          static_cast<int>(candidates.size()));
+      emergencyPending = true;
+      emergencyTarget = candidates[idx];
+    }
+  } else if (QRandomGenerator::global()->bounded(100) < emergencyChance) {
+    // При шансе < 100% авария происходит в текущем тике
     std::vector<int> candidates;
     for (int i = 0; i < static_cast<int>(arrayP.size()); ++i) {
       if (arrayP[i].second >= 3) {

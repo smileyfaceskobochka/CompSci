@@ -6,9 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
-# Remove CMAKE_AUTORCC if you deleted resources.qrc
 
-# Remove Quick, QuickWidgets, Quick3D
 find_package(Qt6 COMPONENTS Widgets REQUIRED)
 find_package(yaml-cpp REQUIRED)
 
@@ -20,13 +18,11 @@ add_executable(${PROJECT_NAME}
   src/initialfilldialog.cpp
   src/pyramidwidget.cpp
   src/mainwindow.cpp
-  # Remove: src/resources.qrc
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE QT_NO_KEYWORDS)
 target_include_directories(${PROJECT_NAME} PRIVATE src)
 
-# Remove Quick/Quick3D libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE
   Qt6::Widgets
   yaml-cpp

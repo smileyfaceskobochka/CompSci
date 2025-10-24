@@ -123,10 +123,10 @@ void ColorDialog::accept() {
 
 QString ColorDialog::colorName(int index) const {
   static const QStringList names = {
-      "Черный",      "Бордовый",  "Зеленый",   "Коричневый",
-      "Темно-синий", "Фиолетовый", "Бирюзовый", "Светло-серый",
-      "Серый",       "Красный",   "Светло-зеленый", "Желтый",
-      "Синий",       "Розовый",   "Голубой",   "Белый"};
+      "Черный",      "Бордовый",   "Зеленый",        "Коричневый",
+      "Темно-синий", "Фиолетовый", "Бирюзовый",      "Светло-серый",
+      "Серый",       "Красный",    "Светло-зеленый", "Желтый",
+      "Синий",       "Розовый",    "Голубой",        "Белый"};
   return names[index % names.size()];
 }
 
@@ -165,7 +165,8 @@ void ColorDialog::onColorChanged(int index) {
   int conflictingPyramidIndex = -1;
   for (int i = 0; i < static_cast<int>(colorCombos.size()); ++i) {
     if (i != comboIndex) {
-      QColor otherColor = colorCombos[i]->currentData(Qt::UserRole).value<QColor>();
+      QColor otherColor =
+          colorCombos[i]->currentData(Qt::UserRole).value<QColor>();
       if (otherColor == selectedColor) {
         hasConflict = true;
         conflictingPyramidIndex = i;
@@ -175,15 +176,15 @@ void ColorDialog::onColorChanged(int index) {
   }
 
   if (hasConflict) {
-    QMessageBox::warning(
-        this, "Ошибка",
-        QString("Цвет '%1' уже используется пирамидкой %2.")
-            .arg(colorName(senderCombo->currentIndex()))
-            .arg(conflictingPyramidIndex));
+    QMessageBox::warning(this, "Ошибка",
+                         QString("Цвет '%1' уже используется пирамидкой %2.")
+                             .arg(colorName(senderCombo->currentIndex()))
+                             .arg(conflictingPyramidIndex));
 
     // Find an available color and revert to it, preferring the previous color
     isReverting = true;
-    int availableIndex = findAvailableColor(comboIndex, previousIndices[comboIndex]);
+    int availableIndex =
+        findAvailableColor(comboIndex, previousIndices[comboIndex]);
     senderCombo->setCurrentIndex(availableIndex);
     previousIndices[comboIndex] = availableIndex;
     isReverting = false;
@@ -193,13 +194,15 @@ void ColorDialog::onColorChanged(int index) {
   }
 }
 
-int ColorDialog::findAvailableColor(int excludeComboIndex, int preferredIndex) const {
+int ColorDialog::findAvailableColor(int excludeComboIndex,
+                                    int preferredIndex) const {
   // First, try the preferred index if it's valid and available
   if (preferredIndex >= 0 && preferredIndex < NUM_COLORS) {
     bool isUsed = false;
     for (int j = 0; j < static_cast<int>(colorCombos.size()); ++j) {
       if (j != excludeComboIndex) {
-        QColor otherColor = colorCombos[j]->currentData(Qt::UserRole).value<QColor>();
+        QColor otherColor =
+            colorCombos[j]->currentData(Qt::UserRole).value<QColor>();
         if (COLOR_PALETTE[preferredIndex] == otherColor) {
           isUsed = true;
           break;
@@ -216,7 +219,8 @@ int ColorDialog::findAvailableColor(int excludeComboIndex, int preferredIndex) c
     bool isUsed = false;
     for (int j = 0; j < static_cast<int>(colorCombos.size()); ++j) {
       if (j != excludeComboIndex) {
-        QColor otherColor = colorCombos[j]->currentData(Qt::UserRole).value<QColor>();
+        QColor otherColor =
+            colorCombos[j]->currentData(Qt::UserRole).value<QColor>();
         if (COLOR_PALETTE[i] == otherColor) {
           isUsed = true;
           break;

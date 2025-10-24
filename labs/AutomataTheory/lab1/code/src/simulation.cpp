@@ -68,7 +68,8 @@ bool Simulation::step() {
 
   // Если есть отложенная авария, выполняем её
   if (emergencyPending) {
-    if (emergencyTarget >= 0 && emergencyTarget < static_cast<int>(arrayP.size())) {
+    if (emergencyTarget >= 0 &&
+        emergencyTarget < static_cast<int>(arrayP.size())) {
       arrayP[emergencyTarget].second -= 3;
       if (arrayP[emergencyTarget].second < 0)
         arrayP[emergencyTarget].second = 0;

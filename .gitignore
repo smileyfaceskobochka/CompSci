@@ -19,8 +19,13 @@ _minted
 build
 dist
 __pycache__
+CMakeCache.txt
+CMakeFiles
 
+# Linux executables (no extension)
+battle
 test_bot
+test_bot_c
 
 labs/Proga/lab8/code/lab8
 labs/Proga/lab8/code/lib/x86_64-linux/lab8.res

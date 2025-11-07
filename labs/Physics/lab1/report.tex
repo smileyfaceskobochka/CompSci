@@ -1,0 +1,408 @@
+\documentclass[oneside,a4paper,14pt]{extarticle}
+\usepackage[a4paper,letterpaper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\usepackage[russian]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{minted, fancyvrb}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{amsmath,amssymb}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{float}
+
+% Форматирование листингов с кодом
+\setminted{style = rainbow_dash, fontsize = \small} % https://pygments.org/styles/
+
+% Форматирование заголовков
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+% Интерлиньяж и абзац
+\renewcommand\baselinestretch{1.33}
+
+\setlength{\parindent}{1.25cm}  % длина красной строки
+
+% Для всех списков
+\setlist[enumerate]{
+  left=0.5\parindent,
+  label=\arabic*.,
+  itemsep=0pt,
+  topsep=5pt,
+  partopsep=0pt,
+  parsep=0pt
+}
+
+\setlist[itemize]{
+  left=0.5\parindent,
+  itemsep=0pt,
+  topsep=5pt,
+  partopsep=0pt,
+  parsep=0pt
+}
+
+% Гиперссылки
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  pdfborder={0 0 0},
+  pdftitle={Отчёт по ЛР №1},
+  pdfauthor={Автор}
+}
+
+\begin{document}
+
+\newpage
+\thispagestyle{empty}
+\begin{center}
+  МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ ОБРАЗОВАТЕЛЬНОЕ УЧРЕЖДЕНИЕ ВЫСШЕГО ОБРАЗОВАНИЯ\\
+  <<ВЯТСКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ>>\\
+  Институт математики и информационных систем\\
+  Факультет автоматики и вычислительной техники\\
+  Кафедра электронных вычислительных машин
+\end{center}
+\vspace{10mm}
+
+\hfill
+\begin{tabular}{l}
+  \footnotesize Дата сдачи на проверку:                                          \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2025 г. \\
+  \footnotesize Проверено:                                                       \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2025 г. \\
+\end{tabular}
+\vfill
+
+\begin{center}
+  Отчёт по лабораторной работе №1\\
+  по дисциплине\\
+  <<Физические основы функционирования ЭВМ>>\\
+\end{center}
+\vspace{25mm}
+\begin{tabular}{ll}
+  Выполнили студенты гр. ИВТб-2301-05-00 & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Черкасов А. А./ \\
+                                         & \hspace{25.5mm}\footnotesize(подпись)                    \\
+                                         & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Зинин В. А./    \\
+                                         & \hspace{25.5mm}\footnotesize(подпись)                    \\
+  Преподователь                          & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Будин А. Г./    \\
+                                         & \hspace{25.5mm}\footnotesize(подпись)                    \\
+\end{tabular}
+
+\noindent
+\begin{tabular}{lp{58mm}r}
+  Работа защищена &  & \hspace{13mm}<<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{30mm}{0.10mm}\ 2025 г.
+\end{tabular}
+\vfill
+
+\begin{center}
+  Киров\\
+  2025
+\end{center}
+
+\newpage
+
+\section*{Цели лабораторной работы}
+
+\begin{itemize}
+  \item[$-$] изучить методы расчёта простых электрических цепей постоянного тока;
+  \item[$-$] научиться определять эквивалентное сопротивление схемы и распределение токов по её ветвям;
+  \item[$-$] освоить практику проверки правильности расчётов через составление баланса мощности;
+  \item[$-$] получить навыки схемотехнического моделирования в среде Electronics\\
+        Workbench и сравнить результаты моделирования с аналитическим расчётом.
+\end{itemize}
+
+\section*{Задание 1}
+
+\noindent Для заданной схемы электрической цепи необходимо:
+
+\begin{enumerate}
+  \item Рассчитать значения эквивалентного сопротивления схемы, в соответствии со 2 вариантом (Рисунок 1). Определить значения тока в каждой ветви для электрической цепи. Числовые значения сопротивлений приемников электрической схемы приведены в Таблице 1.
+  \item Выполнить проверку правильности расчетов, составив баланс мощности и сделать вывод о правильности расчетов.
+  \item Провести моделирование на ЭВМ режима работы рассматриваемой электрической цепи с помощью системы схемотехнического моделирования Electronics Workbench. Полученные результаты приложить к тексту оформленной работы.
+  \item Сравнить результаты расчета и моделирования.
+\end{enumerate}
+
+\newpage
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.75\textwidth]{pics/scheme.png}
+  \caption*{Рисунок 1 --- Схема электрической цепи для задания 1}
+\end{figure}
+
+\section*{Дано}
+\addcontentsline{toc}{section}{Дано}
+
+\begin{itemize}
+  \item[$-$] Источник напряжения: $E = 50$ В.
+  \item[$-$] Сопротивления резисторов:
+        \begin{itemize}
+          \item $R_1 = 14$ Ом
+          \item $R_2 = 7$ Ом
+          \item $R_3 = 12$ Ом
+          \item $R_4 = 8$ Ом
+          \item $R_5 = 17$ Ом
+          \item $R_6 = 12$ Ом
+        \end{itemize}
+  \item[$-$] Узлы схемы (по рисунку): верхняя шина $A, B, C$ --- потенциал $V = 50$ В; нижняя левая точка $F$ --- опорный узел с потенциалом $V_F = 0$ В.
+  \item[$-$] Требуется найти: потенциалы узлов $V_D$ и $V_E$, токи во всех ветвях.
+\end{itemize}
+
+\newpage
+
+\section*{Ход работы}
+\addcontentsline{toc}{section}{Ход работы}
+
+\subsection*{1. Расчёт общего (эквивалентного) сопротивления схемы}
+
+Для определения эквивалентного сопротивления схемы необходимо последовательно упростить её, начиная с самых удалённых от источника элементов.
+
+\textbf{Шаг 1. Параллельное соединение $R_5$ и $R_6$:}
+
+Резисторы $R_5 = 17$ Ом и $R_6 = 12$ Ом соединены параллельно. Их эквивалентное сопротивление:
+
+\begin{equation}
+  R_{5-6} = \frac{R_5 \cdot R_6}{R_5 + R_6} = \frac{17 \cdot 12}{17 + 12} = \frac{204}{29} \approx 7,034 \text{ Ом}
+\end{equation}
+
+\textbf{Шаг 2. Параллельное соединение $R_3$ и $R_4$:}
+
+Резисторы $R_3 = 12$ Ом и $R_4 = 8$ Ом соединены параллельно. Их эквивалентное сопротивление:
+
+\begin{equation}
+  R_{3-4} = \frac{R_3 \cdot R_4}{R_3 + R_4} = \frac{12 \cdot 8}{12 + 8} = \frac{96}{20} = 4,8 \text{ Ом}
+\end{equation}
+
+\textbf{Шаг 3. Последовательное соединение $R_{3-4}$ и $R_{5-6}$:}
+
+Эквивалентные сопротивления $R_{3-4}$ и $R_{5-6}$ соединены последовательно:
+
+\begin{equation}
+  R_{3-6} = R_{3-4} + R_{5-6} = 4,8 + 7,034 = 11,834 \text{ Ом}
+\end{equation}
+
+\textbf{Шаг 4. Последовательное соединение $R_2$ и $R_{3-6}$:}
+
+Резистор $R_2 = 7$ Ом соединён последовательно с $R_{3-6}$:
+
+\begin{equation}
+  R_{2-6} = R_2 + R_{3-6} = 7 + 11,834 = 18,834 \text{ Ом}
+\end{equation}
+
+\textbf{Шаг 5. Параллельное соединение $R_1$ и $R_{2-6}$:}
+
+Резистор $R_1 = 14$ Ом соединён параллельно с эквивалентным сопротивлением $R_{2-6}$. Общее сопротивление схемы:
+
+\begin{equation}
+  R_{\text{общ}} = \frac{R_1 \cdot R_{2-6}}{R_1 + R_{2-6}} = \frac{14 \cdot 18,834}{14 + 18,834} = \frac{263,676}{32,834} \approx 8,030 \text{ Ом}
+\end{equation}
+
+Таким образом, эквивалентное сопротивление всей схемы относительно источника напряжения составляет $R_{\text{общ}} \approx 8,03$ Ом.
+
+\section*{Сравнение с результатами моделирования}
+
+Результаты моделирования в Electronics Workbench на рисунке 2 показали значение общего сопротивления $R_{\text{общ}} \approx 8,547$ Ом. Расхождение с расчётным значением составляет около 6\%.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.75\textwidth]{pics/resistance.png}
+  \caption*{Рисунок 2 --- Модель схемы в среде Electronics Workbench}
+\end{figure}
+
+\subsection*{2. Обозначения токов в ветвях}
+
+Зададим направления токов и выразим их через узловые потенциалы:
+
+\begin{equation}
+  I_1 = \frac{50 - 0}{R_1} = \frac{50}{14} = \frac{25}{7} \text{ А}
+\end{equation}
+
+\begin{equation}
+  I_2 = \frac{50 - V_E}{R_2} = \frac{50 - V_E}{7}
+\end{equation}
+
+\begin{equation}
+  I_3 = \frac{50 - V_D}{R_3} = \frac{50 - V_D}{12}
+\end{equation}
+
+\begin{equation}
+  I_4 = \frac{50 - V_D}{R_4} = \frac{50 - V_D}{8}
+\end{equation}
+
+\begin{equation}
+  I_6 = \frac{V_D - V_E}{R_6} = \frac{V_D - V_E}{12}
+\end{equation}
+
+\begin{equation}
+  I_5 = \frac{V_E - 0}{R_5} = \frac{V_E}{17}
+\end{equation}
+
+\subsection*{3. Составление уравнений по первому закону Кирхгофа}
+
+Запишем баланс токов для узлов $D$ и $E$.
+
+\textbf{Узел $D$:}
+
+В узел входят токи $I_3$ и $I_4$, из узла выходит ток $I_6$:
+
+\begin{equation}
+  \frac{50 - V_D}{12} + \frac{50 - V_D}{8} = \frac{V_D - V_E}{12}
+\end{equation}
+
+Умножим обе части уравнения на 24:
+
+\begin{equation}
+  2(50 - V_D) + 3(50 - V_D) = 2(V_D - V_E)
+\end{equation}
+
+\begin{equation}
+  250 - 5V_D = 2V_D - 2V_E
+\end{equation}
+
+\begin{equation}
+  7V_D - 2V_E = 250 \tag{1}
+\end{equation}
+
+\textbf{Узел $E$:}
+
+В узел входят токи $I_2$ и $I_6$, из узла выходит ток $I_5$:
+
+\begin{equation}
+  \frac{50 - V_E}{7} + \frac{V_D - V_E}{12} = \frac{V_E}{17}
+\end{equation}
+
+Умножим обе части на $7 \cdot 12 \cdot 17 = 1428$:
+
+\begin{equation}
+  204(50 - V_E) + 119(V_D - V_E) = 84V_E
+\end{equation}
+
+\begin{equation}
+  10200 - 204V_E + 119V_D - 119V_E = 84V_E
+\end{equation}
+
+\begin{equation}
+  119V_D - 407V_E = -10200 \tag{2}
+\end{equation}
+
+\subsection*{4. Решение системы уравнений}
+
+Из уравнения (1) выразим $V_D$:
+
+\begin{equation}
+  V_D = \frac{250 + 2V_E}{7}
+\end{equation}
+
+Подставим в уравнение (2). Учитывая, что $119/7 = 17$:
+
+\begin{equation}
+  17(250 + 2V_E) - 407V_E = -10200
+\end{equation}
+
+\begin{equation}
+  4250 + 34V_E - 407V_E = -10200
+\end{equation}
+
+\begin{equation}
+  -373V_E = -14450
+\end{equation}
+
+\begin{equation}
+  V_E = \frac{14450}{373} \approx 38,74 \text{ В}
+\end{equation}
+
+Найдём $V_D$:
+
+\begin{equation}
+  V_D = \frac{250 + 2 \cdot \dfrac{14450}{373}}{7} = \frac{122150}{2611} \approx 46,78 \text{ В}
+\end{equation}
+
+\subsection*{5. Определение токов в ветвях}
+
+Подставим найденные значения потенциалов в выражения для токов:
+
+\begin{align}
+  I_1 & = \frac{25}{7} \approx 3,571 \text{ А}                             \\[3mm]
+  I_2 & = \frac{50 - V_E}{7} = \frac{4200}{2611} \approx 1,609 \text{ А}   \\[3mm]
+  I_3 & = \frac{50 - V_D}{12} = \frac{700}{2611} \approx 0,268 \text{ А}   \\[3mm]
+  I_4 & = \frac{50 - V_D}{8} = \frac{1050}{2611} \approx 0,402 \text{ А}   \\[3mm]
+  I_6 & = \frac{V_D - V_E}{12} = \frac{1750}{2611} \approx 0,670 \text{ А} \\[3mm]
+  I_5 & = \frac{V_E}{17} = \frac{14450}{6341} \approx 2,279 \text{ А}
+\end{align}
+
+\section*{Сравнение с результатами моделирования}
+
+На рисунке 3 представлена смоделированная в среде Electronics Workbench схема с амперметрами для измерения токов в ветвях. Результаты моделирования совпадают с расчётными данными в пределах погрешности округления.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.75\textwidth]{pics/currents.png}
+  \caption*{Рисунок 3 --- Моделирование распределения токов в ветвях электрической цепи}
+\end{figure}
+
+\subsection*{6. Проверка по первому закону Кирхгофа}
+
+\textbf{Узел $D$:}
+\begin{equation}
+  I_3 + I_4 = \frac{700}{2611} + \frac{1050}{2611} = \frac{1750}{2611} = I_6 \quad \checkmark
+\end{equation}
+
+\textbf{Узел $E$:}
+\begin{equation}
+  I_2 + I_6 = \frac{4200}{2611} + \frac{1750}{2611} = \frac{5950}{2611} = \frac{14450}{6341} = I_5 \quad \checkmark
+\end{equation}
+
+Суммарный ток, отдаваемый источником:
+\begin{equation}
+  I_{\text{ист}} = I_1 + I_2 + I_3 + I_4 \approx 3,571 + 1,609 + 0,268 + 0,402 \approx 5,850 \text{ А}
+\end{equation}
+
+\section*{Баланс мощностей}
+\addcontentsline{toc}{section}{Баланс мощностей}
+
+Для проверки правильности расчётов составим баланс мощностей.
+
+\begin{table}[H]
+  \centering
+  \caption{Токи, падения напряжений и мощности на резисторах}
+  \begin{tabular}{@{}lccc@{}}
+    \toprule
+    Резистор      & Ток $I$, А & Напряжение $U$, В & Мощность $P$, Вт \\
+    \midrule
+    $R_1 = 14$ Ом & 3,571      & 50,000            & 178,571          \\
+    $R_2 = 7$ Ом  & 1,609      & 11,260            & 18,112           \\
+    $R_3 = 12$ Ом & 0,268      & 3,217             & 0,862            \\
+    $R_4 = 8$ Ом  & 0,402      & 3,217             & 1,294            \\
+    $R_5 = 17$ Ом & 2,279      & 38,740            & 88,282           \\
+    $R_6 = 12$ Ом & 0,670      & 8,043             & 5,391            \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Сумма рассеиваемых мощностей на резисторах:
+\begin{equation}
+  \sum_{i=1}^{6} P_i = 178,571 + 18,112 + 0,862 + 1,294 + 88,282 + 5,391 = 292,512 \text{ Вт}
+\end{equation}
+
+Мощность, отданная источником:
+\begin{equation}
+  P_{\text{ист}} = E \cdot I_{\text{ист}} = 50 \cdot 5,850 = 292,512 \text{ Вт}
+\end{equation}
+
+Проверка баланса:
+\begin{equation}
+  P_{\text{ист}} = \sum_{i=1}^{6} P_i = 292,512 \text{ Вт} \quad \checkmark
+\end{equation}
+
+Баланс мощностей выполнен, что подтверждает правильность проведённых расчётов.
+
+\newpage
+
+\section*{Вывод}
+
+\end{document}

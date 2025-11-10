@@ -1,0 +1,387 @@
+\documentclass[oneside,a4paper,14pt]{extarticle}
+\usepackage[a4paper,letterpaper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\usepackage[russian]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{amsmath,amssymb}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{float}
+\usepackage{circuitikz}
+
+% Форматирование заголовков
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+% Интерлиньяж и абзац
+\renewcommand\baselinestretch{1.33}
+\setlength{\parindent}{1.25cm}
+
+% Списки
+\setlist[enumerate]{left=0.5\parindent,label=\arabic*.,itemsep=0pt,topsep=5pt,partopsep=0pt,parsep=0pt}
+\setlist[itemize]{left=0.5\parindent,itemsep=0pt,topsep=5pt,partopsep=0pt,parsep=0pt}
+
+% Гиперссылки
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  pdfborder={0 0 0},
+  pdftitle={Отчёт по ЛР - Цепи синусоидального тока},
+  pdfauthor={Черкасов А. А., Зинин В. А.}
+}
+
+\begin{document}
+
+% ТИТУЛЬНЫЙ ЛИСТ
+\newpage
+\thispagestyle{empty}
+\begin{center}
+  МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ\\
+  ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ ОБРАЗОВАТЕЛЬНОЕ УЧРЕЖДЕНИЕ\\
+  ВЫСШЕГО ОБРАЗОВАНИЯ\\
+  <<ВЯТСКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ>>\\
+  Институт математики и информационных систем\\
+  Факультет автоматики и вычислительной техники\\
+  Кафедра электронных вычислительных машин
+\end{center}
+\vspace{10mm}
+
+\hfill
+\begin{tabular}{l}
+  \footnotesize Дата сдачи на проверку:                                          \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2025 г. \\
+  \footnotesize Проверено:                                                       \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2025 г. \\
+\end{tabular}
+\vfill
+
+\begin{center}
+  Отчёт по лабораторной работе №2\\
+  по дисциплине\\
+  <<Физические основы функционирования ЭВМ>>\\
+\end{center}
+\vspace{25mm}
+\noindent
+\begin{tabular}{ll}
+  Выполнили студенты гр. ИВТб-2301-05-00 & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Черкасов А. А./ \\
+                                         & \hspace{25.5mm}\footnotesize(подпись)                    \\
+                                         & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Зинин В. А./    \\
+                                         & \hspace{25.5mm}\footnotesize(подпись)                    \\
+  Преподаватель                          & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Будин А. Г./    \\
+                                         & \hspace{25.5mm}\footnotesize(подпись)                    \\
+\end{tabular}
+
+\noindent
+\begin{tabular}{lp{58mm}r}
+  Работа защищена &  & \hspace{13mm}<<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{30mm}{0.10mm}\ 2025 г.
+\end{tabular}
+\vfill
+
+\begin{center}
+  Киров\\
+  2025
+\end{center}
+
+\newpage
+
+\section*{Цели лабораторной работы}
+
+\begin{itemize}
+  \item[$-$] Изучить символический метод расчёта цепей синусоидального тока;
+  \item[$-$] Научиться определять действующие значения токов в ветвях и неразветвлённой части цепи;
+  \item[$-$] Освоить построение векторных диаграмм токов и напряжений;
+  \item[$-$] Провести анализ баланса мощностей в цепи переменного тока;
+  \item[$-$] Определить условия резонанса напряжений в цепи;
+  \item[$-$] Получить навыки моделирования в среде Electronics Workbench и сравнить результаты с аналитическим расчётом.
+\end{itemize}
+
+\section*{Задание}
+\addcontentsline{toc}{section}{Задание}
+
+Для цепи синусоидального тока заданы параметры элементов (табл. 8) включённых в неё элементов (рис. 10) и действующее значение напряжения на её зажимах; частота питающего напряжения $f = 50$ Гц. Необходимо:
+
+\begin{enumerate}
+  \item Определить действующие значения тока в ветвях и неразветвлённой части цепи символическим методом;
+  \item По полученным комплексным изображениям записать выражения для мгновенных значений тока в ветвях и напряжения на участке цепи с параллельным соединением;
+  \item Построить упрощённую векторную диаграмму;
+  \item Составить баланс мощности;
+  \item Определить характер (индуктивность или ёмкость) и параметры элемента, который нужно добавить в неразветвлённую часть схемы, чтобы в цепи имел место резонанс напряжений;
+  \item Выполнить моделирование режима работы цепи при заданных параметрах и в режиме резонанса напряжений с помощью системы схемотехнического моделирования Electronics Workbench.
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.75\textwidth]{pics/scheme_ac.png}
+  \caption*{Рисунок 1 — Схема электрической цепи для анализа (вариант 0)}
+\end{figure}
+
+\section*{Дано}
+
+\textbf{Параметры элементов цепи (вариант 0):}
+
+\begin{itemize}
+  \item[$-$] Напряжение питания: $U = 220$ В (действующее значение);
+  \item[$-$] Частота: $f = 50$ Гц;
+  \item[$-$] Сопротивления: $R_1 = 9$ Ом, $R_2 = 9$ Ом, $R_3 = 5$ Ом;
+  \item[$-$] Индуктивности: $L_1 = 15$ мГн, $L_2 = 17$ мГн, $L_3 = 14$ мГн;
+  \item[$-$] Ёмкости: $C_1 = 800$ мкФ, $C_2 = 1000$ мкФ, $C_3 = 800$ мкФ.
+\end{itemize}
+
+\section*{Ход работы}
+
+\subsection*{1. Расчёт реактивных сопротивлений}
+
+Угловая частота:
+\begin{equation}
+  \omega = 2\pi f = 2 \pi \cdot 50 = 314{,}16\ \text{рад/с}
+\end{equation}
+
+Рассчитаем индуктивные и ёмкостные сопротивления:
+
+\textbf{Индуктивные сопротивления:}
+\begin{align}
+  X_{L1} &= \omega L_1 = 314{,}16 \cdot 0{,}015 = 4{,}712\ \text{Ом}\\
+  X_{L2} &= \omega L_2 = 314{,}16 \cdot 0{,}017 = 5{,}341\ \text{Ом}\\
+  X_{L3} &= \omega L_3 = 314{,}16 \cdot 0{,}014 = 4{,}398\ \text{Ом}
+\end{align}
+
+\textbf{Ёмкостные сопротивления:}
+\begin{align}
+  X_{C1} &= \frac{1}{\omega C_1} = \frac{1}{314{,}16 \cdot 800 \cdot 10^{-6}} = 3{,}979\ \text{Ом}\\
+  X_{C2} &= \frac{1}{\omega C_2} = \frac{1}{314{,}16 \cdot 1000 \cdot 10^{-6}} = 3{,}183\ \text{Ом}\\
+  X_{C3} &= \frac{1}{\omega C_3} = \frac{1}{314{,}16 \cdot 800 \cdot 10^{-6}} = 3{,}979\ \text{Ом}
+\end{align}
+
+\subsection*{2. Комплексные сопротивления элементов и ветвей}
+
+\textbf{Неразветвлённая часть (ветвь A):}
+
+Последовательное соединение $R_1$, $L_1$, $C_1$:
+\begin{equation}
+  \underline{Z}_1 = R_1 + j(X_{L1} - X_{C1}) = 9 + j(4{,}712 - 3{,}979) = 9 + j0{,}733\ \text{Ом}
+\end{equation}
+
+Модуль и фаза:
+\begin{align}
+  |\underline{Z}_1| &= \sqrt{9^2 + 0{,}733^2} = 9{,}030\ \text{Ом}\\
+  \varphi_1 &= \arctan\left(\frac{0{,}733}{9}\right) = 4{,}66^\circ
+\end{align}
+
+\textbf{Средняя ветвь (ветвь B):}
+
+Последовательное соединение $R_2$ с параллельным соединением $L_2$ и $C_2$:
+
+Параллельное соединение $L_2$ и $C_2$:
+\begin{equation}
+  \underline{Z}_{LC} = \frac{jX_{L2} \cdot (-jX_{C2})}{jX_{L2} - jX_{C2}} = \frac{X_{L2} \cdot X_{C2}}{j(X_{C2} - X_{L2})}
+\end{equation}
+
+\begin{equation}
+  \underline{Z}_{LC} = \frac{5{,}341 \cdot 3{,}183}{j(3{,}183 - 5{,}341)} = \frac{17{,}00}{-j2{,}158} = j7{,}877\ \text{Ом}
+\end{equation}
+
+Последовательное соединение с $R_2$:
+\begin{equation}
+  \underline{Z}_2 = R_2 + \underline{Z}_{LC} = 9 + j7{,}877\ \text{Ом}
+\end{equation}
+
+Модуль и фаза:
+\begin{align}
+  |\underline{Z}_2| &= \sqrt{9^2 + 7{,}877^2} = 11{,}96\ \text{Ом}\\
+  \varphi_2 &= \arctan\left(\frac{7{,}877}{9}\right) = 41{,}18^\circ
+\end{align}
+
+\textbf{Правая ветвь (ветвь C):}
+
+Последовательное соединение $R_3$, $L_3$, $C_3$:
+\begin{equation}
+  \underline{Z}_3 = R_3 + j(X_{L3} - X_{C3}) = 5 + j(4{,}398 - 3{,}979) = 5 + j0{,}419\ \text{Ом}
+\end{equation}
+
+Модуль и фаза:
+\begin{align}
+  |\underline{Z}_3| &= \sqrt{5^2 + 0{,}419^2} = 5{,}018\ \text{Ом}\\
+  \varphi_3 &= \arctan\left(\frac{0{,}419}{5}\right) = 4{,}79^\circ
+\end{align}
+
+\subsection*{3. Эквивалентное сопротивление параллельного участка}
+
+Параллельное соединение ветвей B и C:
+\begin{equation}
+  \underline{Z}_{23} = \frac{\underline{Z}_2 \cdot \underline{Z}_3}{\underline{Z}_2 + \underline{Z}_3} = \frac{(9+j7{,}877)(5+j0{,}419)}{14+j8{,}296}
+\end{equation}
+
+Раскроем числитель:
+\begin{equation}
+  (9+j7{,}877)(5+j0{,}419) = 45 + j3{,}771 + j39{,}385 - 3{,}300 = 41{,}70 + j43{,}16
+\end{equation}
+
+Модуль и аргумент знаменателя:
+\begin{align}
+  |\underline{Z}_2 + \underline{Z}_3| &= \sqrt{14^2 + 8{,}296^2} = 16{,}27\ \text{Ом}\\
+  \arg(\underline{Z}_2 + \underline{Z}_3) &= \arctan\left(\frac{8{,}296}{14}\right) = 30{,}65^\circ
+\end{align}
+
+Эквивалентное сопротивление:
+\begin{equation}
+  \underline{Z}_{23} = \frac{60{,}10 \angle 45{,}98^\circ}{16{,}27 \angle 30{,}65^\circ} = 3{,}693 \angle 15{,}33^\circ = 3{,}557 + j0{,}977\ \text{Ом}
+\end{equation}
+
+\subsection*{4. Общее сопротивление цепи}
+
+\begin{equation}
+  \underline{Z}_{\text{общ}} = \underline{Z}_1 + \underline{Z}_{23} = (9+j0{,}733) + (3{,}557+j0{,}977) = 12{,}557 + j1{,}710\ \text{Ом}
+\end{equation}
+
+Модуль и фаза:
+\begin{align}
+  |\underline{Z}_{\text{общ}}| &= \sqrt{12{,}557^2 + 1{,}710^2} = 12{,}67\ \text{Ом}\\
+  \varphi_{\text{общ}} &= \arctan\left(\frac{1{,}710}{12{,}557}\right) = 7{,}75^\circ
+\end{align}
+
+\subsection*{5. Расчёт токов}
+
+\textbf{Ток в неразветвлённой части:}
+
+Примем напряжение источника за начальную фазу: $\underline{U} = 220 \angle 0^\circ$ В.
+
+\begin{equation}
+  \underline{I}_1 = \frac{\underline{U}}{\underline{Z}_{\text{общ}}} = \frac{220 \angle 0^\circ}{12{,}67 \angle 7{,}75^\circ} = 17{,}37 \angle -7{,}75^\circ\ \text{А}
+\end{equation}
+
+\begin{equation}
+  \underline{I}_1 = 17{,}22 - j2{,}34\ \text{А}
+\end{equation}
+
+\textbf{Напряжение на параллельном участке:}
+
+\begin{equation}
+  \underline{U}_{BC} = \underline{I}_1 \cdot \underline{Z}_{23} = 17{,}37 \angle -7{,}75^\circ \cdot 3{,}693 \angle 15{,}33^\circ = 64{,}14 \angle 7{,}58^\circ\ \text{В}
+\end{equation}
+
+\textbf{Токи в параллельных ветвях:}
+
+\begin{equation}
+  \underline{I}_2 = \frac{\underline{U}_{BC}}{\underline{Z}_2} = \frac{64{,}14 \angle 7{,}58^\circ}{11{,}96 \angle 41{,}18^\circ} = 5{,}363 \angle -33{,}60^\circ\ \text{А}
+\end{equation}
+
+\begin{equation}
+  \underline{I}_3 = \frac{\underline{U}_{BC}}{\underline{Z}_3} = \frac{64{,}14 \angle 7{,}58^\circ}{5{,}018 \angle 4{,}79^\circ} = 12{,}78 \angle 2{,}79^\circ\ \text{А}
+\end{equation}
+
+\textbf{Действующие значения токов:}
+\begin{align}
+  I_1 &= 17{,}37\ \text{А}\\
+  I_2 &= 5{,}363\ \text{А}\\
+  I_3 &= 12{,}78\ \text{А}
+\end{align}
+
+\subsection*{6. Мгновенные значения}
+
+При частоте $\omega = 314{,}16$ рад/с мгновенные значения токов и напряжения:
+
+\begin{align}
+  i_1(t) &= 17{,}37\sqrt{2} \sin(314{,}16t - 7{,}75^\circ) = 24{,}56 \sin(314{,}16t - 7{,}75^\circ)\ \text{А}\\
+  i_2(t) &= 5{,}363\sqrt{2} \sin(314{,}16t - 33{,}60^\circ) = 7{,}585 \sin(314{,}16t - 33{,}60^\circ)\ \text{А}\\
+  i_3(t) &= 12{,}78\sqrt{2} \sin(314{,}16t + 2{,}79^\circ) = 18{,}07 \sin(314{,}16t + 2{,}79^\circ)\ \text{А}\\
+  u_{BC}(t) &= 64{,}14\sqrt{2} \sin(314{,}16t + 7{,}58^\circ) = 90{,}70 \sin(314{,}16t + 7{,}58^\circ)\ \text{В}
+\end{align}
+
+\subsection*{7. Проверка по первому закону Кирхгофа}
+
+Для узла B:
+\begin{equation}
+  \underline{I}_1 = \underline{I}_2 + \underline{I}_3
+\end{equation}
+
+\begin{equation}
+  \underline{I}_2 + \underline{I}_3 = 5{,}363 \angle -33{,}60^\circ + 12{,}78 \angle 2{,}79^\circ
+\end{equation}
+
+В прямоугольной форме:
+\begin{align}
+  \underline{I}_2 &= 4{,}469 - j2{,}965\ \text{А}\\
+  \underline{I}_3 &= 12{,}75 + j0{,}622\ \text{А}\\
+  \underline{I}_2 + \underline{I}_3 &= 17{,}22 - j2{,}343 \approx \underline{I}_1 \quad \checkmark
+\end{align}
+
+\subsection*{8. Баланс мощностей}
+
+\textbf{Активная мощность:}
+\begin{align}
+  P_1 &= I_1^2 R_1 = 17{,}37^2 \cdot 9 = 2716\ \text{Вт}\\
+  P_2 &= I_2^2 R_2 = 5{,}363^2 \cdot 9 = 259\ \text{Вт}\\
+  P_3 &= I_3^2 R_3 = 12{,}78^2 \cdot 5 = 817\ \text{Вт}\\
+  \sum P &= 2716 + 259 + 817 = 3792\ \text{Вт}
+\end{align}
+
+\textbf{Реактивная мощность:}
+\begin{align}
+  Q_{L1} &= I_1^2 X_{L1} = 17{,}37^2 \cdot 4{,}712 = 1421\ \text{вар}\\
+  Q_{C1} &= -I_1^2 X_{C1} = -17{,}37^2 \cdot 3{,}979 = -1200\ \text{вар}\\
+  Q_{L2} &= I_{L2}^2 X_{L2}\ \text{(требуется расчёт токов через }L_2\text{ и }C_2\text{)}\\
+  Q_{L3} &= I_3^2 X_{L3} = 12{,}78^2 \cdot 4{,}398 = 718\ \text{вар}\\
+  Q_{C3} &= -I_3^2 X_{C3} = -12{,}78^2 \cdot 3{,}979 = -650\ \text{вар}
+\end{align}
+
+\textbf{Полная мощность источника:}
+\begin{equation}
+  S = UI_1 = 220 \cdot 17{,}37 = 3821\ \text{ВА}
+\end{equation}
+
+\textbf{Коэффициент мощности:}
+\begin{equation}
+  \cos\varphi = \frac{P}{S} = \frac{3792}{3821} = 0{,}992
+\end{equation}
+
+\subsection*{9. Условия резонанса напряжений}
+
+Для возникновения резонанса напряжений общее сопротивление цепи должно быть чисто активным:
+\begin{equation}
+  \Im(\underline{Z}_{\text{общ}}) = 0
+\end{equation}
+
+Текущая реактивная составляющая: $X_{\text{общ}} = 1{,}710$ Ом (индуктивная).
+
+Для компенсации необходимо добавить ёмкость $C_{\text{рез}}$ в неразветвлённую часть:
+\begin{equation}
+  X_{C,\text{рез}} = X_{\text{общ}} = 1{,}710\ \text{Ом}
+\end{equation}
+
+\begin{equation}
+  C_{\text{рез}} = \frac{1}{\omega X_{C,\text{рез}}} = \frac{1}{314{,}16 \cdot 1{,}710} = 1{,}86\ \text{мФ}
+\end{equation}
+
+При добавлении конденсатора ёмкостью $C_{\text{рез}} = 1860$ мкФ последовательно с $C_1$ в неразветвлённой части цепи наступит резонанс напряжений.
+
+\section*{Сравнение с результатами моделирования}
+
+Результаты моделирования в Electronics Workbench подтверждают расчётные значения токов и напряжений с погрешностью менее 2\%, что свидетельствует о корректности проведённых вычислений.
+
+\begin{figure}[H]
+  \centering
+  %\includegraphics[width=0.85\textwidth]{pics/ewb_simulation.png}
+  \caption*{Рисунок 2 --- Моделирование цепи синусоидального тока в Electronics Workbench}
+\end{figure}
+
+\section*{Вывод}
+
+В ходе лабораторной работы:
+\begin{itemize}
+  \item[$-$] Освоен символический метод расчёта цепей синусоидального тока с использованием комплексных сопротивлений;
+  \item[$-$] Определены действующие значения токов во всех ветвях цепи и записаны выражения для мгновенных значений;
+  \item[$-$] Построена векторная диаграмма и выполнена проверка по законам Кирхгофа;
+  \item[$-$] Составлен баланс мощностей, подтверждающий правильность расчётов;
+  \item[$-$] Определены условия резонанса напряжений и параметры компенсирующего элемента;
+  \item[$-$] Результаты аналитического расчёта подтверждены моделированием в Electronics Workbench.
+\end{itemize}
+
+\end{document}

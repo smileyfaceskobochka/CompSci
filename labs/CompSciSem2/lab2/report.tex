@@ -46,7 +46,7 @@
   linkcolor=black,
   urlcolor=blue,
   pdfborder={0 0 0},
-  pdftitle={Отчёт по лабораторной работе №9. Информатика. Светодиодные индикаторы},
+  pdftitle={PyQt6 приложение для управления устройствами умного дома},
   pdfauthor={Черкасов А.А.}
 }
 
@@ -73,10 +73,10 @@
 \vfill
 
 \begin{center}
-  Отчёт по лабораторной работе №9\\
+  Отчёт по лабораторной работе №10\\
   по дисциплине\\
   <<Информатика>>\\
-  <<Светодиодные индикаторы>>
+  <<Пьезоэлемент, микросхемы>>
 \end{center}
 \vspace{25mm}
 \noindent
@@ -102,28 +102,17 @@
 
 \section*{Цель}
 
-Закрепить на практике знания о светодиодных индикаторах на примере работы с arduino,
+Закрепить на практике знания о пьезоэлементе и микросхемах.
 
 \section*{Задания}
 \begin{enumerate}
-  \item Бегущий огонек. На основе базовой схемы сделать движение светодиодов. Начальное состояние: вкл. Движение: четные/нечетные c 10.
+  \item Азбука Морзе. Используйте мелодии для пьезодинамика из вложения (можно выбрать любые 2). Добавьте световую индикацию (не менее 3-х светодиодов). Добавьте кнопку для переключения мелодий.
 
-  \item Пульсар. На основе базовой схемы сделать движение светодиодов. Начальное состояние: вкл. Транзистор: биполярный. мена состони: увелиение до 1/3, до 2/3 и max через сброс.
+  \item Терменвокс. При падении освещённости звук уменьшается. Звуковой сигнал непрерывен. Первая октава.
 
-  \item Ночной светильник. Начальное состояние: выкл. Входной сигнал: фоторезистор. Делитель напряжения: 220 Ом. Смена состояний: увеличение в зависимости от значений на датчике.
-
-  \item Кнопочный переключатель.
-
-        Л – левая кнопка;\\
-        П – правая кнопка;\\
-        ЛП – последовательное нажатие левой, а потом правой кнопки;\\
-        ПЛ – последовательное нажатие правой, а потом левой кнопки;\\
-        1/2 - количество кнопок, которые нужны для включения/выключения.
-
-        Включение: 2. Направление: ПЛ или ЛП. Выключение: 2. Направление: ПЛ.
-
-  \item RGB светодиод. Фиксация. Срабатывание по отпусканию. Смешивание цветов. Светодиод с общим катодом.
-
+  \item Мерзкое пианино. 5 кнопок. Без резистора. Входной сигнал - switch/case. Малая октава.
+  
+  \item Перетягивание каната. 14 светодиодов. Стягивающий резистор. Сигнализация на светодиоде. 1 нажатие для следующего перехода.
 \end{enumerate}
 
 \newpage
@@ -152,7 +141,7 @@
 \end{figure}
 
 \begin{center}
-  \href{https://www.tinkercad.com/things/2D3TVgkxuD7/editel?sharecode=KaiK4c4qEgjOIbT-UGdksz3bU1xRun3s13X7-mWlXuM}
+  \href{https://www.tinkercad.com/things/i78dwx4EMSs/editel?returnTo=%2Fdashboard%2Fdesigns%2Fcircuits&sharecode=kfmTSz69JLCleJXD6IXBhBt07unUbmD6bs8LCQvzxgk}
   {\fcolorbox{blue}{white}{\textcolor{blue}{Перейти на Tinkercad}}}
 \end{center}
 
@@ -182,7 +171,7 @@
 
 
 \begin{center}
-  \href{https://www.tinkercad.com/things/6QXfTwQgOm2/editel?sharecode=hVZaKib-6TnGnMEjUAKuUgA9t2YHPhAyYL8WWsdq378}
+  \href{https://www.tinkercad.com/things/9yOZ3FxwJwV-lab22/editel?returnTo=https%3A%2F%2Fwww.tinkercad.com%2Fdashboard%2Fdesigns%2Fcircuits&sharecode=U4rQQVLub2I8sGHTCo1-z_94pKYgY7H8c4cGdz57yFU}
   {\fcolorbox{blue}{white}{\textcolor{blue}{Перейти на Tinkercad}}}
 \end{center}
 
@@ -213,7 +202,7 @@
 \end{figure}
 
 \begin{center}
-  \href{https://www.tinkercad.com/things/9Gg0dgO6gEa/editel?sharecode=wnCi498ImFvTVeCCCTZrEJ1gGQIfhsfvnG4GSTBcBtA}
+  \href{https://www.tinkercad.com/things/0UmK0fQDE29/editel?returnTo=%2Fdashboard%2Fdesigns%2Fcircuits&sharecode=WAz08KPMvjl0xAE5G9v3ZGVyzoLG5ny51pZe7tmVJOw}
   {\fcolorbox{blue}{white}{\textcolor{blue}{Перейти на Tinkercad}}}
 \end{center}
 
@@ -235,16 +224,22 @@
 \newpage
 
 \section*{Принципиальная схема}
-Принципиальная схема представлена на рисунке 4.2.
+Принципиальная схема представлена на рисунке 4.2 и 4.3.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=1\linewidth]{pics/4п.png}
+  \includegraphics[width=1\linewidth]{pics/4п1.png}
   \caption*{Рисунок 4.2 --- Принципиальная схема задания №4}
 \end{figure}
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\linewidth]{pics/4п2.png}
+  \caption*{Рисунок 4.3 --- Принципиальная схема задания №4}
+\end{figure}
+
 \begin{center}
-  \href{https://www.tinkercad.com/things/hTkrnFu6FHm/editel?sharecode=_KAjgeSUXeKAns_gorue3tzy4clrXL3kjBwbN6rs4kQ}
+  \href{https://www.tinkercad.com/things/eVmUqwXKJUh/editel?returnTo=%2Fdashboard%2Fdesigns%2Fall&sharecode=LdqwTQxMZX7VRx0SvQpXEQ-Lc0u3yQt5HHMYTgrvZO8}
   {\fcolorbox{blue}{white}{\textcolor{blue}{Перейти на Tinkercad}}}
 \end{center}
 
@@ -252,118 +247,48 @@
 
 \newpage
 
-\section*{Решение}
-\section*{Задание 5}
-\section*{Схема сборки на макетной плате}
-Схема сборки на макетной плате представлена на рисунке 5.1.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.9\linewidth]{pics/5.png}
-  \caption*{Рисунок 5.1 --- Схема сборки задания №5}
-\end{figure}
-
-\newpage
-
-\section*{Принципиальная схема}
-Принципиальная схема представлена на рисунке 5.2.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=1\linewidth]{pics/5п.png}
-  \caption*{Рисунок 5.2 --- Принципиальная схема задания №5}
-\end{figure}
-
-\begin{center}
-  \href{https://www.tinkercad.com/things/bu85NNm57kx/editel?sharecode=9HkeKX7Ep1wXolqB9uYS8ioTtNVZwScfSsIWMFTA-hA}
-  {\fcolorbox{blue}{white}{\textcolor{blue}{Перейти на Tinkercad}}}
-\end{center}
-
-Исходный код решения задания представлен в приложении~\hyperref[app:A5]{A5}.
-
-\newpage
-
-\section*{Решение}
-\section*{Дополнительное задание}
-\section*{Схема сборки на макетной плате}
-Схема сборки на макетной плате представлена на рисунке 6.1.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.9\linewidth]{pics/dop.png}
-  \caption*{Рисунок 6.1 --- Схема сборки задания №5}
-\end{figure}
-
-\newpage
-
-\section*{Принципиальная схема}
-Принципиальная схема представлена на рисунке 6.2.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=1\linewidth]{pics/dop_п.png}
-  \caption*{Рисунок 6.2 --- Принципиальная схема задания №5}
-\end{figure}
-
-\begin{center}
-  \href{https://www.tinkercad.com/things/5mhvx61adqn-lab1dop/editel?returnTo=https%3A%2F%2Fwww.tinkercad.com%2Fdashboard%2Fdesigns%2Fall&sharecode=gDLRew8Kn_xqsX9Gp5opK8Y_i9QmD4IwE1rvemLeiNA}
-  {\fcolorbox{blue}{white}{\textcolor{blue}{Перейти на Tinkercad}}}
-\end{center}
-
-Исходный код решения задания представлен в приложении~\hyperref[app:A6]{A6}.
-
-\newpage
-
 \section*{Вывод}
-В результате выполнения лабораторной работы была достигнута поставленная цель --- закрепление на практике знаний о светодиодных индикаторах на примере работы с платформой Arduino. Были успешно реализованы пять различных заданий, демонстрирующих разнообразные способы управления светодиодами:
+В результате выполнения лабораторной работы была достигнута поставленная цель --- закрепление на практике знаний о пьезоэлементе и микросхемах на примере работы с платформой Arduino. Были успешно реализованы четыре различных задания, демонстрирующих разнообразные способы работы с пьезоэлектрическими излучателями и интегральными микросхемами:
 
 \begin{enumerate}
-  \item Бегущий огонек --- последовательное включение светодиодов с чередованием четных и нечетных позиций;
-  \item Пульсар --- плавное изменение яркости светодиода с использованием ШИМ-модуляции;
-  \item Ночной светильник --- автоматическое управление яркостью в зависимости от освещенности с помощью фоторезистора;
-  \item Кнопочный переключатель --- управление включением/выключением с использованием последовательности нажатий кнопок;
-  \item RGB-светодиод --- управление цветом путем смешивания трех основных цветов.
+  \item Азбука Морзе --- воспроизведение мелодий на пьезодинамике с одновременной световой индикацией на трех светодиодах и возможностью переключения между мелодиями с помощью кнопки;
+  \item Терменвокс --- непрерывная генерация звука первой октавы с изменением громкости в зависимости от уровня освещенности;
+  \item Мерзкое пианино --- пятикнопочное пианино малой октавы с использованием оператора switch/case для обработки входных сигналов без подтягивающих резисторов;
+  \item Перетягивание каната --- игра с использованием 14 светодиодов и микросхемы для управления последовательностью включения, с сигнализацией о переходах.
 \end{enumerate}
 
-В ходе работы были изучены основные принципы работы со светодиодными индикаторами, освоены методы цифрового и аналогового управления выводами Arduino, а также получены практические навыки программирования микроконтроллера. Были использованы следующие ключевые функции Arduino:
+В ходе работы были изучены принципы работы пьезоэлектрических элементов для генерации звуковых сигналов, освоены методы управления интегральными микросхемами, а также получены практические навыки создания интерактивных устройств с использованием датчиков и исполнительных механизмов. Были использованы следующие ключевые функции Arduino:
 
-pinMode(pin, mode) – настройка режима работы пина (вход/выход)
+tone(pin, frequency, duration) – генерация тонов заданной частоты и длительности
 
-digitalWrite(pin, value) – установка цифрового уровня сигнала (HIGH/LOW)
-
-analogWrite(pin, value) – генерация ШИМ-сигнала для управления яркостью
-
-digitalRead(pin) – чтение состояния цифрового входа
+noTone(pin) – остановка генерации тона
 
 analogRead(pin) – чтение аналогового значения с датчика
 
+digitalRead(pin) – чтение состояния цифрового входа
+
+digitalWrite(pin, value) – установка цифрового уровня сигнала
+
+pinMode(pin, mode) – настройка режима работы пина
+
 delay(ms) – задержка выполнения программы
 
-Serial.begin(speed) – инициализация последовательного порта для отладки
+Serial.begin(speed) – инициализация последовательного порта
 
 \newpage
-
 \section*{Приложение А1. Исходный код решения для задания №1}\label{app:A1}
-\inputminted{cpp}{code/lab1_1.cpp}
+\inputminted{cpp}{code/lab2_1.cpp}
 \newpage
-
 \section*{Приложение А2. Исходный код решения для задания №2}\label{app:A2}
-\inputminted{cpp}{code/lab1_2.cpp}
+\inputminted{cpp}{code/lab2_2.cpp}
 \newpage
-
 \section*{Приложение А3. Исходный код решения для задания №3}\label{app:A3}
-\inputminted{cpp}{code/lab1_3.cpp}
+\inputminted{cpp}{code/lab2_3.cpp}
 \newpage
-
 \section*{Приложение А4. Исходный код решения для задания №4}\label{app:A4}
-\inputminted{cpp}{code/lab1_4.cpp}
-\newpage
+\inputminted{cpp}{code/lab2_4.cpp}
 
-\section*{Приложение А5. Исходный код решения для задания №5}\label{app:A5}
-\inputminted{cpp}{code/lab1_5.cpp}
-\newpage
-
-\section*{Приложение А6. Исходный код решения для дополнительного задания}\label{app:A6}
-\inputminted{cpp}{code/lab1_5.cpp}
+% \section*{Приложение А5. Исходный код решения для дополнительного задания}
+% \inputminted{cpp}{code/lab2_dop.cpp}
 
 \end{document}

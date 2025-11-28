@@ -1,17 +1,12 @@
-program test_bot_pas;
+program test_bot_fixed;
 
-uses bot, Math;
+uses bot, Math, SysUtils;
 
 const
   OPPONENT_SEQUENCE_LENGTH = 100;
 
 var
-  OPPONENT_SEQUENCE: array[0..OPPONENT_SEQUENCE_LENGTH-1] of integer = (
-    1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2,
-    1, 1, 1, 1, 1, 3, 1, 1, 3, 2, 1, 1, 1, 3, 1, 3, 3, 3, 1, 3, 2, 1, 1, 1, 1,
-    1, 3, 2, 1, 3, 2, 1, 3, 2, 1, 2, 1, 3, 2, 1, 3, 2, 1, 3, 2, 1, 3, 3, 1, 3,
-    1, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3
-  );
+  OPPONENT_SEQUENCE: array[0..OPPONENT_SEQUENCE_LENGTH-1] of integer;
 
 var
   moveIndex: integer;
@@ -19,6 +14,33 @@ var
   round: integer;
   opp, bot_move, res: integer;
   total: real;
+
+procedure loadOpponentMoves();
+var
+  fileHandle: TextFile;
+  line: string;
+  token: string;
+  i, pos: integer;
+begin
+  Assign(fileHandle, 'opponent_moves.txt');
+  Reset(fileHandle);
+  ReadLn(fileHandle, line);
+  Close(fileHandle);
+  i := 0;
+  pos := 1;
+  while (pos <= Length(line)) and (i < OPPONENT_SEQUENCE_LENGTH) do
+  begin
+    token := '';
+    while (pos <= Length(line)) and (line[pos] <> ',') do
+    begin
+      token := token + line[pos];
+      Inc(pos);
+    end;
+    Inc(pos); // skip comma
+    OPPONENT_SEQUENCE[i] := StrToInt(Trim(token));
+    Inc(i);
+  end;
+end;
 
 function getOpponentMove(): integer;
 begin
@@ -47,20 +69,27 @@ begin
 end;
 
 begin
+  loadOpponentMoves();
   onGameStart();
   moveIndex := 0;
   wins := 0;
   draws := 0;
   losses := 0;
 
-  writeln('| № | МХ | ХС | Рез |');
+  writeln('| № | МХ | ХС | ИР |');
   writeln('|----|----|----|----|');
 
-  // ТЕСТИРОВАНИЕ НА 50 РАУНДОВ (ПО НОВЫМ ТРЕБОВАНИЯМ)
-  for round := 1 to 50 do
+  // ТЕСТИРОВАНИЕ НА 100 РАУНДОВ
+  for round := 1 to 100 do
   begin
     opp := getOpponentMove();
-    bot_move := choose(opp);
+    
+    // КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: Для первого раунда вызываем choose(0)
+    if round = 1 then
+      bot_move := choose(0)
+    else
+      bot_move := choose(opp);
+      
     res := determineOutcome(bot_move, opp);
 
     writeln('| ', round:2, ' | ', moveToString(bot_move), ' | ',
@@ -73,9 +102,9 @@ begin
     end;
   end;
 
-  total := 50.0;
+  total := 100.0;
   writeln();
-  writeln('**Итог (50 раундов)**: ', wins, ' побед, ', draws, ' ничьих, ',
+  writeln('**Итог (100 раундов)**: ', wins, ' побед, ', draws, ' ничьих, ',
           losses, ' поражений (', (wins/total*100):0:1, '% побед, ',
           (draws/total*100):0:1, '% ничьих, ', (losses/total*100):0:1, '% поражений)');
 end.

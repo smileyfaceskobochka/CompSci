@@ -5,77 +5,65 @@ interface
 uses Math;
 
 const
-  ROCK = 1;
-  PAPER = 2;
-  SCISSORS = 3;
-  WIN = 1;
-  LOSE = -1;
-  DRAW = 0;
-  MAX_HISTORY = 1000;
-  MAX_PATTERN_LENGTH = 10;
-  LOSE_STREAK_THRESHOLD = 5;
-  SEQ: array[0..9] of integer = (SCISSORS, SCISSORS, PAPER, ROCK, SCISSORS, ROCK, PAPER, SCISSORS, PAPER, PAPER);
+  ROCK = 1;                    // Камень
+  PAPER = 2;                   // Бумага
+  SCISSORS = 3;                // Ножницы
+  WIN = 1;                     // Победа
+  LOSE = -1;                   // Поражение
+  DRAW = 0;                    // Ничья
+  MAX_HISTORY = 1000;          // Максимальная длина истории
+  BASE_MAX_PATTERN_LENGTH = 10; // Базовая максимальная длина паттерна (увеличена для лучшего поиска)
+  BASE_ANALYSIS_WINDOW = 80;   // Базовое окно анализа
+  LOSE_STREAK_THRESHOLD = 5;   // Порог поражений подряд для смены тактики
 
 type
   THistory = record
-    opponentMoves: array[0..MAX_HISTORY-1] of integer;
-    ourMoves: array[0..MAX_HISTORY-1] of integer;
-    outcomes: array[0..MAX_HISTORY-1] of integer;
-    length: integer;
+    opponentMoves: array[0..MAX_HISTORY-1] of integer; // Ходы противника
+    ourMoves: array[0..MAX_HISTORY-1] of integer;      // Наши ходы
+    outcomes: array[0..MAX_HISTORY-1] of integer;      // Исходы раундов
+    length: integer;                                   // Текущая длина истории
   end;
 
 var
-  history: THistory;
-  current_round: integer;
-  current_lose_streak: integer;
-  current_strategy: integer;
-  sequence_idx: integer;
+  history: THistory;                    // История игры
+  current_lose_streak: integer;         // Текущая серия поражений
+  current_tactic: integer;              // Текущая тактика (1-паттерны, 2-частоты)
+  current_pattern_length: integer;      // Текущая длина паттерна
+  current_analysis_window: integer;     // Текущее окно анализа
+  adaptation_level: double;             // Уровень адаптации (0.3-1.0)
 
-function beats(move: integer): integer;
-function getCounterMove(predictedMove: integer): integer;
-function cycleMove(move: integer): integer;
-function determineOutcome(ourMove, opponentMove: integer): integer;
-function analyzeInteractionPatterns(maxLen: integer): integer;
-function analyzeOutcomeReaction(): integer;
-function analyzePatterns(maxLen: integer): integer;
-function predictLastMove(): integer;
-function analyzeFrequency(): integer;
-function getFallbackPrediction(): integer;
-function getPrediction(): integer;
-procedure switchStrategyIfNeeded(outcome: integer);
-function choose(previousOpponentChoice: integer): integer;
-procedure onGameStart();
-procedure setParameters(setCount, winsPerSet: integer);
+function choose(previousOpponentChoice: integer): integer;          // Основная функция выбора хода
+function determineOutcome(ourMove, opponentMove: integer): integer; // Определение исхода раунда
+function beats(move: integer): integer;                             // Функция получения выигрышного хода
+function getCounterMove(predictedMove: integer): integer;           // Функция получения контр-хода
+function analyzeFrequency(): integer;                               // Функция анализа частоты
+function analyzePatterns(maxLen: integer): integer;                 // Функция анализа паттернов
+function getPrediction(): integer;                                  // Функция получения предсказания
+procedure switchTacticIfNeeded(outcome: integer);                   // Проверка смены тактики
+procedure onGameStart();                                            // Инициализация игры
+procedure setParameters(setCount, winsPerSet: integer);             // Настройка параметров
+procedure onGameEnd();
 
 implementation
 
+// Функция получения выигрышного хода
 function beats(move: integer): integer;
 begin
   case move of
-    ROCK: beats := PAPER;
-    PAPER: beats := SCISSORS;
-    SCISSORS: beats := ROCK;
-    else beats := PAPER;
+    ROCK: beats := PAPER;       // Камень бьет ножницы
+    PAPER: beats := SCISSORS;   // Бумага бьет камень
+    SCISSORS: beats := ROCK;    // Ножницы бьют бумагу
+    else beats := PAPER;        // По умолчанию - бумага
   end;
 end;
 
+// Функция получения контр-хода против предсказанного хода противника
 function getCounterMove(predictedMove: integer): integer;
 begin
   getCounterMove := beats(predictedMove);
 end;
 
-function cycleMove(move: integer): integer;
-begin
-  if move = ROCK then
-    cycleMove := PAPER
-  else if move = PAPER then
-    cycleMove := SCISSORS
-  else if move = SCISSORS then
-    cycleMove := ROCK
-  else
-    cycleMove := PAPER;
-end;
-
+// Функция определения исхода раунда
 function determineOutcome(ourMove, opponentMove: integer): integer;
 begin
   if ourMove = opponentMove then
@@ -88,293 +76,257 @@ begin
     determineOutcome := LOSE;
 end;
 
-function analyzeInteractionPatterns(maxLen: integer): integer;
+function analyzeFrequency(): integer;
 var
-  len, cur_start, i, j, search_start: integer;
-  match: boolean;
+  r, p, s, w, age_factor: double; // Счетчики для Камень, Бумага, Ножницы и веса
+  window, start, i: integer;      // Параметры окна анализа
 begin
-  if history.length < maxLen + 1 then
+  if history.length < 2 then
   begin
-    analyzeInteractionPatterns := -1;
+    analyzeFrequency := -1;       // Недостаточно данных
     exit;
   end;
 
-  search_start := 0;
-  if history.length > 5 then search_start := history.length - 5;
+  r := 0.0001; p := 0.0001; s := 0.0001; // Инициализация счетчиков
+  window := Min(history.length - 1, current_analysis_window); // Размер окна анализа
+  start := history.length - window - 1; // Начальная позиция
+  if start < 0 then start := 0;
 
-  for len := maxLen downto 2 do
+  for i := start to history.length - 2 do
   begin
-    if history.length < len + 1 then continue;
-    cur_start := history.length - len;
+    age_factor := (i - start + 1) / window; // Возрастной фактор
+    w := 0.1 + age_factor * 0.9;            // Базовый вес с приоритетом новых данных
+    if i >= history.length - 10 then w := w * 3.0; // Усиление последних 10 ходов
 
-    for i := search_start to history.length - len - 1 do
-    begin
-      match := true;
-      for j := 0 to len - 1 do
-      begin
-        if (history.ourMoves[i + j] <> history.ourMoves[cur_start + j]) or
-           (history.opponentMoves[i + j] <> history.opponentMoves[cur_start + j]) then
-        begin
-          match := false;
-          break;
-        end;
+    if i < history.length - 1 then
+      case history.outcomes[i] of
+        LOSE: w := w * (4.0 * adaptation_level + 2.0); // Больше внимания после проигрыша
+        WIN: w := w * (0.2 * adaptation_level + 0.3);  // Меньше внимания после победы
+        DRAW: w := w * (0.7 * adaptation_level + 0.8); // Среднее внимание после ничьи
       end;
-      if match then
-      begin
-        analyzeInteractionPatterns := history.opponentMoves[i + len];
-        exit;
-      end;
+
+    case history.opponentMoves[i] of
+      ROCK: r := r + w;    // Увеличиваем счетчик камня
+      PAPER: p := p + w;   // Увеличиваем счетчик бумаги
+      SCISSORS: s := s + w; // Увеличиваем счетчик ножниц
     end;
   end;
 
-  analyzeInteractionPatterns := -1;
+  // Выбираем ход с максимальным счетчиком
+  if (r > p) and (r > s) then analyzeFrequency := ROCK
+  else if (p > r) and (p > s) then analyzeFrequency := PAPER
+  else if (s > r) and (s > p) then analyzeFrequency := SCISSORS
+  else analyzeFrequency := PAPER; // По умолчанию - бумага
 end;
 
-function analyzeOutcomeReaction(): integer;
+// Функция анализа паттернов в ходах противника
+function analyzePatterns(maxLen: integer): integer;
 var
-  last_outcome, last_opp: integer;
+  len, i, j: integer;              // Параметры циклов
+  best_score: double;              // Лучший счет паттерна
+  match: boolean;                  // Флаг совпадения паттерна
+  best_prediction: integer;        // Лучшее предсказание
+  actualMaxLen: integer;           // Фактическая максимальная длина
+  cur_start: integer;              // Текущая начальная позиция
+  next_move: integer;              // Следующий ход после паттерна
+  outcome_bonus: double;           // Бонус за исходы
+  pattern_weight: double;          // Вес паттерна
 begin
   if history.length < 3 then
   begin
-    analyzeOutcomeReaction := -1;
+    analyzePatterns := -1; // Недостаточно данных
     exit;
   end;
 
-  last_outcome := history.outcomes[history.length - 2];
-  last_opp := history.opponentMoves[history.length - 2];
+  best_score := -9999;      // Начальное значение лучшего счета
+  best_prediction := -1;    // Начальное предсказание
+  actualMaxLen := Min(current_pattern_length, history.length - 1); // Максимальная длина для анализа
 
-  if last_outcome = -WIN then
-    analyzeOutcomeReaction := beats(last_opp)
-  else if last_outcome = WIN then
-    analyzeOutcomeReaction := last_opp
-  else
-    analyzeOutcomeReaction := -1;
-end;
-
-function analyzePatterns(maxLen: integer): integer;
-var
-  len, cur_start, i, j: integer;
-  match: boolean;
-begin
-  if history.length < maxLen + 1 then
+  // Проверяем паттерны от большей длины к меньшей
+  for len := actualMaxLen downto 2 do
   begin
-    analyzePatterns := -1;
-    exit;
-  end;
-
-  for len := maxLen downto 2 do
-  begin
-    if history.length < len + 1 then continue;
-    cur_start := history.length - len;
-
-    for i := len to history.length - len - 1 do
+    cur_start := history.length - len; // Начальная позиция текущего паттерна
+    
+    // Ищем все вхождения паттерна данной длины
+    for i := len - 1 to history.length - len - 1 do
     begin
-      match := true;
+      match := true; // Предполагаем совпадение
+      
+      // Проверяем совпадение всех элементов паттерна
       for j := 0 to len - 1 do
-      begin
         if history.opponentMoves[i + j] <> history.opponentMoves[cur_start + j] then
         begin
-          match := false;
+          match := false; // Не совпадает
           break;
         end;
-      end;
-      if match then
+
+      // Если паттерн найден и есть следующий ход
+      if match and (i + len < history.length) then
       begin
-        analyzePatterns := history.opponentMoves[i + len];
-        exit;
+        next_move := history.opponentMoves[i + len]; // Ход после паттерна
+        
+        pattern_weight := 1.0; // Базовый вес паттерна
+        outcome_bonus := 0;    // Изначальный бонус
+        
+        // Бонус за длину паттерна
+        pattern_weight := pattern_weight + (len * 0.5 * adaptation_level);
+        
+        // Анализируем исходы 1-3 раундов после паттерна (усиление бонусов для лучшего выбора паттернов)
+        for j := 0 to Min(2, len - 1) do
+        begin
+          if (i + len + j) < history.length then
+            case history.outcomes[i + len + j] of
+              WIN: outcome_bonus := outcome_bonus + (25 * adaptation_level + 15);  // Бонус за победу
+              DRAW: outcome_bonus := outcome_bonus + (12 * adaptation_level + 8);   // Бонус за ничью
+              LOSE: outcome_bonus := outcome_bonus - (12 * adaptation_level + 8);   // Штраф за поражение
+            end;
+        end;
+        
+        // Итоговый счет паттерна
+        outcome_bonus := outcome_bonus * pattern_weight;
+
+        // Если это лучший паттерн - запоминаем его
+        if outcome_bonus > best_score then
+        begin
+          best_score := outcome_bonus;
+          best_prediction := next_move;
+        end;
       end;
     end;
-  end;
-
-  analyzePatterns := -1;
-end;
-
-function predictLastMove(): integer;
-begin
-  if history.length < 2 then
-  begin
-    predictLastMove := -1;
-    exit;
-  end;
-  predictLastMove := history.opponentMoves[history.length - 1];
-end;
-
-function analyzeFrequency(): integer;
-var
-  r, p, s: double;
-  window, start, i: integer;
-  w: double;
-begin
-  if history.length < 2 then
-  begin
-    analyzeFrequency := -1;
-    exit;
-  end;
-
-  r := 0.0; p := 0.0; s := 0.0;
-  window := Min(history.length, 20);
-  start := history.length - window;
-
-  for i := start to history.length - 1 do
-  begin
-    w := 0.5 + (i - start) / window;
-    if i >= history.length - 3 then w := w * 2.0;
-    case history.opponentMoves[i] of
-      ROCK: r := r + w;
-      PAPER: p := p + w;
-      SCISSORS: s := s + w;
+    
+    // Если нашли достаточно хороший паттерн - используем его (пониженный порог для более активного выбора)
+    if best_score >= (15 * adaptation_level + 10) then
+    begin
+      analyzePatterns := best_prediction;
+      exit;
     end;
   end;
 
-  if (r >= p) and (r >= s) then
-    analyzeFrequency := ROCK
-  else if p >= s then
-    analyzeFrequency := PAPER
-  else
-    analyzeFrequency := SCISSORS;
+  analyzePatterns := best_prediction;
 end;
 
-function getFallbackPrediction(): integer;
-begin
-  getFallbackPrediction := (history.length mod 3) + 1;
-end;
-
+// Функция получения предсказания на основе текущей тактики
 function getPrediction(): integer;
 var
-  pred: integer;
+  pred: integer; // Предсказание
 begin
-  pred := analyzeInteractionPatterns(MAX_PATTERN_LENGTH);
-  if pred <> -1 then
-  begin
-    getPrediction := pred;
-    exit;
-  end;
+  if current_tactic = 1 then
+    pred := analyzePatterns(current_pattern_length)
+  else
+    pred := analyzeFrequency();
 
-  pred := analyzeOutcomeReaction();
-  if pred <> -1 then
-  begin
-    getPrediction := pred;
-    exit;
-  end;
-
-  pred := analyzePatterns(MAX_PATTERN_LENGTH);
-  if pred <> -1 then
-  begin
-    getPrediction := pred;
-    exit;
-  end;
-
-  pred := predictLastMove();
-  if pred <> -1 then
-  begin
-    getPrediction := pred;
-    exit;
-  end;
-
-  pred := analyzeFrequency();
-  if pred <> -1 then
-  begin
-    getPrediction := pred;
-    exit;
-  end;
-
-  getPrediction := getFallbackPrediction();
+  if pred = -1 then pred := PAPER; // По умолчанию - бумага
+  getPrediction := pred;
 end;
 
-procedure switchStrategyIfNeeded(outcome: integer);
+// Процедура проверки необходимости смены тактики
+procedure switchTacticIfNeeded(outcome: integer);
 begin
   if outcome = LOSE then
   begin
-    Inc(current_lose_streak);
+    inc(current_lose_streak); // Увеличиваем счетчик поражений
+    
+    // Смена тактики только после серии поражений
     if current_lose_streak >= LOSE_STREAK_THRESHOLD then
     begin
-      current_strategy := 3 - current_strategy;
-      current_lose_streak := 0;
+      if current_tactic = 1 then current_tactic := 2
+      else current_tactic := 1;
+      current_lose_streak := 0;                      // Сбрасываем счетчик
     end;
   end
   else
-    current_lose_streak := 0;
+    current_lose_streak := 0; // Сбрасываем при победе или ничье
 end;
 
+// Основная функция выбора хода
 function choose(previousOpponentChoice: integer): integer;
 var
-  ourMove, prediction, outcome: integer;
+  ourMove, prediction, outcome: integer; // Наш ход, предсказание и исход
 begin
-  Inc(current_round);
-
+  // Принудительно возвращаем PAPER для первого хода
   if previousOpponentChoice = 0 then
   begin
-    history.ourMoves[0] := PAPER;
-    history.opponentMoves[0] := 0;
-    history.length := 1;
-    current_strategy := 1;
-    current_lose_streak := 0;
-    choose := PAPER;
+    // Первый ход - инициализация
+    onGameStart();
+    history.ourMoves[0] := PAPER;      // Начинаем с бумаги
+    history.opponentMoves[0] := 0;     // Пустой ход противника
+    history.outcomes[0] := DRAW;       // Ничья по умолчанию
+    history.length := 1;               // Длина истории = 1
+    choose := PAPER;                   // Возвращаем бумагу
     exit;
   end;
 
+  // Сохраняем ход противника и вычисляем исход
   history.opponentMoves[history.length - 1] := previousOpponentChoice;
   outcome := determineOutcome(history.ourMoves[history.length - 1], previousOpponentChoice);
   history.outcomes[history.length - 1] := outcome;
 
+  // Проверяем необходимость смены тактики
+  switchTacticIfNeeded(outcome);
+
+  // Получаем предсказание и выбираем контр-ход
   prediction := getPrediction();
-
-  if current_strategy = 1 then
-  begin
-    ourMove := getCounterMove(prediction);
-
-    if history.length >= 2 then
-    begin
-      if (history.outcomes[history.length - 1] = LOSE) and
-         (history.outcomes[history.length - 2] = LOSE) then
-      begin
-        ourMove := cycleMove(ourMove);
-      end;
-    end;
-
-    if (history.length >= 3) and
-       (history.ourMoves[history.length - 1] = history.ourMoves[history.length - 2]) and
-       (history.ourMoves[history.length - 2] = history.ourMoves[history.length - 3]) and
-       (history.outcomes[history.length - 1] = LOSE) then
-    begin
-      ourMove := cycleMove(ourMove);
-    end;
-  end
+  if prediction <> -1 then
+    ourMove := getCounterMove(prediction) // Контр-ход против предсказанного
   else
-  begin
-    if sequence_idx < 6 then
-      ourMove := getCounterMove(prediction)
-    else if sequence_idx < 8 then
-      ourMove := beats(history.ourMoves[history.length - 1])
-    else
-      ourMove := SEQ[sequence_idx];
+    ourMove := PAPER; // По умолчанию - бумага
 
-    sequence_idx := (sequence_idx + 1) mod 10;
-  end;
-
-  switchStrategyIfNeeded(outcome);
-
+  // Сохраняем наш ход для следующего раунда
   if history.length < MAX_HISTORY then
   begin
     history.ourMoves[history.length] := ourMove;
-    history.opponentMoves[history.length] := 0;
-    Inc(history.length);
+    inc(history.length);
   end;
 
   choose := ourMove;
 end;
 
+// Процедура инициализации в начале игры
 procedure onGameStart();
 begin
-  FillChar(history, SizeOf(history), 0);
-  current_round := 0;
-  current_strategy := 1;
-  current_lose_streak := 0;
-  sequence_idx := 0;
+  FillChar(history, SizeOf(history), 0); // Очищаем всю историю
+  current_lose_streak := 0;              // Обнуляем счетчик поражений
+  current_tactic := 1;                   // Начинаем с анализа паттернов
+  current_pattern_length := BASE_MAX_PATTERN_LENGTH;   // Базовая длина паттерна
+  current_analysis_window := BASE_ANALYSIS_WINDOW;     // Базовое окно анализа
+  adaptation_level := 0.5;               // Уровенный адаптации (0.3-1.0)
 end;
 
+// Процедура настройки параметров на основе статистики
 procedure setParameters(setCount, winsPerSet: integer);
+var
+  win_rate: double; // Текущий винрейт
 begin
+  // Вычисляем текущий винрейт
+  if setCount > 0 then
+    win_rate := winsPerSet / setCount
+  else
+    win_rate := 0.5; // По умолчанию 50%
+  
+  // Микро-настройка на основе производительности
+  if win_rate > 0.6 then
+  begin
+    // При высоком винрейте делаем более агрессивным
+    adaptation_level := Min(1.0, adaptation_level + 0.1);
+    current_pattern_length := Min(12, current_pattern_length + 1);
+    current_analysis_window := Min(120, current_analysis_window + 10);
+  end
+  else if win_rate < 0.4 then
+  begin
+    // При низком винрейте делаем более консервативным
+    adaptation_level := Max(0.3, adaptation_level - 0.1);
+    current_pattern_length := Max(6, current_pattern_length - 1);
+    current_analysis_window := Max(60, current_analysis_window - 10);
+  end;
+  
+  // После многих сетов снижаем адаптацию для стабильности
+  if setCount > 20 then
+    adaptation_level := Max(0.4, adaptation_level - 0.05);
+end;
+
+procedure onGameEnd();
+begin
+
 end;
 
 end.

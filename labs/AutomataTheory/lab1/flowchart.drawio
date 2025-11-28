@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.5 Chrome/138.0.7204.251 Electron/37.6.1 Safari/537.36" version="28.2.5">
   <diagram name="Page-1" id="tdL3OlcL4nhrMiRy9fMq">
-    <mxGraphModel dx="1261" dy="776" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="940" dy="572" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -177,7 +177,7 @@
         <mxCell id="1MIUwqTkAL3Y40EuHGo1-63" value="&lt;span style=&quot;text-align: left; text-wrap-mode: nowrap;&quot;&gt;I&lt;/span&gt;&lt;sub style=&quot;text-align: left; text-wrap-mode: nowrap;&quot;&gt;&lt;font style=&quot;font-size: 8px;&quot;&gt;N&lt;/font&gt;&lt;/sub&gt;&amp;nbsp;&amp;gt; 2?" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;fontFamily=JetBrainsMono Nerd Font;fontSize=12;textShadow=0;labelBackgroundColor=none;" parent="1" vertex="1">
           <mxGeometry x="269" y="314" width="180" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="BxH8Uh6q4Whagv1fQVL5-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="1MIUwqTkAL3Y40EuHGo1-81" target="BxH8Uh6q4Whagv1fQVL5-1">
+        <mxCell id="BxH8Uh6q4Whagv1fQVL5-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="1MIUwqTkAL3Y40EuHGo1-81" target="BxH8Uh6q4Whagv1fQVL5-1" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="1MIUwqTkAL3Y40EuHGo1-81" value="Удалить N из P+" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=12;labelBackgroundColor=none;textShadow=0;" parent="1" vertex="1">
@@ -196,15 +196,16 @@
         </mxCell>
         <mxCell id="iu6CpTwJnIHfmfVHylGz-26" value="нет" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=JetBrainsMono Nerd Font;" parent="iu6CpTwJnIHfmfVHylGz-10" vertex="1" connectable="0">
           <mxGeometry x="-0.475" y="-1" relative="1" as="geometry">
-            <mxPoint x="16" y="5" as="offset" />
+            <mxPoint x="-16" y="5" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="9DakYx7IXsf1BZS7sbXb-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=JetBrainsMono Nerd Font;" parent="1" source="9DakYx7IXsf1BZS7sbXb-4" target="1MIUwqTkAL3Y40EuHGo1-14" edge="1">
+        <mxCell id="9DakYx7IXsf1BZS7sbXb-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontFamily=JetBrainsMono Nerd Font;" parent="1" source="9DakYx7IXsf1BZS7sbXb-4" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="470" y="550" />
               <mxPoint x="359" y="550" />
             </Array>
+            <mxPoint x="359" y="550" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="9DakYx7IXsf1BZS7sbXb-4" value="Добавить N в P-" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=12;textShadow=0;labelBackgroundColor=none;" parent="1" vertex="1">
@@ -270,10 +271,15 @@
         <mxCell id="9DakYx7IXsf1BZS7sbXb-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;fontFamily=JetBrainsMono Nerd Font;" parent="1" source="1MIUwqTkAL3Y40EuHGo1-63" target="9DakYx7IXsf1BZS7sbXb-10" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="BxH8Uh6q4Whagv1fQVL5-1" value="Удалить N из P-" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=12;textShadow=0;labelBackgroundColor=none;" vertex="1" parent="1">
+        <mxCell id="FD9g2a_KbmBQgCK_3qqG-1" value="нет" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="9DakYx7IXsf1BZS7sbXb-14">
+          <mxGeometry x="-0.8046" y="-2" relative="1" as="geometry">
+            <mxPoint x="-14" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="BxH8Uh6q4Whagv1fQVL5-1" value="Удалить N из P-" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontFamily=JetBrainsMono Nerd Font;fontSize=12;textShadow=0;labelBackgroundColor=none;" parent="1" vertex="1">
           <mxGeometry x="40" y="350" width="180" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="BxH8Uh6q4Whagv1fQVL5-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="BxH8Uh6q4Whagv1fQVL5-1" target="1MIUwqTkAL3Y40EuHGo1-23">
+        <mxCell id="BxH8Uh6q4Whagv1fQVL5-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="BxH8Uh6q4Whagv1fQVL5-1" target="1MIUwqTkAL3Y40EuHGo1-23" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>

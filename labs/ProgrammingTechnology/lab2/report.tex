@@ -1,0 +1,203 @@
+\documentclass[oneside,a4paper,14pt]{extarticle}
+\usepackage[a4paper,letterpaper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\usepackage[russian]{babel}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{minted, fancyvrb}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\setminted{style = rainbow_dash, fontsize = \small}
+
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+
+\renewcommand\baselinestretch{1.33}
+\setlength{\parindent}{1.25cm}
+
+\setlist[enumerate]{
+  left=\parindent,
+  label=\arabic*.,
+  itemsep=0pt,
+  topsep=5pt,
+  partopsep=0pt,
+  parsep=0pt
+}
+
+\setlist[itemize]{
+  left=\parindent,
+  itemsep=0pt,
+  topsep=5pt,
+  partopsep=0pt,
+  parsep=0pt
+}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  pdfborder={0 0 0},
+  pdftitle={Веб-приложение на Express},
+  pdfauthor={Студент ИВТ}
+}
+
+\begin{document}
+
+\newpage
+\thispagestyle{empty}
+\begin{center}
+  МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ\\
+  ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ ОБРАЗОВАТЕЛЬНОЕ УЧРЕЖДЕНИЕ ВЫСШЕГО ОБРАЗОВАНИЯ\\
+  «ВЯТСКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ»\\
+  Институт математики и информационных систем\\
+  Факультет автоматики и вычислительной техники\\
+  Кафедра электронных вычислительных машин
+\end{center}
+\vspace{10mm}
+
+\hfill
+\begin{tabular}{l}
+  \footnotesize Дата сдачи на проверку:                                          \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2025 г. \\
+  \footnotesize Проверено:                                                       \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2025 г. \\
+\end{tabular}
+\vfill
+
+\begin{center}
+  Разработка клиент–серверного веб-приложения на HTML, CSS, JavaScript и Express.js.\\
+  Отчёт по лабораторной работе №2\\
+  по дисциплине\\
+  «Web-программирование»
+\end{center}
+
+\vspace{25mm}
+
+\noindent
+\begin{tabular}{ll}
+  Разработал студент гр. ИВТб-2301-05-00 & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Черкасов А. А./ \\
+                                         & \hspace{25.5mm}\footnotesize(подпись)                     \\
+  Старший преподаватель                  & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Преподаватель/   \\
+                                         & \hspace{25.5mm}\footnotesize(подпись)                     \\
+\end{tabular}
+
+\vfill
+\begin{center}
+  Киров\\
+  2025
+\end{center}
+
+\newpage
+\section*{Цели лабораторной работы}
+
+\begin{itemize}
+  \item[$-$] изучить структуру клиент–серверных веб-приложений;
+  \item[$-$] освоить работу с Express.js и обработку POST-запросов;
+  \item[$-$] закрепить навыки раздельного использования HTML, CSS и JavaScript;
+  \item[$-$] научиться принимать и обрабатывать данные, отправленные из формы.
+\end{itemize}
+
+\section*{Задание}
+
+Создать веб-приложение, работающее по архитектуре «клиент–сервер», удовлетворяющее требованиям:
+
+\begin{enumerate}
+  \item На стороне клиента реализовать HTML-страницу с формой отправки данных.
+  \item Стили разместить в отдельном файле CSS, логику обработки формы — в отдельном JS.
+  \item На стороне сервера реализовать обработку POST-запроса с использованием Express.js.
+  \item Сервер должен принимать данные, логировать их и возвращать ответ клиенту.
+  \item Организовать вывод всех полученных данных в виде массива.
+  \item Файлы клиента должны раздаваться через статическую директорию.
+\end{enumerate}
+
+\newpage
+\section*{Ход выполнения работы}
+
+\subsection*{1. Создание структуры проекта}
+
+Проект был создан в соответствии с типовой структурой веб-приложения:
+
+\begin{itemize}
+  \item \texttt{index.html} — основная страница с формой;
+  \item \texttt{style.css} — стили оформления;
+  \item \texttt{script.js} — логика отправки данных;
+  \item \texttt{server.js} — сервер на Express.js;
+  \item статические файлы размещены в папке \texttt{/public}.
+\end{itemize}
+
+\subsection*{2. Реализация клиентской части}
+
+Была разработана HTML-форма, содержащая несколько полей ввода и кнопку отправки.
+Все стили вынесены в отдельный файл CSS.
+JavaScript осуществляет отправку данных методом POST и выводит ответ сервера.
+
+\subsection*{3. Реализация серверной части}
+
+Сервер был создан на Express.js.
+Были подключены модули:
+
+\begin{itemize}
+  \item \texttt{express} — основной фреймворк;
+  \item \texttt{body-parser} — обработка POST-запросов.
+\end{itemize}
+
+На сервере была реализована логика:
+
+\begin{itemize}
+  \item раздача статических файлов;
+  \item логирование всех входящих запросов (данные формы, query, headers);
+  \item сохранение всех полученных данных в массив;
+  \item ответ клиенту после успешного получения данных;
+  \item вывод массива по запросу \texttt{/list}.
+\end{itemize}
+
+Также дополнительно был реализован расширенный лог всего, что происходит в сервере: тело запроса, параметры, заголовки, время получения.
+
+\subsection*{4. Тестирование работы приложения}
+
+После запуска сервера через:
+
+\begin{verbatim}
+bun server.js
+или
+node server.js
+\end{verbatim}
+
+Приложение было открыто в браузере по адресу:
+
+\begin{center}
+  \texttt{http://localhost:8080}
+\end{center}
+
+Поля формы были заполнены, данные успешно отправлены и отобразились в консоли, а затем были возвращены пользователю.
+
+\subsection*{5. Скриншот формы}
+
+\begin{figure}[H] \centering \includegraphics[height=0.45\textheight]{pics/form.png} \caption*{Рисунок 1 --- Форма} \end{figure}
+
+\newpage
+\section*{Вывод}
+
+В ходе выполнения лабораторной работы было разработано полноценное клиент–серверное веб-приложение.
+Была изучена структура веб-проекта, реализован сервер на Express.js, выполнено разделение клиентского кода на HTML, CSS и JavaScript.
+
+Были выполнены все требования задания: форма корректно отправляет данные, сервер принимает их, логирует, сохраняет и возвращает ответ клиенту.
+
+Работа позволила закрепить знания по основам веб-разработки и принципам построения архитектуры «клиент–сервер».
+
+\newpage
+\section*{Приложение А1. Исходный код index.html}
+\inputminted{html}{code/public/index.html}
+
+\section*{Приложение А2. Исходный код script.js}
+\inputminted{js}{code/public/script.js}
+
+\section*{Приложение А3. Исходный код style.css}
+\inputminted{css}{code/public/style.css}
+
+\section*{Приложение А4. Исходный код server.js}
+\inputminted{js}{code/server.js}
+
+\end{document}

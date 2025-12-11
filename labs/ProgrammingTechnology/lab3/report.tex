@@ -1,0 +1,223 @@
+\documentclass[oneside,a4paper,14pt]{extarticle}
+\usepackage[a4paper,letterpaper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\usepackage[russian]{babel}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{minted, fancyvrb}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+% Форматирование листингов
+\setminted{style = rainbow_dash, fontsize = \small}
+
+% Форматирование заголовков
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\renewcommand\baselinestretch{1.33}
+\setlength{\parindent}{1.25cm}
+
+\setlist[enumerate]{
+  left=\parindent,
+  label=\arabic*.,
+  itemsep=0pt,
+  topsep=5pt,
+  partopsep=0pt,
+  parsep=0pt
+}
+
+\setlist[itemize]{
+  left=\parindent,
+  itemsep=0pt,
+  topsep=5pt,
+  partopsep=0pt,
+  parsep=0pt
+}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  pdfborder={0 0 0},
+  pdftitle={Многооконное приложение Qt6},
+  pdfauthor={Черкасов А.А.}
+}
+
+\begin{document}
+
+\newpage
+\thispagestyle{empty}
+\begin{center}
+  МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ\\
+  ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ ОБРАЗОВАТЕЛЬНОЕ УЧРЕЖДЕНИЕ ВЫСШЕГО ОБРАЗОВАНИЯ\\[1mm]
+  «ВЯТСКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ»\\
+  Институт математики и информационных систем\\
+  Факультет автоматики и вычислительной техники\\
+  Кафедра электронных вычислительных машин
+\end{center}
+
+\vspace{10mm}
+
+\hfill
+\begin{tabular}{l}
+  \footnotesize Дата сдачи на проверку:                                          \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2025 г. \\
+  \footnotesize Проверено:                                                       \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2025 г. \\
+\end{tabular}
+
+\vfill
+
+\begin{center}
+  Разработка многооконного приложения на C++ с использованием Qt6.\\
+  Отчёт по лабораторной работе №3\\
+  по дисциплине\\
+  «Технологии программирования»
+\end{center}
+
+\vspace{25mm}
+
+\noindent
+\begin{tabular}{ll}
+  Разработал студент гр. ИВТб-2301-05-00 & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Черкасов А. А./ \\
+                                         & \hspace{25.5mm}\footnotesize(подпись) \\
+  Преподаватель                  & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Пащенко Д. Э./   \\
+                                         & \hspace{25.5mm}\footnotesize(подпись) \\
+\end{tabular}
+
+\vfill
+
+\begin{center}
+  Киров\\
+  2025
+\end{center}
+
+\newpage
+\thispagestyle{plain}
+
+\section*{Цели лабораторной работы}
+
+\begin{itemize}
+  \item[$-$] изучить основы разработки многооконных приложений на C++ с использованием библиотеки Qt6;
+  \item[$-$] освоить механизм передачи данных между главным и дочерними окнами;
+  \item[$-$] научиться правильно организовывать интерфейс и взаимодействие компонентов.
+\end{itemize}
+
+\section*{Задание}
+
+Разработать приложение с графическим интерфейсом, содержащее минимум два окна:
+
+\begin{enumerate}
+  \item Главное окно — отображает данные и содержит кнопки для вызова дочернего окна.
+  \item Дочернее окно — содержит элементы ввода; после закрытия передаёт данные обратно в главное окно.
+\end{enumerate}
+
+Требования:
+\begin{itemize}
+  \item[$-$] корректная передача параметров в дочернее окно при открытии;
+  \item[$-$] возврат данных в главное окно (через сигнал–слот или callback);
+  \item[$-$] обновление элементов интерфейса главного окна на основе полученных данных;
+  \item[$-$] обработка ошибок ввода;
+  \item[$-$] логическая связь между окнами.
+\end{itemize}
+
+\clearpage
+\section*{Реализация приложения}
+
+В лабораторной работе используется уже существующее приложение — разработанное ранее приложение на Qt6 (для ЛР по Базам Данных).  
+В рамках ЛР №3 оно модифицировано и рассматривается как многооконная система:
+
+\begin{itemize}
+  \item \textbf{MainWindow} — главное окно.
+  \item \textbf{DeviceDialog} — дочернее окно редактирования сущности.
+  \item \textbf{HubDialog} — дополнительное дочернее окно.
+\end{itemize}
+
+Передача данных происходит следующим образом:
+
+\begin{enumerate}
+  \item Главное окно открывает дочернее, передавая в него выбранную строку.
+  \item Дочернее окно изменяет данные.
+  \item По нажатию кнопки «Сохранить» окно испускает сигнал \texttt{dataReady()}.
+  \item Главное окно принимает сигнал, обновляет таблицу.
+\end{enumerate}
+
+\subsection*{Класс MainWindow}
+
+Фрагмент вызова дочернего окна:
+
+\begin{minted}{cpp}
+void MainWindow::onAddDeviceClicked() {
+    DeviceDialog* dlg = new DeviceDialog(db_, this);
+    connect(dlg, &DeviceDialog::deviceSaved,
+            this, &MainWindow::refresh_data);
+    dlg->show();
+}
+\end{minted}
+
+\subsection*{Класс DeviceDialog}
+
+Передача данных обратно:
+
+\begin{minted}{cpp}
+void DeviceDialog::onSaveClicked() {
+    // ... валидация и сохранение ...
+    emit deviceSaved();
+    close();
+}
+\end{minted}
+
+Это полностью удовлетворяет требованию передачи данных «из дочернего окна в основное».
+
+\subsection*{Валидация ввода}
+
+Для предотвращения ошибок используется проверка полей:
+
+\begin{minted}{cpp}
+if (name_edit_->text().trimmed().isEmpty()) {
+    QMessageBox::warning(this, "Ошибка", "Название не может быть пустым");
+    return;
+}
+\end{minted}
+
+\subsection*{Скриншоты работы приложения}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\textwidth]{pics/login.png}
+  \caption*{Рисунок 1 --- Окно входа}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{pics/main_window.png}
+  \caption*{Рисунок 2 --- Главное окно}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\textwidth]{pics/device_dialog.png}
+  \caption*{Рисунок 3 --- Дочернее окно (редактирование устройства)}
+\end{figure}
+
+\section*{Вывод}
+
+В ходе выполнения лабораторной работы №3 были изучены основные механизмы создания многооконных приложений на языке C++ с использованием Qt6.  
+Реализована передача данных между главным и дочерним окном, выполнена корректная обработка событий, валидация ввода и обновление интерфейса.  
+Полученный функционал полностью соответствует требованиям методических указаний.
+
+\newpage
+
+\section*{Приложение А1. Исходный код mainwindow.cpp}
+\inputminted{cpp}{code/src/mainwindow.cpp}
+
+\section*{Приложение А2. Исходный код dialogs.cpp}
+\inputminted{cpp}{code/src/dialogs.cpp}
+
+\section*{Приложение А3. Исходный код dialogs.h}
+\inputminted{cpp}{code/src/dialogs.h}
+
+\end{document}

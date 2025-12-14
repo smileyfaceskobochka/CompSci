@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meme Gallery</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container gallery-container">
+    <h1 class="title">🎨 Meme Gallery 🎨</h1>
+    <a href="/">⬅️ Back to Upload</a>
+    <div id="gallery"></div>
+    <div id="loading" style="text-align: center; padding: 20px; color: var(--text-secondary); display: none;">
+      Loading memes...
+    </div>
+    <div id="empty" style="text-align: center; padding: 20px; color: var(--text-secondary); display: none;">
+      No memes yet! Be the first to upload! 🎉
+    </div>
+  </div>
+
+  <!-- Modal for image view -->
+  <div id="imageModal" class="modal">
+    <span class="modal-close">&times;</span>
+    <img class="modal-content" id="modalImage" alt="Meme fullsize">
+  </div>
+
+  <!-- Background spinning memes -->
+  <div class="spinning-meme"></div>
+  <div class="spinning-meme"></div>
+  <div class="spinning-meme"></div>
+  <div class="spinning-meme"></div>
+  <div class="spinning-meme"></div>
+  <div class="spinning-meme"></div>
+  <div class="spinning-meme"></div>
+  <div class="spinning-meme"></div>
+
+  <script>
+    const galleryDiv = document.getElementById('gallery');
+    const loadingDiv = document.getElementById('loading');
+    const emptyDiv = document.getElementById('empty');
+
+    function loadGallery() {
+      loadingDiv.style.display = 'block';
+      galleryDiv.innerHTML = '';
+      emptyDiv.style.display = 'none';
+
+      fetch('/gallery')
+        .then(res => res.json())
+        .then(images => {
+          loadingDiv.style.display = 'none';
+
+          if (images.length === 0) {
+            emptyDiv.style.display = 'block';
+            return;
+          }
+
+          const cacheBust = Date.now();
+          galleryDiv.innerHTML = images.map(img => `
+            <div class="gallery-item">
+              <img src="${img.path}?t=${cacheBust}" alt="Meme" data-image="${img.path}" onerror="this.src='/placeholder.png'">
+              <p><strong>${img.uploader_name}</strong></p>
+              <p style="font-size: 0.8rem; opacity: 0.9;">${img.uploader_email}</p>
+              <p style="font-size: 1.1rem; margin: 10px 0;"><strong>🔥 Votes: <span id="votes-${img.id}">${img.votes}</span></strong></p>
+              <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <button data-id="${img.id}" data-vote="1">👍 UPVOTE</button>
+                <button data-id="${img.id}" data-vote="-1">👎 DOWNVOTE</button>
+              </div>
+            </div>
+          `).join('');
+          
+          // Add event listeners for images
+          document.querySelectorAll('.gallery-item img').forEach(img => {
+            img.addEventListener('click', function() {
+              openModal(this.dataset.image);
+            });
+          });
+          
+          // Add event listeners for vote buttons
+          document.querySelectorAll('.gallery-item button').forEach(btn => {
+            btn.addEventListener('click', function() {
+              vote(parseInt(this.dataset.id), parseInt(this.dataset.vote));
+            });
+          });
+        })
+        .catch(err => {
+          console.error('Failed to load gallery:', err);
+          loadingDiv.style.display = 'none';
+          galleryDiv.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">Failed to load gallery 😢</p>';
+        });
+    }
+
+    function vote(id, vote) {
+      fetch('/vote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, vote })
+      })
+      .then(res => {
+        if (res.ok) {
+          // Update votes display
+          const votesSpan = document.getElementById(`votes-${id}`);
+          if (votesSpan) {
+            votesSpan.textContent = parseInt(votesSpan.textContent) + vote;
+          }
+          // Reload gallery to reflect new order
+          setTimeout(() => loadGallery(), 500);
+        } else {
+          return res.text().then(text => {
+            alert(text);
+          });
+        }
+      })
+      .catch(err => {
+        console.error('Failed to vote:', err);
+        alert('Failed to vote. Please try again.');
+      });
+    }
+
+    // Load background images
+    function loadBackgroundImages() {
+      fetch('/images')
+        .then(res => res.json())
+        .then(images => {
+          const spinningMemes = document.querySelectorAll('.spinning-meme');
+          
+          if (!images || images.length === 0) {
+            spinningMemes.forEach(meme => meme.style.display = 'none');
+            return;
+          }
+
+          // Generate random positions once
+          const positions = [];
+          spinningMemes.forEach(() => {
+            const randomTop = Math.random() * 80 + 5;
+            const randomLeft = Math.random() * 80 + 5;
+            positions.push({ top: randomTop, left: randomLeft });
+          });
+
+          spinningMemes.forEach((meme, index) => {
+            meme.style.display = 'block';
+
+            // Use pre-generated position
+            meme.style.top = positions[index].top + '%';
+            meme.style.left = positions[index].left + '%';
+
+            const randomImage = images[Math.floor(Math.random() * images.length)];
+            const cacheBust = Date.now();
+            meme.innerHTML = `<img src="/${randomImage}?t=${cacheBust}" alt="Meme" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'">`;
+            meme.style.animationDelay = (Math.random() * 10) + 's';
+          });
+        })
+        .catch(err => console.error('Failed to load background images:', err));
+    }
+
+    loadGallery();
+    loadBackgroundImages();
+
+    // Modal functions
+    function openModal(imagePath) {
+      const modal = document.getElementById('imageModal');
+      const modalImg = document.getElementById('modalImage');
+      modal.classList.add('show');
+      const cacheBust = Date.now();
+      modalImg.src = imagePath + '?t=' + cacheBust;
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('imageModal');
+      modal.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    // Event listeners for modal
+    document.getElementById('imageModal').addEventListener('click', function(e) {
+      if (e.target === this || e.target.classList.contains('modal-close')) {
+        closeModal();
+      }
+    });
+
+    document.getElementById('modalImage').addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
+
+    // Close modal on ESC key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>

@@ -7,9 +7,10 @@
 </head>
 <body>
   <div class="container">
-    <h1 class="title">Передача данных на сервер</h1>
+    <h1 class="title">Meme Repo</h1>
+    <a href="gallery.html">View Gallery</a>
 
-    <form id="form">
+    <form id="form" enctype="multipart/form-data">
       <div class="form-group">
         <label class="form-label">Имя</label>
         <input class="form-control" name="name" required>
@@ -20,11 +21,25 @@
         <input class="form-control" name="email" type="email" required>
       </div>
 
+      <div class="form-group">
+        <label class="form-label">Мем</label>
+        <input class="form-control" type="file" name="meme" accept="image/*" required>
+      </div>
+
       <button class="btn">Отправить</button>
     </form>
 
     <div id="response" class="response"></div>
   </div>
+
+  <div class="spinning-meme"></div>
+  <div class="spinning-meme"></div>
+  <div class="spinning-meme"></div>
+  <div class="spinning-meme"></div>
+  <div class="spinning-meme"></div>
+  <div class="spinning-meme"></div>
+  <div class="spinning-meme"></div>
+  <div class="spinning-meme"></div>
 
   <script src="script.js"></script>
 </body>

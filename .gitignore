@@ -22,6 +22,8 @@ __pycache__
 CMakeCache.txt
 CMakeFiles
 
+node_modules
+
 # Linux executables (no extension)
 battle
 test_bot

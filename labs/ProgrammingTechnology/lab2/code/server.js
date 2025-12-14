@@ -1,56 +1,69 @@
 const express = require("express");
 const path = require("path");
-const bodyParser = require("body-parser");
+const multer = require("multer");
+const fs = require("fs");
 
-// init
 const app = express();
 const port = 8080;
 
-console.log("[INIT] Starting server...");
-console.log("[PATH] __dirname =", __dirname);
-console.log("[PATH] static dir =", path.resolve(__dirname, "public"));
+// Static files
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// логируем каждый запрос
-app.use((req, res, next) => {
-  console.log(`[REQ] ${req.method} ${req.url}`);
-  next();
+// Ensure uploads directory
+const uploadsDir = path.join(__dirname, 'public', 'uploads');
+if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+
+// Multer config
+const storage = multer.diskStorage({
+  destination: uploadsDir,
+  filename: (req, file, cb) => cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname))
 });
+const upload = multer({ storage });
 
-// логируем раздачу статики
-app.use(
-  express.static(path.resolve(__dirname, "public"), {
-    setHeaders(res, filePath) {
-      console.log(`[STATIC] Sent file: ${filePath}`);
-    },
-  })
-);
+// JSON storage
+const imagesFile = path.join(__dirname, 'images.json');
+const votesFile = path.join(__dirname, 'votes.json');
+let imagesData = fs.existsSync(imagesFile) ? JSON.parse(fs.readFileSync(imagesFile)) : [];
+let votesData = fs.existsSync(votesFile) ? JSON.parse(fs.readFileSync(votesFile)) : {};
 
-app.use(bodyParser.urlencoded({ extended: true }));
+function saveImages() { fs.writeFileSync(imagesFile, JSON.stringify(imagesData)); }
+function saveVotes() { fs.writeFileSync(votesFile, JSON.stringify(votesData)); }
 
-const list = [];
+// Routes
+app.get("/images", (req, res) => res.json(imagesData.sort((a, b) => b.votes - a.votes).slice(0, 10).map(img => img.path)));
+app.get("/gallery", (req, res) => res.json(imagesData.sort((a, b) => b.votes - a.votes)));
 
-// логируем GET /list
-app.get("/list", (req, res) => {
-  console.log("[GET /list] returning list:", list);
-  res.send(list);
-});
-
-// логируем отдачу index.html
-app.get("/", (req, res) => {
-  const file = path.resolve(__dirname, "index.html");
-  console.log("[GET /] sending", file);
-  res.sendFile(file);
-});
-
-// логируем POST
-app.post("/", (req, res) => {
-  console.log("[POST /] BODY =", req.body);
-  list.push(req.body);
-  console.log("[POST /] list now =", list);
+app.post("/vote", (req, res) => {
+  const { id, vote } = req.body;
+  const img = imagesData.find(i => i.id == id);
+  if (!img) return res.status(404).send("Not found");
+  const ip = req.ip || 'unknown';
+  if (!votesData[ip]) votesData[ip] = {};
+  if (votesData[ip][id]) return res.status(429).send("Already voted");
+  votesData[ip][id] = true;
+  saveVotes();
+  img.votes += vote;
+  saveImages();
   res.send("OK");
 });
 
-// запуск сервера
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+app.post("/", upload.single('meme'), (req, res) => {
+  if (!req.file) return res.status(400).send("No file");
+  const newImage = {
+    id: Date.now(),
+    path: 'uploads/' + req.file.filename,
+    uploader_name: req.body.name,
+    uploader_email: req.body.email,
+    votes: 0
+  };
+  imagesData.push(newImage);
+  saveImages();
+  res.send("OK");
 });
+
+app.get("/", (req, res) => res.sendFile(path.join(__dirname, "public", "index.html")));
+app.get("/gallery.html", (req, res) => res.sendFile(path.join(__dirname, "public", "gallery.html")));
+
+app.listen(port, () => console.log(`Server on http://localhost:${port}`));

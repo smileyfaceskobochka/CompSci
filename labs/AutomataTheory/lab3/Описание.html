@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&Ocy;&pcy;&icy;&scy;&acy;&ncy;&icy;&iecy; &bcy;&ocy;&tcy;&acy; &dcy;&lcy;&yacy; &icy;&gcy;&rcy;&ycy; &quot;&Mcy;&ocy;&rcy;&scy;&kcy;&ocy;&jcy; &Bcy;&ocy;&jcy;&quot;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-dark">
+            <h1 id="описание-бота-для-игры-морской-бой">Описание бота для игры &quot;Морской Бой&quot;</h1>
+<h2 id="игровые-элементы">Игровые элементы</h2>
+<p><strong>Поле</strong>: Сетка 10×10 клеток с координатами от (0,0) до (9,9).</p>
+<p><strong>Флот</strong>:</p>
+<ul>
+<li>1×4 клетки (четырехпалубный)</li>
+<li>2×3 клетки (трехпалубные)</li>
+<li>3×2 клетки (двухпалубные)</li>
+<li>4×1 клетка (однопалубные)</li>
+</ul>
+<p><strong>Результаты выстрелов</strong>:</p>
+<ul>
+<li>0: Промах</li>
+<li>2: Попадание (корабль не уничтожен)</li>
+<li>3: Уничтожение (корабль полностью уничтожен)</li>
+</ul>
+<p><strong>Состояния клеток поля противника</strong>:</p>
+<ul>
+<li>0: Неизвестная (не стреляли)</li>
+<li>1: Промах</li>
+<li>2: Попадание</li>
+<li>3: Уничтоженный корабль</li>
+<li>4: Невозможная (вокруг уничтоженного корабля)</li>
+</ul>
+<h2 id="внутренние-состояния-бота">Внутренние состояния бота</h2>
+<ul>
+<li>Режим работы: поиск или добивание</li>
+<li>Матрица поля противника 10×10</li>
+<li>Счетчики живых кораблей по размерам</li>
+<li>Очередь клеток для стрельбы в режиме поиска</li>
+<li>Список попаданий в текущий корабль</li>
+<li>Направление корабля: горизонтальное/вертикальное/неизвестное</li>
+<li>Индекс расстановки (0-5, циклически)</li>
+</ul>
+<h2 id="основной-цикл-работы">Основной цикл работы</h2>
+<p><strong>Инициализация игры</strong>: Установка начального индекса расстановки.</p>
+<p><strong>Начало сета</strong>:</p>
+<ul>
+<li>Поле противника: все клетки неизвестны (0)</li>
+<li>Счетчики кораблей: 4-3-2-1 по размерам 1-2-3-4</li>
+<li>Режим: поиск</li>
+<li>Сброс переменных добивания</li>
+<li>Инициализация очереди поиска</li>
+</ul>
+<p><strong>Расстановка кораблей</strong>: Возврат одной из 6 предопределенных расстановок, увеличение индекса.</p>
+<p><strong>Выстрел</strong>: Выбор клетки по режиму (из очереди или расчет для добивания).</p>
+<p><strong>Обработка результата</strong>:</p>
+<ul>
+<li>Промах (0): клетка → 1</li>
+<li>Попадание (2): клетка → 2, добавить в массив попаданий, активировать режим добивания, определить направление</li>
+<li>Уничтожение (3): клетки корабля → 3, вокруг → 4, уменьшить счетчик, сброс в режим поиска</li>
+</ul>
+<p>После обработки в режиме поиска обновляется очередь.</p>
+<h2 id="режим-поиска">Режим поиска</h2>
+<p>Стрельба по оптимизированной стратегии, зависящей от размера самого большого живого корабля.</p>
+<h3 id="четырехпалубные-6-проходов">Четырехпалубные (6 проходов)</h3>
+<ul>
+<li>Проход 1 смещение(0,0): (0,0), (0,4), (0,8), (4,0), (4,4), (4,8), (8,0), (8,4), (8,8)</li>
+<li>Проход 2 смещение(1,1): (1,1), (1,5), (1,9), (5,1), (5,5), (5,9), (9,1), (9,5), (9,9)</li>
+<li>Проход 3 смещение(2,2): (2,2), (2,6), (6,2), (6,6)</li>
+<li>Проход 4 смещение(3,3): (3,3), (3,7), (7,3), (7,7)</li>
+<li>Проход 5 смещение(4,4): (4,4), (4,8), (8,4), (8,8)</li>
+<li>Проход 6 смещение(5,5): (5,5), (5,9), (9,5), (9,9)</li>
+</ul>
+<h3 id="трехпалубные-4-прохода">Трехпалубные (4 прохода)</h3>
+<ul>
+<li>Проход 1 смещение(0,0): (0,0), (0,3), (0,6), (0,9), (3,0), (3,3), (3,6), (3,9), (6,0), (6,3), (6,6), (6,9), (9,0), (9,3), (9,6), (9,9)</li>
+<li>Проход 2 смещение(1,1): (1,1), (1,4), (1,7), (4,1), (4,4), (4,7), (7,1), (7,4), (7,7)</li>
+<li>Проход 3 смещение(2,2): (2,2), (2,5), (2,8), (5,2), (5,5), (5,8), (8,2), (8,5), (8,8)</li>
+<li>Проход 4 смещение(3,3): (3,3), (3,6), (3,9), (6,3), (6,6), (6,9), (9,3), (9,6), (9,9)</li>
+</ul>
+<h3 id="двухпалубные-и-однопалубные">Двухпалубные и однопалубные</h3>
+<p>Очередь заполняется всеми неизвестными клетками слева направо, сверху вниз.</p>
+<h2 id="режим-добивания">Режим добивания</h2>
+<p>Активируется при первом попадании (результат = 2).</p>
+<p><strong>Одиночное попадание</strong>: Стрельба в 4 направления (вверх/вниз/влево/вправо) от клетки попадания.</p>
+<p><strong>Два и более попадания</strong>: Определение направления:</p>
+<ul>
+<li>Все попадания в одном ряду → горизонтальное</li>
+<li>Все попадания в одном столбце → вертикальное</li>
+</ul>
+<p><strong>Для горизонтального корабля</strong>:</p>
+<ul>
+<li>Сортировка попаданий по столбцу</li>
+<li>Стрельба вдоль линии (заполнение пробелов)</li>
+<li>Стрельба на одну клетку за крайними попаданиями</li>
+</ul>
+<p><strong>Для вертикального корабля</strong>: Аналогично, сортировка по строке.</p>
+<p><strong>При уничтожении</strong>:</p>
+<ul>
+<li>Клетки попаданий → 3</li>
+<li>Вокруг корабля → 4</li>
+<li>Уменьшение счетчика типа корабля</li>
+<li>Сброс в режим поиска</li>
+</ul>
+<h2 id="схема-алгоритма">Схема алгоритма</h2>
+<p><img src="file:////home/lsnko/Documents/Development/CompSci/labs/AutomataTheory/lab3/pics/flowchart_main.png" alt="main"></p>
+<hr>
+<p><img src="file:////home/lsnko/Documents/Development/CompSci/labs/AutomataTheory/lab3/pics/flowchart_best.png" alt="best"></p>
+<hr>
+<p><img src="file:////home/lsnko/Documents/Development/CompSci/labs/AutomataTheory/lab3/pics/flowchart_dob.png" alt="dob"></p>
+<hr>
+<p><img src="file:////home/lsnko/Documents/Development/CompSci/labs/AutomataTheory/lab3/pics/flowchart_dob_fin.png" alt="dob_fin"></p>
+
+            
+            
+        </body>
+        </html>

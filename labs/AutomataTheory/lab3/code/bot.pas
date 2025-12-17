@@ -1,5 +1,3 @@
-{ Модуль бота для игры в морской бой }
-{ Реализует ИИ для автоматической игры в battleship }
 unit bot;
 
 interface
@@ -26,7 +24,7 @@ const
   CELL_KILLED = 3; { Убитый корабль }
   CELL_IMPOSSIBLE = 4; { Невозможное место для корабля }
 
-{ Устанавливает параметры игры (не используется) }
+{ Устанавливает параметры игры }
 procedure setParameters(setCount: integer);
 { Вызывается в начале игры }
 procedure onGameStart();
@@ -38,11 +36,11 @@ function getMap(): TMap;
 function shoot(): TCoordinates;
 { Обрабатывает результат выстрела }
 procedure shotResult(resultCode: integer);
-{ Вызывается при выстреле противника (не используется) }
+{ Вызывается при выстреле противника }
 procedure onOpponentShot(cell: TCoordinates);
-{ Вызывается в конце сета (не используется) }
+{ Вызывается в конце сета }
 procedure onSetEnd();
-{ Вызывается в конце игры (не используется) }
+{ Вызывается в конце игры }
 procedure onGameEnd();
 
 implementation
@@ -162,7 +160,7 @@ begin
       end;
 end;
 
-{ Получает возможные выстрелы для одного попадания (4 направления) }
+{ Получает возможные выстрелы для одного попадания }
 function getPossibleShotsForSingleHit(var output: array of TCoord): integer;
 const
   directions: array[0..3, 0..1] of integer = ((-1, 0), (0, 1), (1, 0), (0, -1));

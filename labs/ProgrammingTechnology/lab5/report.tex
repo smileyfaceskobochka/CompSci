@@ -1,0 +1,285 @@
+\documentclass[oneside,a4paper,14pt]{extarticle}
+\usepackage[a4paper,letterpaper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\usepackage[russian]{babel}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{minted, fancyvrb}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+% Форматирование листингов
+\setminted{style = rainbow_dash, fontsize = \small}
+
+% Форматирование заголовков
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\renewcommand\baselinestretch{1.33}
+\setlength{\parindent}{1.25cm}
+
+\setlist[enumerate]{
+  left=\parindent,
+  label=\arabic*.,
+  itemsep=0pt,
+  topsep=5pt,
+  partopsep=0pt,
+  parsep=0pt
+}
+
+\setlist[itemize]{
+  left=\parindent,
+  itemsep=0pt,
+  topsep=5pt,
+  partopsep=0pt,
+  parsep=0pt
+}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  pdfborder={0 0 0},
+  pdftitle={Кроссплатформенное приложение Flutter},
+  pdfauthor={Черкасов А.А.}
+}
+
+\begin{document}
+
+\newpage
+\thispagestyle{empty}
+\begin{center}
+	МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ\\
+	ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ ОБРАЗОВАТЕЛЬНОЕ УЧРЕЖДЕНИЕ ВЫСШЕГО ОБРАЗОВАНИЯ\\[1mm]
+	«ВЯТСКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ»\\
+	Институт математики и информационных систем\\
+	Факультет автоматики и вычислительной техники\\
+	Кафедра электронных вычислительных машин
+\end{center}
+
+\vspace{10mm}
+
+\hfill
+\begin{tabular}{l}
+	\footnotesize Дата сдачи на проверку:                                          \\
+	\footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2025 г. \\
+	\footnotesize Проверено:                                                       \\
+	\footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2025 г. \\
+\end{tabular}
+
+\vfill
+
+\begin{center}
+	Разработка кроссплатформенного приложения на Flutter.\\
+	Отчёт по лабораторной работе №5\\
+	по дисциплине\\
+	«Технологии программирования»\\
+	Вариант 5
+\end{center}
+
+\vspace{25mm}
+
+\noindent
+\begin{tabular}{ll}
+	Разработал студент гр. ИВТб-2301-05-00 & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Черкасов А. А./ \\
+	                                       & \hspace{25.5mm}\footnotesize(подпись)                    \\
+	Преподаватель                          & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Пащенко Д. Э./  \\
+	                                       & \hspace{25.5mm}\footnotesize(подпись)                    \\
+\end{tabular}
+
+\vfill
+
+\begin{center}
+	Киров\\
+	2025
+\end{center}
+
+\newpage
+\thispagestyle{plain}
+
+\section*{Цели лабораторной работы}
+
+\begin{itemize}
+	\item[$-$] освоить практические навыки создания кроссплатформенных приложений на Flutter;
+	\item[$-$] познакомиться с основными виджетами для построения пользовательского интерфейса;
+	\item[$-$] понять структуру проекта Flutter и особенности работы с виджетами компоновки.
+\end{itemize}
+
+\section*{Задание}
+
+Разработать приложение на Flutter с использованием различных виджетов компоновки:
+
+\begin{enumerate}
+	\item Добавить в Leading AppBar произвольную иконку с помощью class Icons.
+	\item В тело экрана добавить изображения из ассетов и сети, задать отступ.
+	\item Использовать виджеты Wrap и Column для компоновки нескольких контейнеров и текстовых виджетов.
+	\item Ознакомиться с параметрами и использованием виджетов Stack, Row, Column, Wrap для компоновки интерфейса.
+\end{enumerate}
+
+\clearpage
+\section*{Реализация приложения}
+
+В рамках лабораторной работы разработано Flutter-приложение, демонстрирующее использование основных виджетов компоновки и структурирования интерфейса.
+
+\subsection*{Структура приложения}
+
+Приложение состоит из единственного экрана, построенного с использованием следующих компонентов:
+
+\begin{itemize}
+	\item[$-$] \textbf{MaterialApp} — корневой виджет приложения, определяющий тему и базовые настройки.
+	\item[$-$] \textbf{Scaffold} — каркас экрана, содержащий AppBar и основное тело.
+	\item[$-$] \textbf{AppBar} — верхняя панель с иконкой и заголовком.
+	\item[$-$] \textbf{Stack} — основной контейнер для компоновки элементов с наложением.
+	\item[$-$] \textbf{Positioned} — виджет точного позиционирования элементов внутри Stack.
+\end{itemize}
+
+\subsection*{Настройка AppBar}
+
+В верхнюю панель приложения добавлена иконка \texttt{Icons.code} и заголовок с ФИО студента:
+
+\begin{minted}{dart}
+appBar: AppBar(
+  leading: Icon(Icons.code),
+  title: Text('Черкасов Александр Андреевич'),
+  backgroundColor: Colors.blue,
+),
+\end{minted}
+
+\subsection*{Компоновка элементов}
+
+Для размещения элементов использован виджет \texttt{Stack}, позволяющий накладывать виджеты друг на друга. Внутри Stack размещены:
+
+\begin{enumerate}
+	\item Четыре цветных контейнера по углам экрана (красный, зеленый, синий, оранжевый).
+	\item Центральный текстовый блок.
+\end{enumerate}
+
+Пример позиционирования контейнера:
+
+\begin{minted}{dart}
+Positioned(
+  top: 0,
+  left: 0,
+  child: Container(
+    width: 100,
+    height: 100,
+    color: Colors.red,
+  ),
+),
+\end{minted}
+
+\subsection*{Центральный текстовый блок}
+
+По центру экрана размещен текстовый виджет с надписью «Технологии программирования»:
+
+\begin{minted}{dart}
+Center(
+  child: Container(
+    padding: EdgeInsets.all(16),
+    color: Colors.white.withOpacity(0.8),
+    child: Text(
+      'Технологии программирования',
+      style: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      ),
+    ),
+  ),
+),
+\end{minted}
+
+\subsection*{Скриншот работы приложения}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=0.7\textheight]{pics/screen.png}
+	\caption*{Рисунок 1 --- Основной экран приложения}
+\end{figure}
+
+\section*{Контрольные вопросы}
+
+\subsection*{1. Что такое Flutter?}
+
+Flutter — это фреймворк от Google для разработки кроссплатформенных приложений под Android, iOS, Web и Desktop с использованием языка программирования Dart. Отличается высокой производительностью и собственной системой рендеринга.
+
+\subsection*{2. Структура Flutter-проекта}
+
+Типичная структура включает:
+\begin{itemize}
+	\item[$-$] \texttt{lib/} — основной код приложения на Dart;
+	\item[$-$] \texttt{pubspec.yaml} — файл настроек проекта и зависимостей;
+	\item[$-$] \texttt{android/}, \texttt{ios/}, \texttt{web/} — платформенная обёртка;
+	\item[$-$] \texttt{assets/} — ресурсы (изображения, шрифты).
+\end{itemize}
+
+\subsection*{3. Основные виджеты и функции}
+
+\begin{itemize}
+	\item[$-$] \textbf{runApp()} — точка входа, запускает приложение;
+	\item[$-$] \textbf{MaterialApp} — корневой компонент Material Design, задаёт тему и маршруты;
+	\item[$-$] \textbf{Scaffold} — основной шаблон экрана (AppBar, тело, меню);
+	\item[$-$] \textbf{AppBar} — верхняя панель приложения;
+	\item[$-$] \textbf{Container} — блок с возможностью задать размеры, отступы, цвет;
+	\item[$-$] \textbf{Text} — текстовый элемент;
+	\item[$-$] \textbf{TextStyle} — оформление текста (цвет, размер, шрифт);
+	\item[$-$] \textbf{Image} — отображение изображения (локального или сетевого);
+	\item[$-$] \textbf{Icon} — иконка из набора Material Icons;
+	\item[$-$] \textbf{Padding} — отступ вокруг дочернего виджета.
+\end{itemize}
+
+\subsection*{4. Виджет Column}
+
+Column располагает элементы вертикально. Основные параметры:
+\begin{itemize}
+	\item[$-$] \texttt{children} — список виджетов;
+	\item[$-$] \texttt{mainAxisAlignment} — выравнивание по вертикали;
+	\item[$-$] \texttt{crossAxisAlignment} — выравнивание по горизонтали.
+\end{itemize}
+
+\subsection*{5. Виджет Row}
+
+Row располагает элементы горизонтально. Параметры аналогичны Column:
+\begin{itemize}
+	\item[$-$] \texttt{children} — список дочерних элементов;
+	\item[$-$] \texttt{mainAxisAlignment} — выравнивание по горизонтали;
+	\item[$-$] \texttt{crossAxisAlignment} — выравнивание по вертикали.
+\end{itemize}
+
+\subsection*{6. Виджет Stack}
+
+Stack накладывает элементы друг на друга. Основные параметры:
+\begin{itemize}
+	\item[$-$] \texttt{children} — список слоёв;
+	\item[$-$] \texttt{alignment} — выравнивание содержимого;
+	\item[$-$] \texttt{fit} — управление размером дочерних элементов.
+\end{itemize}
+
+\subsection*{7. Виджет Center}
+
+Center располагает один дочерний элемент строго по центру экрана или доступной области.
+
+\subsection*{8. Виджет Wrap}
+
+Wrap размещает элементы в нескольких строках или столбцах, автоматически перенося их. Параметры:
+\begin{itemize}
+	\item[$-$] \texttt{spacing} — расстояние между элементами по горизонтали;
+	\item[$-$] \texttt{runSpacing} — расстояние между строками;
+	\item[$-$] \texttt{direction} — горизонтальное или вертикальное размещение.
+\end{itemize}
+
+\section*{Вывод}
+
+В ходе выполнения лабораторной работы №5 были освоены практические навыки создания кроссплатформенных приложений на Flutter.  
+Реализовано базовое приложение с использованием основных виджетов компоновки: AppBar, Stack, Positioned, Center.  
+Изучены особенности работы с различными виджетами для построения пользовательского интерфейса.  
+Полученный функционал полностью соответствует требованиям методических указаний.
+
+\newpage
+
+\section*{Приложение А. Исходный код main.dart}
+\inputminted{dart}{code/lib/main.dart}
+
+\end{document}

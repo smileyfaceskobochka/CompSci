@@ -1,0 +1,335 @@
+\documentclass[oneside,a4paper,14pt]{extarticle}
+\usepackage[a4paper,letterpaper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\usepackage[russian]{babel}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{minted, fancyvrb}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+% Форматирование листингов
+\setminted{style = rainbow_dash, fontsize = \small}
+
+% Форматирование заголовков
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\renewcommand\baselinestretch{1.33}
+\setlength{\parindent}{1.25cm}
+
+\setlist[enumerate]{
+  left=\parindent,
+  label=\arabic*.,,
+  itemsep=0pt,
+  topsep=5pt,
+  partopsep=0pt,
+  parsep=0pt
+}
+
+\setlist[itemize]{
+  left=\parindent,
+  itemsep=0pt,
+  topsep=5pt,
+  partopsep=0pt,
+  parsep=0pt
+}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  pdfborder={0 0 0},
+  pdftitle={Мобильное приложение с базой данных},
+  pdfauthor={Черкасов А.А.}
+}
+
+\begin{document}
+
+\newpage
+\thispagestyle{empty}
+\begin{center}
+	МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ\\
+	ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ ОБРАЗОВАТЕЛЬНОЕ УЧРЕЖДЕНИЕ ВЫСШЕГО ОБРАЗОВАНИЯ\\[1mm]
+	«ВЯТСКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ»\\
+	Институт математики и информационных систем\\
+	Факультет автоматики и вычислительной техники\\
+	Кафедра электронных вычислительных машин
+\end{center}
+
+\vspace{10mm}
+
+\hfill
+\begin{tabular}{l}
+	\footnotesize Дата сдачи на проверку:                                          \\
+	\footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2025 г. \\
+	\footnotesize Проверено:                                                       \\
+	\footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2025 г. \\
+\end{tabular}
+
+\vfill
+
+\begin{center}
+	Разработка мобильного приложения с базой данных.\\[1mm]
+	Отчёт по лабораторной работе №6\\
+	по дисциплине\\
+	«Технологии программирования»\\
+\end{center}
+
+\vspace{25mm}
+
+\noindent
+\begin{tabular}{ll}
+	Разработал студент гр. ИВТб-2301-05-00 & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Черкасов А. А./ \\
+	                                       & \hspace{25.5mm}\footnotesize(подпись)                    \\
+	Преподаватель                          & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Пащенко Д. Э./  \\
+	                                       & \hspace{25.5mm}\footnotesize(подпись)                    \\
+\end{tabular}
+
+\vfill
+
+\begin{center}
+	Киров\\
+	2025
+\end{center}
+
+\newpage
+\thispagestyle{plain}
+
+\section*{Цели лабораторной работы}
+
+\begin{itemize}
+	\item[$-$] освоить практические навыки создания мобильных приложений с локальной базой данных;
+	\item[$-$] познакомиться с основами работы с SQLite в Flutter;
+	\item[$-$] изучить паттерн управления состоянием Riverpod;
+	\item[$-$] понять принципы построения многооконных приложений с CRUD-операциями.
+\end{itemize}
+
+\section*{Задание}
+
+Разработать многооконное мобильное приложение, которое хранит информацию в локальной базе данных SQLite и позволяет изменять её. Тема приложения: «Моя Библиотека» — управление коллекцией книг и авторов.
+
+\clearpage
+\section*{Реализация приложения}
+
+В рамках лабораторной работы разработано Flutter-приложение «Моя Библиотека», предназначенное для управления коллекцией книг и авторов с использованием локальной базы данных SQLite.
+
+\subsection*{Структура приложения}
+
+Приложение состоит из трёх основных экранов, доступных через нижнюю навигационную панель:
+
+\begin{itemize}
+	\item[$-$] \textbf{Добавить} — экран для добавления новых книг и авторов;
+	\item[$-$] \textbf{Книги} — список всех книг с возможностью редактирования и удаления;
+	\item[$-$] \textbf{Авторы} — список всех авторов с возможностью удаления.
+\end{itemize}
+
+\subsection*{База данных}
+
+Приложение использует SQLite базу данных с двумя таблицами:
+
+\begin{enumerate}
+	\item \textbf{books} — хранит информацию о книгах:
+	\begin{itemize}
+		\item \texttt{id} (INTEGER PRIMARY KEY) — уникальный идентификатор;
+		\item \texttt{title} (TEXT NOT NULL) — название книги;
+		\item \texttt{publication\_year} (INTEGER NOT NULL) — год издания;
+		\item \texttt{genre} (TEXT NOT NULL) — жанр;
+		\item \texttt{isbn} (TEXT NOT NULL) — ISBN книги.
+	\end{itemize}
+
+	\item \textbf{authors} — хранит информацию об авторах:
+	\begin{itemize}
+		\item \texttt{id} (INTEGER PRIMARY KEY) — уникальный идентификатор;
+		\item \texttt{book\_id} (INTEGER, FOREIGN KEY) — связь с книгой;
+		\item \texttt{first\_name} (TEXT NOT NULL) — имя автора;
+		\item \texttt{last\_name} (TEXT NOT NULL) — фамилия автора;
+		\item \texttt{nationality} (TEXT NOT NULL) — национальность;
+		\item \texttt{birth\_year} (INTEGER NOT NULL) — год рождения.
+	\end{itemize}
+\end{enumerate}
+
+\subsection*{Управление состоянием}
+
+Для управления состоянием приложения используется Riverpod — декларативный фреймворк для управления состоянием:
+
+\begin{itemize}
+	\item[$-$] \texttt{booksProvider} — управление списком книг;
+	\item[$-$] \texttt{authorsProvider} — управление списком авторов;
+	\item[$-$] \texttt{fastDeleteProvider} — настройка быстрого удаления.
+\end{itemize}
+
+\subsection*{CRUD-операции}
+
+Приложение поддерживает полный набор CRUD-операций:
+
+\begin{itemize}
+	\item[$-$] \textbf{Create} — добавление новых книг и авторов через формы ввода;
+	\item[$-$] \textbf{Read} — отображение списков книг и авторов;
+	\item[$-$] \textbf{Update} — редактирование информации о книгах;
+	\item[$-$] \textbf{Delete} — удаление книг и авторов с подтверждением.
+\end{itemize}
+
+\subsection*{Пользовательский интерфейс}
+
+Интерфейс построен с использованием Material Design 3:
+
+\begin{itemize}
+	\item[$-$] \textbf{Навигация} — нижняя панель с тремя вкладками;
+	\item[$-$] \textbf{Формы} — валидированные формы для ввода данных;
+	\item[$-$] \textbf{Списки} — карточки с информацией и кнопками действий;
+	\item[$-$] \textbf{Диалоги} — модальные окна для редактирования и подтверждения удаления.
+\end{itemize}
+
+\subsection*{Скриншоты работы приложения}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=0.7\textheight]{pics/home_screen.png}
+	\caption*{Рисунок 1 --- Главный экран приложения}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=0.7\textheight]{pics/books_screen.png}
+	\caption*{Рисунок 2 --- Экран списка книг}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=0.7\textheight]{pics/authors_screen.png}
+	\caption*{Рисунок 3 --- Экран списка авторов}
+\end{figure}
+
+\section*{Контрольные вопросы}
+
+\subsection*{1. Что такое SQLite?}
+
+SQLite — это встраиваемая реляционная база данных, которая не требует отдельного серверного процесса. Она хранит всю базу данных в одном файле на диске и предоставляет полный набор SQL-функций.
+
+\subsection*{2. Преимущества SQLite в мобильной разработке}
+
+\begin{itemize}
+	\item[$-$] Не требует установки сервера;
+	\item[$-$] Хранит данные в одном файле;
+	\item[$-$] Поддерживает ACID-транзакции;
+	\item[$-$] Имеет небольшой размер библиотеки;
+	\item[$-$] Поддерживает большинство SQL-стандартов.
+\end{itemize}
+
+\subsection*{3. Что такое Riverpod?}
+
+Riverpod — это фреймворк для управления состоянием во Flutter, предоставляющий декларативный подход к управлению зависимостями и состоянием приложения. Он является развитием Provider с улучшенной типобезопасностью и API.
+
+\subsection*{4. Основные компоненты Riverpod}
+
+\begin{itemize}
+	\item[$-$] \textbf{Provider} — контейнер для хранения состояния или зависимостей;
+	\item[$-$] \textbf{ConsumerWidget/ConsumerStatefulWidget} — виджеты, которые могут читать провайдеры;
+	\item[$-$] \textbf{WidgetRef} — объект для чтения и изменения состояния провайдеров;
+	\item[$-$] \textbf{Notifier} — классы для управления изменяемым состоянием.
+\end{itemize}
+
+\subsection*{5. Что такое CRUD?}
+
+CRUD — акроним, обозначающий четыре основные операции с данными в базе данных:
+\begin{itemize}
+	\item[$-$] \textbf{Create} — создание новых записей;
+	\item[$-$] \textbf{Read} — чтение/получение данных;
+	\item[$-$] \textbf{Update} — обновление существующих записей;
+	\item[$-$] \textbf{Delete} — удаление записей.
+\end{itemize}
+
+\subsection*{6. Внешние ключи в SQLite}
+
+Внешний ключ (FOREIGN KEY) — это поле в таблице, которое ссылается на первичный ключ другой таблицы. Он обеспечивает целостность данных и позволяет устанавливать связи между таблицами. В SQLite внешние ключи включаются с помощью \texttt{PRAGMA foreign\_keys = ON}.
+
+\subsection*{7. Асинхронное программирование в Flutter}
+
+Flutter использует \texttt{async/await} для работы с асинхронными операциями. Ключевые слова:
+\begin{itemize}
+	\item[$-$] \texttt{async} — помечает функцию как асинхронную;
+	\item[$-$] \texttt{await} — ожидает завершения асинхронной операции;
+	\item[$-$] \texttt{Future} — тип для представления асинхронного результата.
+\end{itemize}
+
+\subsection*{8. Валидация форм во Flutter}
+
+Валидация форм осуществляется через callback \texttt{validator} в \texttt{TextFormField}. Функция валидации возвращает строку с ошибкой или \texttt{null}, если данные корректны. Для запуска валидации используется метод \texttt{FormState.validate()}.
+
+\section*{Вывод}
+
+В ходе выполнения лабораторной работы №6 было разработано полнофункциональное мобильное приложение «Моя Библиотека» с использованием локальной базы данных SQLite.  
+Реализован полный набор CRUD-операций для управления книгами и авторами.  
+Изучены принципы работы с SQLite в Flutter, включая создание таблиц, внешние ключи и асинхронные операции.  
+Освоен паттерн управления состоянием Riverpod для декларативного управления данными приложения.  
+Приложение демонстрирует современные подходы к разработке мобильных приложений с персистентным хранением данных.
+
+\newpage
+
+\section*{Приложение А. Исходный код main.dart}
+\inputminted{dart}{code/lib/main.dart}
+
+\newpage
+
+\section*{Приложение А1. Исходный код database.dart}
+\inputminted{dart}{code/lib/database.dart}
+
+\newpage
+
+\section*{Приложение А2. Исходный код error\_handle.dart}
+\inputminted{dart}{code/lib/error_handle.dart}
+
+\newpage
+
+\section*{Приложение А3. Исходный код providers.dart}
+\inputminted{dart}{code/lib/providers.dart}
+
+\newpage
+
+\section*{Приложение А4. Исходный код screens/authors\_page.dart}
+\inputminted{dart}{code/lib/screens/authors_page.dart}
+
+\newpage
+
+\section*{Приложение А5. Исходный код screens/books\_page.dart}
+\inputminted{dart}{code/lib/screens/books_page.dart}
+
+\newpage
+
+\section*{Приложение А6. Исходный код screens/home\_page.dart}
+\inputminted{dart}{code/lib/screens/home_page.dart}
+
+\newpage
+
+\section*{Приложение А7. Исходный код widgets/author\_adding\_window.dart}
+\inputminted{dart}{code/lib/widgets/author_adding_window.dart}
+
+\newpage
+
+\section*{Приложение А8. Исходный код widgets/book\_adding\_window.dart}
+\inputminted{dart}{code/lib/widgets/book_adding_window.dart}
+
+\newpage
+
+\section*{Приложение А9. Исходный код widgets/book\_redacting\_popup.dart}
+\inputminted{dart}{code/lib/widgets/book_redacting_popup.dart}
+
+\newpage
+
+\section*{Приложение А10. Исходный код utils/confirm\_delete\_popup.dart}
+\inputminted{dart}{code/lib/utils/confirm_delete_popup.dart}
+
+\newpage
+
+\section*{Приложение А11. Исходный код validators/author\_validator.dart}
+\inputminted{dart}{code/lib/validators/author_validator.dart}
+
+\newpage
+
+\section*{Приложение А12. Исходный код validators/book\_validator.dart}
+\inputminted{dart}{code/lib/validators/book_validator.dart}
+
+\end{document}

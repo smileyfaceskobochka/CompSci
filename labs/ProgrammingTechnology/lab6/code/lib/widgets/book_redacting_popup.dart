@@ -1,32 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../database.dart'; // Обновленный путь
-import '../providers.dart'; // Обновленный путь
-import '../validators/book_validator.dart'; // Обновленный путь
-import 'dart:async';
+import '../database.dart';
+import '../providers.dart';
+import '../validators/book_validator.dart';
 
 void showBookEditingDialog(BuildContext context, Book book, WidgetRef ref) {
-  // Изменено название функции и тип данных
-  final titleCtrl = TextEditingController(
-    text: book.title,
-  ); // Изменено с breed на title
-  final genreCtrl = TextEditingController(
-    text: book.genre,
-  ); // Изменено с age на genre
+  final titleCtrl = TextEditingController(text: book.title);
+  final genreCtrl = TextEditingController(text: book.genre);
   final publicationYearCtrl = TextEditingController(
     text: '${book.publicationYear}',
-  ); // Изменено с name на publicationYear
-  final isbnCtrl = TextEditingController(
-    text: book.isbn,
-  ); // Изменено с collar на isbn
+  );
+  final isbnCtrl = TextEditingController(text: book.isbn);
 
   final focusNode = FocusNode();
-  String? titleError; // Изменено
-  String? genreError; // Изменено
-  String? publicationYearError; // Изменено
-  String? isbnError; // Добавлено
+  String? titleError;
+  String? genreError;
+  String? publicationYearError;
+  String? isbnError;
 
-  final BookValidator validator = BookValidator(); // Изменено имя валидатора
+  final BookValidator validator = BookValidator();
 
   void closeDialog() {
     if (context.mounted) {
@@ -45,12 +37,11 @@ void showBookEditingDialog(BuildContext context, Book book, WidgetRef ref) {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Редактирование книги', // Изменен заголовок
+                'Редактирование книги',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
 
-              // Поле "Название"
               TextField(
                 controller: titleCtrl,
                 onChanged: (value) {
@@ -69,7 +60,6 @@ void showBookEditingDialog(BuildContext context, Book book, WidgetRef ref) {
 
               const SizedBox(height: 12),
 
-              // Поле "Жанр"
               TextField(
                 controller: genreCtrl,
                 onChanged: (value) {
@@ -87,7 +77,6 @@ void showBookEditingDialog(BuildContext context, Book book, WidgetRef ref) {
 
               const SizedBox(height: 12),
 
-              // Поле "Год публикации"
               TextField(
                 controller: publicationYearCtrl,
                 keyboardType: TextInputType.number,
@@ -108,7 +97,6 @@ void showBookEditingDialog(BuildContext context, Book book, WidgetRef ref) {
 
               const SizedBox(height: 12),
 
-              // Поле "ISBN"
               TextField(
                 controller: isbnCtrl,
                 onChanged: (value) {
@@ -161,30 +149,22 @@ void showBookEditingDialog(BuildContext context, Book book, WidgetRef ref) {
                       }
 
                       final updatedBook = Book(
-                        // Изменено с Dog на Book
                         id: book.id,
-                        title: titleCtrl.text, // Изменено
+                        title: titleCtrl.text,
                         publicationYear:
-                            int.tryParse(publicationYearCtrl.text) ??
-                            0, // Изменено
-                        genre: genreCtrl.text, // Изменено
-                        isbn: isbnCtrl.text, // Изменено
+                            int.tryParse(publicationYearCtrl.text) ?? 0,
+                        genre: genreCtrl.text,
+                        isbn: isbnCtrl.text,
                       );
 
-                      ref
-                          .read(booksProvider.notifier)
-                          .updateBook(
-                            updatedBook,
-                          ); // Изменено имя провайдера и метод
+                      ref.read(booksProvider.notifier).updateBook(updatedBook);
 
                       closeDialog();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Книга обновлена.'),
-                        ), // Изменен текст
+                        const SnackBar(content: Text('Книга обновлена.')),
                       );
                     },
-                    child: const Text('Сохранить'), // Изменен текст
+                    child: const Text('Сохранить'),
                   ),
                 ],
               ),
@@ -194,10 +174,4 @@ void showBookEditingDialog(BuildContext context, Book book, WidgetRef ref) {
       ),
     ),
   );
-
-  Future.delayed(const Duration(milliseconds: 200), () {
-    if (context.mounted) {
-      FocusScope.of(context).requestFocus(focusNode);
-    }
-  });
 }

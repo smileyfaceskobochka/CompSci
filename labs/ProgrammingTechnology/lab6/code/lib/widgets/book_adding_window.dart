@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../database.dart'; // Обновленный путь
-import '../providers.dart'; // Обновленный путь
-import '../validators/book_validator.dart'; // Обновленный путь
+import '../database.dart';
+import '../providers.dart';
+import '../validators/book_validator.dart';
 
 class BookAddingWindow extends ConsumerStatefulWidget {
   const BookAddingWindow({super.key});
@@ -16,7 +16,8 @@ class _BookAddingWindowState extends ConsumerState<BookAddingWindow> {
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _genreController = TextEditingController();
-  final TextEditingController _publicationYearController = TextEditingController();
+  final TextEditingController _publicationYearController =
+      TextEditingController();
   final TextEditingController _isbnController = TextEditingController();
 
   final BookValidator _validator = BookValidator();
@@ -40,7 +41,7 @@ class _BookAddingWindowState extends ConsumerState<BookAddingWindow> {
           isbn: _isbnController.text,
         );
 
-        await ref.read(booksProvider.notifier).addBook(book); // Изменено имя провайдера
+        await ref.read(booksProvider.notifier).addBook(book);
 
         _formKey.currentState!.reset();
         _titleController.clear();
@@ -51,7 +52,7 @@ class _BookAddingWindowState extends ConsumerState<BookAddingWindow> {
         if (mounted) {
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(const SnackBar(content: Text('Книга добавлена!'))); // Изменен текст
+          ).showSnackBar(const SnackBar(content: Text('Книга добавлена!')));
         }
       } catch (e) {
         if (mounted) {
@@ -79,7 +80,7 @@ class _BookAddingWindowState extends ConsumerState<BookAddingWindow> {
               ),
               validator: _validator.validateTitle,
             ),
-            const SizedBox(height: 16), // Добавлен SizedBox для отступа
+            const SizedBox(height: 16),
             TextFormField(
               controller: _genreController,
               decoration: const InputDecoration(
@@ -107,23 +108,23 @@ class _BookAddingWindowState extends ConsumerState<BookAddingWindow> {
               ),
               validator: _validator.validateISBN,
             ),
-            const SizedBox(height: 24), // Увеличен отступ
+            const SizedBox(height: 24),
             ElevatedButton(
               onPressed: _submit,
               style: ElevatedButton.styleFrom(
-                minimumSize: const Size.fromHeight(50), // Увеличен размер кнопки
+                minimumSize: const Size.fromHeight(50),
               ),
-              child: const Text('Добавить книгу'), // Изменен текст
+              child: const Text('Добавить книгу'),
             ),
             const SizedBox(height: 10),
-            TextButton( // Изменено на TextButton для тестовой кнопки
+            TextButton(
               onPressed: () {
                 _isbnController.text = '978-3-16-148410-0';
                 _genreController.text = 'Фантастика';
                 _publicationYearController.text = '1999';
                 _titleController.text = 'Путешествие на Луну';
               },
-              child: const Text('Заполнить тестовой книгой'), // Изменен текст
+              child: const Text('Заполнить тестовой книгой'),
             ),
           ],
         ),

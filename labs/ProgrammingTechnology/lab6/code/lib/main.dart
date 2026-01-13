@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'screens/books_page.dart';
 import 'screens/authors_page.dart';
 import 'screens/home_page.dart';
@@ -13,75 +14,94 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final lightColorScheme = ColorScheme.fromSeed(
-      seedColor: const Color.fromARGB(255, 68, 138, 201),
-      brightness: Brightness.light,
-    );
+    return DynamicColorBuilder(
+      builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+        ColorScheme lightColorScheme;
+        ColorScheme darkColorScheme;
 
-    final darkColorScheme = ColorScheme.fromSeed(
-      seedColor: const Color.fromARGB(255, 68, 138, 201),
-      brightness: Brightness.dark,
-    );
+        if (lightDynamic != null && darkDynamic != null) {
+          // Use dynamic colors from system
+          lightColorScheme = lightDynamic.harmonized();
+          darkColorScheme = darkDynamic.harmonized();
+        } else {
+          // Fallback to default blue theme
+          lightColorScheme = ColorScheme.fromSeed(
+            seedColor: Colors.blue,
+            brightness: Brightness.light,
+          );
+          darkColorScheme = ColorScheme.fromSeed(
+            seedColor: Colors.blue,
+            brightness: Brightness.dark,
+          );
+        }
 
-    return MaterialApp(
-      themeMode: ThemeMode.system,
-      title: 'Моя Библиотека',
-      darkTheme: ThemeData(colorScheme: darkColorScheme, useMaterial3: true),
-      theme: ThemeData(
-        colorScheme: lightColorScheme,
-        useMaterial3: true,
-        appBarTheme: AppBarTheme(
-          backgroundColor: lightColorScheme.primary,
-          foregroundColor: lightColorScheme.onPrimary,
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          labelStyle: TextStyle(
-            fontSize: 18,
-            color: lightColorScheme.onSurfaceVariant,
+        return MaterialApp(
+          themeMode: ThemeMode.system,
+          title: 'Моя Библиотека',
+          darkTheme: ThemeData(
+            colorScheme: darkColorScheme,
+            useMaterial3: true,
           ),
-          border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8)),
+          theme: ThemeData(
+            colorScheme: lightColorScheme,
+            useMaterial3: true,
+            appBarTheme: AppBarTheme(
+              backgroundColor: lightColorScheme.primary,
+              foregroundColor: lightColorScheme.onPrimary,
+            ),
+            inputDecorationTheme: InputDecorationTheme(
+              labelStyle: TextStyle(
+                fontSize: 18,
+                color: lightColorScheme.onSurfaceVariant,
+              ),
+              border: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: lightColorScheme.primary,
+                  width: 2,
+                ),
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: lightColorScheme.error, width: 2),
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: lightColorScheme.error, width: 2),
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: lightColorScheme.outline),
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+              ),
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+            ),
+            cardTheme: CardThemeData(
+              elevation: 4,
+              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              color: lightColorScheme.surface,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            navigationBarTheme: NavigationBarThemeData(
+              indicatorColor: lightColorScheme.primaryContainer,
+              labelTextStyle: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.selected)) {
+                  return TextStyle(
+                    color: lightColorScheme.onSurface,
+                    fontWeight: FontWeight.bold,
+                  );
+                }
+                return TextStyle(color: lightColorScheme.onSurfaceVariant);
+              }),
+            ),
           ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: lightColorScheme.primary, width: 2),
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: lightColorScheme.error, width: 2),
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: lightColorScheme.error, width: 2),
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: lightColorScheme.outline),
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
-          ),
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-        ),
-        cardTheme: CardThemeData(
-          elevation: 4,
-          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          color: lightColorScheme.surface,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        navigationBarTheme: NavigationBarThemeData(
-          indicatorColor: lightColorScheme.primaryContainer,
-          labelTextStyle: WidgetStateProperty.resolveWith((states) {
-            if (states.contains(WidgetState.selected)) {
-              return TextStyle(
-                color: lightColorScheme.onSurface,
-                fontWeight: FontWeight.bold,
-              );
-            }
-            return TextStyle(color: lightColorScheme.onSurfaceVariant);
-          }),
-        ),
-      ),
-      home: const MainScreen(title: 'Моя Библиотека'),
+          home: const MainScreen(title: 'Моя Библиотека'),
+        );
+      },
     );
   }
 }

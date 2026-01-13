@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../widgets/book_adding_window.dart'; // Изменено
-import '../widgets/author_adding_window.dart'; // Изменено
+import '../widgets/book_adding_window.dart';
+import '../widgets/author_adding_window.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -11,15 +11,15 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  String? _appBarTitle = 'Добавить книгу'; // Изменено
-  int _showWindow = 0; // Изменено имя переменной
+  String? _appBarTitle = 'Добавить книгу';
+  int _showWindow = 0;
 
   Widget _buildWindow() {
-    switch (_showWindow) { // Изменено имя переменной
+    switch (_showWindow) {
       case 0:
-        return const BookAddingWindow(); // Изменено
+        return const BookAddingWindow();
       case 1:
-        return const AuthorAddingWindow(); // Изменено
+        return const AuthorAddingWindow();
       default:
         return const SizedBox();
     }
@@ -31,14 +31,14 @@ class _HomePageState extends ConsumerState<HomePage> {
       appBar: AppBar(centerTitle: true, title: Text('$_appBarTitle')),
       body: Column(
         children: [
-          Expanded(child: _buildWindow()), // Wrap with Expanded
+          Expanded(child: _buildWindow()),
           Container(
-            padding: const EdgeInsets.only(bottom: 16, top: 16), // Добавлен top padding
+            padding: const EdgeInsets.only(bottom: 16, top: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
-                  'Что добавить:', // Изменен текст
+                  'Что добавить:',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(height: 8),
@@ -50,20 +50,20 @@ class _HomePageState extends ConsumerState<HomePage> {
                       onPressed: () {
                         setState(() {
                           _showWindow = 0;
-                          _appBarTitle = 'Добавить книгу'; // Изменено
+                          _appBarTitle = 'Добавить книгу';
                         });
                       },
-                      child: const Text('Книгу'), // Изменено
+                      child: const Text('Книгу'),
                     ),
                     const SizedBox(width: 16),
                     TextButton(
                       onPressed: () {
                         setState(() {
                           _showWindow = 1;
-                          _appBarTitle = 'Добавить автора'; // Изменено
+                          _appBarTitle = 'Добавить автора';
                         });
                       },
-                      child: const Text('Автора'), // Изменено
+                      child: const Text('Автора'),
                     ),
                   ],
                 ),

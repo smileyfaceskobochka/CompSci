@@ -1,30 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers.dart'; // Обновленный путь
-import '../utils/confirm_delete_popup.dart'; // Обновленный путь
+import '../providers.dart';
+import '../utils/confirm_delete_popup.dart';
+import '../widgets/author_editing_popup.dart';
 
 class AuthorsPage extends ConsumerWidget {
   const AuthorsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isFastDelete = ref.watch(
-      fastDeleteProvider,
-    ); // Изменено имя провайдера
-    final authorsAsyncValue = ref.watch(
-      authorsProvider,
-    ); // Изменено имя провайдера
+    final isFastDelete = ref.watch(fastDeleteProvider);
+    final authorsAsyncValue = ref.watch(authorsProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Список авторов'),
-      ), // Изменен заголовок
+      appBar: AppBar(centerTitle: true, title: const Text('Список авторов')),
       body: authorsAsyncValue.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         data: (authors) {
           if (authors.isEmpty) {
-            return const Center(child: Text('Авторов нет!')); // Изменен текст
+            return const Center(child: Text('Авторов нет!'));
           }
           return ListView.builder(
             itemCount: authors.length,
@@ -34,53 +28,37 @@ class AuthorsPage extends ConsumerWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 child: ListTile(
                   leading: CircleAvatar(
-                    // Небольшое изменение дизайна - круглая иконка с ID
                     child: Text(
                       '${author.id}',
                       style: const TextStyle(fontSize: 12),
                     ),
                   ),
                   title: Text(
-                    '${author.lastName} ${author.firstName}', // Обновлен вывод информации об авторе
+                    '${author.lastName} ${author.firstName}',
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
-                    'Национальность: ${author.nationality}\nГод рождения: ${author.birthYear}\nID книги: ${author.bookId ?? 'не указан'}', // Обновлен вывод информации
+                    'Национальность: ${author.nationality}\nГод рождения: ${author.birthYear}\nID книги: ${author.bookId ?? 'не указан'}',
                   ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Кнопка редактирования автора (реализация не предусмотрена в оригинале, но добавлена как заглушка)
                       IconButton(
-                        onPressed: () {
-                          // TODO: Реализовать диалог редактирования автора
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Редактирование автора пока не реализовано',
-                              ),
-                            ),
-                          );
-                        },
-                        icon: const Icon(
-                          Icons.edit,
-                          color: Colors.grey,
-                        ), // Серая иконка для неактивной функции
+                        onPressed: () =>
+                            showAuthorEditingDialog(context, author, ref),
+                        icon: const Icon(Icons.edit, color: Colors.blue),
                       ),
                       IconButton(
                         onPressed: () async {
                           showDeleteConfirmation(
                             context: context,
                             isFastDelete: isFastDelete,
-                            title: 'Удалить автора?', // Изменен заголовок
-                            itemName:
-                                '${author.firstName} ${author.lastName}', // Имя автора
+                            title: 'Удалить автора?',
+                            itemName: '${author.firstName} ${author.lastName}',
                             onDelete: () async {
                               await ref
                                   .read(authorsProvider.notifier)
-                                  .deleteAuthor(
-                                    author.id,
-                                  ); // Изменено имя провайдера
+                                  .deleteAuthor(author.id);
                             },
                           );
                         },
@@ -96,9 +74,7 @@ class AuthorsPage extends ConsumerWidget {
         error: (err, stack) => Center(child: Text('Ошибка: $err')),
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(
-          bottom: 50.0,
-        ), // Отступ от нижней навигации
+        padding: const EdgeInsets.only(bottom: 50.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -124,8 +100,7 @@ class AuthorsPage extends ConsumerWidget {
                   Switch(
                     value: isFastDelete,
                     onChanged: (newValue) {
-                      ref.read(fastDeleteProvider.notifier).state =
-                          newValue; // Изменено имя провайдера
+                      ref.read(fastDeleteProvider.notifier).state = newValue;
                     },
                   ),
                 ],
@@ -134,8 +109,7 @@ class AuthorsPage extends ConsumerWidget {
           ],
         ),
       ),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.endDocked, // Расположение FAB
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 }

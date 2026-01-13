@@ -1,4 +1,3 @@
-# hash.S - djb2 hash function in x86-64 assembler (Intel syntax)
 # uint32_t simple_hash(const char* data, size_t len)
 # djb2 hash: hash = 5381 + data[0]*33 + data[1]*33^2 + ...
 
@@ -8,12 +7,8 @@
 .section .text
 
 simple_hash:
-    # Parameters:
-    # rdi = data (const char*)
-    # rsi = len (size_t)
-
     mov eax, 5381          # hash = 5381
-    test rsi, rsi          # if len == 0, return hash
+    test rsi, rsi          # if len == 0, ret hash
     jz .done
 
 .loop:

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../database.dart'; // Обновленный путь
-import '../providers.dart'; // Обновленный путь
-import '../validators/author_validator.dart'; // Обновленный путь
+import '../database.dart';
+import '../providers.dart';
+import '../validators/author_validator.dart';
 
 class AuthorAddingWindow extends ConsumerStatefulWidget {
   const AuthorAddingWindow({super.key});
@@ -19,9 +19,8 @@ class _AuthorAddingWindowState extends ConsumerState<AuthorAddingWindow> {
   final _nationalityController = TextEditingController();
   final _birthYearController = TextEditingController();
 
-  Book? selectedBook; // Изменено с Dog на Book
-  final AuthorValidator _validator =
-      AuthorValidator(); // Изменено имя валидатора
+  Book? selectedBook;
+  final AuthorValidator _validator = AuthorValidator();
 
   @override
   void dispose() {
@@ -36,16 +35,14 @@ class _AuthorAddingWindowState extends ConsumerState<AuthorAddingWindow> {
     if (_formKey.currentState!.validate()) {
       try {
         final author = Author(
-          bookId: selectedBook?.id, // Изменено с dogId на bookId
+          bookId: selectedBook?.id,
           firstName: _firstNameController.text,
           lastName: _lastNameController.text,
           nationality: _nationalityController.text,
           birthYear: int.parse(_birthYearController.text),
         );
 
-        await ref
-            .read(authorsProvider.notifier)
-            .addAuthor(author); // Изменено имя провайдера
+        await ref.read(authorsProvider.notifier).addAuthor(author);
 
         _formKey.currentState!.reset();
         _firstNameController.clear();
@@ -53,13 +50,13 @@ class _AuthorAddingWindowState extends ConsumerState<AuthorAddingWindow> {
         _nationalityController.clear();
         _birthYearController.clear();
         setState(() {
-          selectedBook = null; // Изменено с selectedDog на selectedBook
+          selectedBook = null;
         });
 
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Автор добавлен!")),
-          ); // Изменен текст
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text("Автор добавлен!")));
         }
       } catch (e) {
         if (mounted) {
@@ -73,12 +70,9 @@ class _AuthorAddingWindowState extends ConsumerState<AuthorAddingWindow> {
 
   @override
   Widget build(BuildContext context) {
-    final booksList = ref.watch(
-      booksProvider,
-    ); // Изменено с dogsProvider на booksProvider
+    final booksList = ref.watch(booksProvider);
 
     return SingleChildScrollView(
-      // Обертка в SingleChildScrollView
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
       child: Form(
         key: _formKey,
@@ -105,37 +99,27 @@ class _AuthorAddingWindowState extends ConsumerState<AuthorAddingWindow> {
 
             booksList.when(
               loading: () => const CircularProgressIndicator(),
-              error: (err, st) =>
-                  Text('Ошибка загрузки книг: $err'), // Обновлен текст ошибки
+              error: (err, st) => Text('Ошибка загрузки книг: $err'),
               data: (books) {
                 final List<DropdownMenuItem<Book?>> menuItems = [
                   const DropdownMenuItem<Book?>(
                     value: null,
-                    child: Text('Нет (без книги)'), // Изменен текст
+                    child: Text('Нет (без книги)'),
                   ),
                 ];
                 menuItems.addAll(
                   books.map((book) {
-                    // Изменено с dog на book
                     return DropdownMenuItem<Book?>(
-                      // Изменено с Dog на Book
                       value: book,
-                      child: Text(
-                        '${book.title} (${book.genre})',
-                      ), // Обновлен вывод информации о книге
+                      child: Text('${book.title} (${book.genre})'),
                     );
                   }),
                 );
                 return DropdownButtonFormField<Book?>(
-                  // Изменено с Dog на Book
-                  decoration: const InputDecoration(
-                    labelText: 'Книга автора', // Изменен текст
-                  ),
-                  initialValue: selectedBook, // Изменено на initialValue
+                  decoration: const InputDecoration(labelText: 'Книга автора'),
+                  initialValue: selectedBook,
                   items: menuItems,
-                  onChanged: (value) => setState(
-                    () => selectedBook = value,
-                  ), // Изменено с selectedDog на selectedBook
+                  onChanged: (value) => setState(() => selectedBook = value),
                 );
               },
             ),
@@ -152,18 +136,17 @@ class _AuthorAddingWindowState extends ConsumerState<AuthorAddingWindow> {
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size.fromHeight(50),
               ),
-              child: const Text("Добавить автора"), // Изменен текст
+              child: const Text("Добавить автора"),
             ),
             const SizedBox(height: 10),
             TextButton(
-              // Изменено на TextButton
               onPressed: () {
                 _birthYearController.text = '1828';
                 _nationalityController.text = 'Русский';
                 _lastNameController.text = 'Толстой';
                 _firstNameController.text = 'Лев';
               },
-              child: const Text('Заполнить тестовым автором'), // Изменен текст
+              child: const Text('Заполнить тестовым автором'),
             ),
           ],
         ),

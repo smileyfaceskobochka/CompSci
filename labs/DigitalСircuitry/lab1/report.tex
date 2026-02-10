@@ -1,0 +1,210 @@
+\documentclass[oneside,a4paper,14pt]{extarticle}
+\usepackage[a4paper,letterpaper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\usepackage[russian]{babel}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{minted, fancyvrb}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{geometry}
+\geometry{verbose,a4paper, tmargin=3.5cm,bmargin=3.5cm,lmargin=2.5cm,rmargin=2.5cm,headsep=1cm,footskip=1.5cm}
+\usepackage{fancyhdr}
+\usepackage{colortbl}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tikz -timing}
+\usepackage{tikz}
+\usetikzlibrary{karnaugh}
+
+\definecolor{LogisimKMapColor0}{RGB}{128,0,0}
+\definecolor{LogisimKMapColor1}{RGB}{230,25,75}
+\definecolor{LogisimKMapColor2}{RGB}{250,190,190}
+\definecolor{LogisimKMapColor3}{RGB}{170,110,40}
+\definecolor{LogisimKMapColor4}{RGB}{245,130,48}
+\definecolor{LogisimKMapColor5}{RGB}{255,215,180}
+\definecolor{LogisimKMapColor6}{RGB}{128,128,0}
+\definecolor{LogisimKMapColor7}{RGB}{255,255,25}
+\definecolor{LogisimKMapColor8}{RGB}{210,245,60}
+\definecolor{LogisimKMapColor9}{RGB}{0,0,128}
+\definecolor{LogisimKMapColor10}{RGB}{145,30,180}
+\definecolor{LogisimKMapColor11}{RGB}{60,180,175}
+\definecolor{LogisimKMapColor12}{RGB}{0,130,203}
+\definecolor{LogisimKMapColor13}{RGB}{230,190,255}
+\definecolor{LogisimKMapColor14}{RGB}{170,255,195}
+\definecolor{LogisimKMapColor15}{RGB}{240,50,230}
+
+% Форматирование листингов с кодом
+\setminted{style = rainbow_dash, fontsize = \small} % https://pygments.org/styles/
+
+% Форматирование заголовков
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+% Интерлиньяж и абзац
+\renewcommand\baselinestretch{1.33}
+
+\setlength{\parindent}{1.25cm}  % длина красной строки
+
+% Для всех списков
+\setlist[enumerate]{
+  left=0.5\parindent,       % отступ слева
+  label=\arabic*.,       % цифры
+  itemsep=0pt,           % расстояние между пунктами
+  topsep=5pt,            % отступ сверху
+  partopsep=0pt,         % дополнительный отступ сверху, если абзац до списка
+  parsep=0pt             % отступ между абзацами внутри пункта
+}
+
+\setlist[itemize]{
+  left=0.5\parindent,       % отступ слева
+  itemsep=0pt,           % расстояние между пунктами
+  topsep=5pt,            % отступ сверху
+  partopsep=0pt,
+  parsep=0pt
+}
+
+% Гиперссылки
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  pdfborder={0 0 0},
+  pdftitle={Синтез комбинационной схемы},
+  pdfauthor={Черкасов А.А. и Зинин В.А.},
+}
+
+\begin{document}
+
+\newpage
+\thispagestyle{empty}
+\begin{center}
+  МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ УЧРЕЖДЕНИЕ ВЫСШЕГО ОБРАЗОВАНИЯ\\
+  <<ВЯТСКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ>>\\
+  Институт математики и информационных систем\\
+  Факультет автоматики и вычислительной техники\\
+  Кафедра электронных вычислительных машин
+\end{center}
+\vspace{10mm}
+
+\hfill
+\begin{tabular}{l}
+  \footnotesize Дата сдачи на проверку:                                          \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2025 г. \\
+  \footnotesize Проверено:                                                       \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2025 г. \\
+\end{tabular}
+\vfill
+
+\begin{center}
+  Отчёт по лабораторной работе №1\\
+  по дисциплине\\
+  <<Цифровая схемотехника>>\\
+\end{center}
+\vspace{25mm}
+\noindent
+\begin{tabular}{ll}
+  Разработали студенты гр. ИВТб-2301-05-00 & \hspace{5mm}\rule[-1mm]{30mm}{0.10mm}\,/Черкасов А. А./ \\
+                                           & \hspace{5mm}\rule[-1mm]{30mm}{0.10mm}\,/Зинин В. А./    \\
+                                           & \hspace{12.5mm}\footnotesize(подпись)                    \\
+  Преподователь                            & \hspace{5mm}\rule[-1mm]{30mm}{0.10mm}\,/Мельцов В. Ю./  \\
+                                           & \hspace{12.5mm}\footnotesize(подпись)                    \\
+\end{tabular}
+
+\noindent
+\begin{tabular}{lp{58mm}r}
+  Работа защищена &  & \hspace{5mm}<<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{30mm}{0.10mm}\ 2026 г.
+\end{tabular}
+\vfill
+
+\begin{center}
+  Киров\\
+  2026
+\end{center}
+
+\newpage\thispagestyle{plain}
+
+\section{Цель лабораторной работы}
+Получить навыки синтеза комбинационных схем в определённом логическом базисе. Синтезировать логическую схему по заданной таблице истинности, используя базис <<И, ИЛИ, НЕ>>.
+
+\section{Исходные данные:}
+Дано исходное уравнение функции $F$:
+\begin{equation*}
+  F = \overline{x_0}  \cdot x_1 \cdot  \overline{x_2}  \cdot x_3+x_0 \cdot x_1 \cdot x_2
+\end{equation*}
+
+\section{Таблица истинности}
+\begin{center}
+  \begin{tabular}{cccc|c}
+    $x_0$ & $x_1$ & $x_2$ & $x_3$ & $F$ \\
+    \hline
+    $0$   & $0$   & $0$   & $0$   & $0$ \\
+    $0$   & $0$   & $0$   & $1$   & $0$ \\
+    $0$   & $0$   & $1$   & $0$   & $0$ \\
+    $0$   & $0$   & $1$   & $1$   & $0$ \\
+    $0$   & $1$   & $0$   & $0$   & $0$ \\
+    $0$   & $1$   & $0$   & $1$   & $1$ \\
+    $0$   & $1$   & $1$   & $0$   & $0$ \\
+    $0$   & $1$   & $1$   & $1$   & $0$ \\
+    $1$   & $0$   & $0$   & $0$   & $0$ \\
+    $1$   & $0$   & $0$   & $1$   & $0$ \\
+    $1$   & $0$   & $1$   & $0$   & $0$ \\
+    $1$   & $0$   & $1$   & $1$   & $0$ \\
+    $1$   & $1$   & $0$   & $0$   & $0$ \\
+    $1$   & $1$   & $0$   & $1$   & $0$ \\
+    $1$   & $1$   & $1$   & $0$   & $1$ \\
+    $1$   & $1$   & $1$   & $1$   & $1$ \\
+  \end{tabular}
+\end{center}
+
+\section{Построим карту Карно для минимизации КУ}
+
+\begin{center}
+  \begin{tikzpicture}[karnaugh,disable bars,x=1\kmunitlength,y=1\kmunitlength,kmbar left sep=1\kmunitlength,grp/.style n args={4}{#1,fill=#1!30,minimum width= #2\kmunitlength,minimum height=#3\kmunitlength,rounded corners=0.2\kmunitlength,fill opacity=0.6,rectangle,draw}]
+    \karnaughmap{4}{$F$}{{$x_0$}{$x_2$}{$x_1$}{$x_3$}}
+    {0001000000000011}{
+      \draw[kmbox] (-0.5,4.5)
+      node[below left]{$x_0$, $x_1$}
+      node[above right]{$x_2$, $x_3$} +(-0.2,0.2)
+      node[above left]{$F$};\draw (0,4) -- (-0.7,4.7);
+      \foreach \x/\1 in %
+        {0/00,1/01,2/11,3/10} {
+          \node at (\x+0.5,4.2) {\1};
+        }
+      \foreach \y/\1 in %
+        {0/00,1/01,2/11,3/10} {
+          \node at (-0.4,-0.5-\y+4) {\1};
+        }
+      \node[grp={LogisimKMapColor0}{0.8}{0.8}](n0) at(1.5,2.5) {};
+      \node[grp={LogisimKMapColor1}{1.8}{0.8}](n1) at(3,1.5) {};
+    }
+  \end{tikzpicture}
+\end{center}
+Получаем минимальное выражение для функции $F$:
+\begin{equation*}
+  F =  \overline{x_0}  \cdot x_1 \cdot  \overline{x_2}  \cdot x_3+x_0 \cdot x_1 \cdot x_2
+\end{equation*}
+
+\section{Построим функциональную схему в базисе <<И, ИЛИ, НЕ>>}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{pics/functional_diagram.png}
+  \caption*{Рисунок 1 - Функциональная схема устройства в базисе <<И, ИЛИ, НЕ>>}
+\end{figure}
+
+\section{Построим принципиальную схему устройства}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{pics/principle_diagram.png}
+  \caption*{Рисунок 2 - Принципиальная схема устройства в базисе <<И, ИЛИ, НЕ>>}
+\end{figure}
+
+\section*{Вывод}
+
+В данной лабораторной работе мы получили навыки синтеза комбинационных схем в базисе <<И, ИЛИ, НЕ>>. Мы синтезировали логическую схему по заданной таблице истинности, используя карту Карно для минимизации функции. В результате мы получили минимальное выражение для функции $F$ и построили функциональную и принципиальную схемы устройства.
+
+
+\end{document}

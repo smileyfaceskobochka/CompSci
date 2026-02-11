@@ -9,8 +9,6 @@
 \usepackage{hyperref}
 \usepackage{enumitem}
 \usepackage{amsmath}
-\usepackage{geometry}
-\geometry{verbose,a4paper, tmargin=3.5cm,bmargin=3.5cm,lmargin=2.5cm,rmargin=2.5cm,headsep=1cm,footskip=1.5cm}
 \usepackage{fancyhdr}
 \usepackage{colortbl}
 \usepackage[dvipsnames]{xcolor}
@@ -108,9 +106,9 @@
 \begin{tabular}{ll}
   Разработали студенты гр. ИВТб-2301-05-00 & \hspace{5mm}\rule[-1mm]{30mm}{0.10mm}\,/Черкасов А. А./ \\
                                            & \hspace{5mm}\rule[-1mm]{30mm}{0.10mm}\,/Зинин В. А./    \\
-                                           & \hspace{12.5mm}\footnotesize(подпись)                    \\
+                                           & \hspace{12.5mm}\footnotesize(подпись)                   \\
   Преподователь                            & \hspace{5mm}\rule[-1mm]{30mm}{0.10mm}\,/Мельцов В. Ю./  \\
-                                           & \hspace{12.5mm}\footnotesize(подпись)                    \\
+                                           & \hspace{12.5mm}\footnotesize(подпись)                   \\
 \end{tabular}
 
 \noindent
@@ -129,14 +127,10 @@
 \section{Цель лабораторной работы}
 Получить навыки синтеза комбинационных схем в определённом логическом базисе. Синтезировать логическую схему по заданной таблице истинности, используя базис <<И, ИЛИ, НЕ>>.
 
-\section{Исходные данные:}
-Дано исходное уравнение функции $F$:
-\begin{equation*}
-  F = \overline{x_0}  \cdot x_1 \cdot  \overline{x_2}  \cdot x_3+x_0 \cdot x_1 \cdot x_2
-\end{equation*}
-
 \section{Таблица истинности}
 \begin{center}
+  Таблица 1 --- Таблица истинности \\
+  \vspace{5mm}
   \begin{tabular}{cccc|c}
     $x_0$ & $x_1$ & $x_2$ & $x_3$ & $F$ \\
     \hline
@@ -159,9 +153,16 @@
   \end{tabular}
 \end{center}
 
+\section{Уравнение функции $F$}
+\begin{equation*}
+  F = \overline{x_0}  \cdot x_1 \cdot  \overline{x_2}  \cdot x_3+x_0 \cdot x_1 \cdot x_2
+\end{equation*}
+
 \section{Построим карту Карно для минимизации КУ}
 
 \begin{center}
+  Таблица 2 --- Карта Карно \\
+  \vspace{5mm}
   \begin{tikzpicture}[karnaugh,disable bars,x=1\kmunitlength,y=1\kmunitlength,kmbar left sep=1\kmunitlength,grp/.style n args={4}{#1,fill=#1!30,minimum width= #2\kmunitlength,minimum height=#3\kmunitlength,rounded corners=0.2\kmunitlength,fill opacity=0.6,rectangle,draw}]
     \karnaughmap{4}{$F$}{{$x_0$}{$x_2$}{$x_1$}{$x_3$}}
     {0001000000000011}{
@@ -191,17 +192,47 @@
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\textwidth]{pics/functional_diagram.png}
-  \caption*{Рисунок 1 - Функциональная схема устройства в базисе <<И, ИЛИ, НЕ>>}
+  \caption*{Рисунок 1 --- Функциональная схема устройства в базисе <<И, ИЛИ, НЕ>>}
 \end{figure}
-
+\newpage
 \section{Построим принципиальную схему устройства}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\textwidth]{pics/principle_diagram.png}
-  \caption*{Рисунок 2 - Принципиальная схема устройства в базисе <<И, ИЛИ, НЕ>>}
+  \caption*{Рисунок 2 --- Принципиальная схема устройства в базисе <<И, ИЛИ, НЕ>>}
 \end{figure}
+\newpage
+\begin{center}
+  Таблица 3 --- Таблица микросхем \\
+  \vspace{5mm}
+  \begin{tabular}{|c|c|}
+    \hline
+    Микросхема & Маркировка \\
+    \hline
+    D1         & К555ЛИ1    \\
+    \hline
+    D2         & К555ЛН1    \\
+    \hline
+    D3         & К555ЛИ1    \\
+    \hline
+    D4         & К555ЛЛ1    \\
+    \hline
+  \end{tabular}
+\end{center}
 
+Определим контакты питания для микросхем ТТЛ:
+\begin{center}
+  Таблица 4 --- Таблица питания для микросхем ТТЛ \\
+  \vspace{5mm}
+  \begin{tabular}{|c|c|c|}
+    \hline
+    Микросхема     & 0V & +5V \\
+    \hline
+    D1, D2, D3, D4 & 14 & 7   \\
+    \hline
+  \end{tabular}
+\end{center}
 \section*{Вывод}
 
 В данной лабораторной работе мы получили навыки синтеза комбинационных схем в базисе <<И, ИЛИ, НЕ>>. Мы синтезировали логическую схему по заданной таблице истинности, используя карту Карно для минимизации функции. В результате мы получили минимальное выражение для функции $F$ и построили функциональную и принципиальную схемы устройства.

@@ -155,7 +155,7 @@
 
 \section{Уравнение функции $F$}
 \begin{equation*}
-  F = \overline{x_0}  \cdot x_1 \cdot  \overline{x_2}  \cdot x_3+x_0 \cdot x_1 \cdot x_2
+F = (\overline{x_0} \cdot x_1 \cdot \overline{x_2} \cdot x_3) + (x_0 \cdot x_1 \cdot x_2 \cdot \overline{x_3}) + (x_0 \cdot x_1 \cdot x_2 \cdot x_3)
 \end{equation*}
 
 \section{Построим карту Карно для минимизации КУ}
@@ -203,23 +203,6 @@
   \caption*{Рисунок 2 --- Принципиальная схема устройства в базисе <<И, ИЛИ, НЕ>>}
 \end{figure}
 \newpage
-\begin{center}
-  Таблица 3 --- Таблица микросхем \\
-  \vspace{5mm}
-  \begin{tabular}{|c|c|}
-    \hline
-    Микросхема & Маркировка \\
-    \hline
-    D1         & К555ЛИ1    \\
-    \hline
-    D2         & К555ЛН1    \\
-    \hline
-    D3         & К555ЛИ1    \\
-    \hline
-    D4         & К555ЛЛ1    \\
-    \hline
-  \end{tabular}
-\end{center}
 
 Определим контакты питания для микросхем ТТЛ:
 \begin{center}
@@ -227,9 +210,9 @@
   \vspace{5mm}
   \begin{tabular}{|c|c|c|}
     \hline
-    Микросхема     & 0V & +5V \\
+    Микросхема     & +5V & 0V \\
     \hline
-    D1, D2, D3, D4 & 14 & 7   \\
+    D1, D2, D3, D4 & 14 & 07   \\
     \hline
   \end{tabular}
 \end{center}

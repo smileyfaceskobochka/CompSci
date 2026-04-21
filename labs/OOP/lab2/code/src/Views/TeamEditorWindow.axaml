@@ -1,0 +1,78 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:RacingSystem.ViewModels"
+        xmlns:core="using:RacingSystem.Core"
+        x:Class="RacingSystem.Views.TeamEditorWindow"
+        x:DataType="vm:TeamEditorViewModel"
+        Title="Edit Team" Width="450" Height="600"
+        WindowStartupLocation="CenterOwner"
+        Background="#252525" Foreground="White">
+
+    <Grid RowDefinitions="*, Auto" Margin="20">
+        <ScrollViewer Grid.Row="0">
+            <StackPanel Spacing="10">
+                <TextBlock Text="Quick Fill (Lab 1 Templates)" FontSize="18" FontWeight="Bold"/>
+                <ComboBox ItemsSource="{Binding Templates}" SelectedItem="{Binding SelectedTemplate}" HorizontalAlignment="Stretch">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="core:FormulaTeam">
+                            <TextBlock Text="{Binding TeamName}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                
+                <Separator Margin="0,10"/>
+                
+                <TextBlock Text="Basic Information" FontSize="18" FontWeight="Bold"/>
+                
+                <TextBlock Text="Team Name:"/>
+                <TextBox Text="{Binding Name}"/>
+
+                <TextBlock Text="Principal:"/>
+                <TextBox Text="{Binding Principal}"/>
+
+                <TextBlock Text="Headquarters:"/>
+                <TextBox Text="{Binding Hq}"/>
+
+                <TextBlock Text="Series Type:"/>
+                <ComboBox ItemsSource="{Binding TeamTypes}" SelectedItem="{Binding SelectedType}" HorizontalAlignment="Stretch"/>
+
+                <Separator Margin="0,10"/>
+                <TextBlock Text="Series Specific Details" FontSize="18" FontWeight="Bold"/>
+
+                <!-- F1 Fields -->
+                <StackPanel Spacing="10" IsVisible="{Binding IsF1}">
+                    <TextBlock Text="Power Unit:"/>
+                    <TextBox Text="{Binding PowerUnit}"/>
+                    <TextBlock Text="Budget Cap (Mln $):"/>
+                    <NumericUpDown Value="{Binding Budget}" Minimum="0"/>
+                    <TextBlock Text="Championship Position:"/>
+                    <NumericUpDown Value="{Binding CtorPos}" Minimum="0" Maximum="20"/>
+                </StackPanel>
+
+                <!-- F2 Fields -->
+                <StackPanel Spacing="10" IsVisible="{Binding IsF2}">
+                    <TextBlock Text="Chassis Model:"/>
+                    <TextBox Text="{Binding Chassis}"/>
+                    <TextBlock Text="F1 Graduates:"/>
+                    <NumericUpDown Value="{Binding Graduates}" Minimum="0"/>
+                    <CheckBox IsChecked="{Binding IsFeeder}" Content="F1 Feeder Series"/>
+                </StackPanel>
+
+                <!-- FE Fields -->
+                <StackPanel Spacing="10" IsVisible="{Binding IsFE}">
+                    <TextBlock Text="Energy Partner:"/>
+                    <TextBox Text="{Binding EnergyPartner}"/>
+                    <TextBlock Text="Battery Capacity (kWh):"/>
+                    <NumericUpDown Value="{Binding BatteryKwh}" Minimum="0"/>
+                    <TextBlock Text="Sustainability Score (0-100):"/>
+                    <NumericUpDown Value="{Binding SustainScore}" Minimum="0" Maximum="100"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,20,0,0">
+            <Button Content="Save" Click="OnSaveClick" Width="80" Background="Green"/>
+            <Button Content="Cancel" Click="OnCancelClick" Width="80"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,215 @@
+\documentclass[oneside,a4paper,14pt]{extarticle}
+\usepackage[a4paper,letterpaper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\usepackage[russian]{babel}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{minted, fancyvrb}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{float}
+
+% Code styling
+\setminted{style = rainbow_dash, fontsize = \small, breaklines}
+
+% Header styles
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+% Spacing
+\renewcommand\baselinestretch{1.33}
+\setlength{\parindent}{1.25cm}
+
+% List styles
+\setlist[enumerate]{
+  left=\parindent,
+  label=\arabic*.,
+  itemsep=0pt,
+  topsep=5pt,
+  partopsep=0pt,
+  parsep=0pt
+}
+
+\setlist[itemize]{
+  left=\parindent,
+  itemsep=0pt,
+  topsep=5pt,
+  partopsep=0pt,
+  parsep=0pt
+}
+
+% Hyperlinks
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  pdfborder={0 0 0},
+  pdftitle={Система управления гоночными командами — Лабораторная работа 3},
+  pdfauthor={Черкасов А.А.}
+}
+
+\begin{document}
+
+\newpage
+\thispagestyle{empty}
+\begin{center}
+  МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ ОБРАЗОВАТЕЛЬНОЕ УЧРЕЖДЕНИЕ ВЫСШЕГО ОБРАЗОВАНИЯ\\
+  «ВЯТСКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ»\\
+  Институт математики и информационных систем\\
+  Факультет автоматики и вычислительной техники\\
+  Кафедра электронных вычислительных машин
+\end{center}
+\vspace{10mm}
+
+\hfill
+\begin{tabular}{l}
+  \footnotesize Дата сдачи на проверку:                                          \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\ \rule[-1mm]{20mm}{0.10mm}\ 2026 г. \\
+  \footnotesize Проверено:                                                       \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\ \rule[-1mm]{20mm}{0.10mm}\ 2026 г. \\
+\end{tabular}
+\vfill
+
+\begin{center}
+  Разработка приложения Formula Racing Management System на Java с использованием Spring Boot и PostgreSQL. \\
+  Отчёт по лабораторной работе №3\\
+  по дисциплине\\
+  <<Объектно-ориентированное программирование>>\\
+\end{center}
+\vspace{25mm}
+\noindent
+\begin{tabular}{ll}
+  Разработал студент гр. ИВТб-2301-05-00 & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Черкасов А. А./ \\
+                                         & \hspace{25.5mm}\footnotesize(подпись)                    \\
+  Преподаватель                  & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Шмакова Н. А./ \\
+                                         & \hspace{25.5mm}\footnotesize(подпись)                    \\
+\end{tabular}
+
+\noindent
+\begin{tabular}{lp{58mm}r}
+  Работа защищена &  & \hspace{13mm}<<\rule[-1mm]{5mm}{0.10mm}\/>>\ \rule[-1mm]{30mm}{0.10mm}\ 2026 г.
+\end{tabular}
+\vfill
+
+\begin{center}
+  Киров\\
+  2026
+\end{center}
+
+\newpage\thispagestyle{plain}
+
+\section*{Цели лабораторной работы}
+\begin{itemize}
+  \item[$-$] освоить разработку веб-приложений на языке Java с использованием фреймворка Spring Boot;
+  \item[$-$] изучить применение ORM-инструмента Hibernate для работы с реляционной базой данных PostgreSQL без написания SQL-запросов вручную;
+  \item[$-$] реализовать полноценное CRUD"=приложение с веб-интерфейсом и нормализованной схемой БД;
+  \item[$-$] изучить инструмент управления миграциями базы данных Flyway.
+\end{itemize}
+
+\section*{Задание}
+Разработать веб-приложение <<Formula Racing Management System>> на языке Java, соответствующее следующим требованиям:
+\begin{enumerate}
+  \item Использовать язык программирования Java.
+  \item Использовать СУБД PostgreSQL.
+  \item Использовать сборщик Maven (зависимости только через \texttt{pom.xml}).
+  \item Использовать Hibernate для работы с сущностями без SQL"=запросов.
+  \item Нормализованная схема БД: не менее трёх связанных таблиц, структура соответствует 3НФ.
+  \item Реализовать CRUD-операции: добавление, просмотр, редактирование и удаление объектов.
+  \item Пользовательский интерфейс реализован в виде HTML"=страниц с использованием шаблонизатора Thymeleaf.
+\end{enumerate}
+
+\clearpage
+\section*{Реализация приложения}
+
+\subsection*{Предметная область}
+Система автоматизирует управление гоночными командами в трёх чемпионатах: Formula 1, Formula 2 и Formula E. Каждая серия объединяет несколько команд, а каждая команда включает пилотов с личными очками. Иерархия объектов отражает реальные данные сезона 2026 года.
+
+\subsection*{Архитектура приложения}
+Проект построен по принципу многоуровневой архитектуры (Layered Architecture) в рамках Spring Boot:
+\begin{itemize}
+  \item[$-$] \textbf{Модели (Models)} --- сущности JPA, отражающие таблицы БД: \texttt{RacingSeries}, \texttt{RacingTeam}, \texttt{RacingDriver}.
+  \item[$-$] \textbf{Репозитории (Repositories)} --- интерфейсы Spring Data JPA, автоматически предоставляющие CRUD-операции и производные запросы (например, \texttt{findByTeam\_SeriesIdOrderByPointsDesc}).
+  \item[$-$] \textbf{Сервис (Service)} --- слой \texttt{RacingService}, инкапсулирующий бизнес-логику и изолирующий контроллер от деталей работы с данными.
+  \item[$-$] \textbf{Контроллер (Controller)} --- \texttt{RacingController}, обрабатывающий HTTP-запросы и передающий данные в шаблоны Thymeleaf.
+  \item[$-$] \textbf{Представление (View)} --- HTML"=шаблоны с разметкой Thymeleaf (\texttt{index.html}, \texttt{team-form.html}, \texttt{driver-form.html}).
+\end{itemize}
+
+\subsection*{Схема базы данных}
+Для хранения данных используется PostgreSQL. Схема нормализована до третьей нормальной формы (3НФ) и содержит три основные таблицы:
+
+\begin{itemize}
+  \item[$-$] \textbf{racing\_series}: хранит информацию о чемпионатах (название, официальное наименование, штаб-квартира, управляющая организация, год основания, количество этапов).
+  \item[$-$] \textbf{racing\_teams}: хранит данные о командах (название, руководитель, база, силовая установка, очки). Каждая команда ссылается на серию через внешний ключ \texttt{series\_id}.
+  \item[$-$] \textbf{racing\_drivers}: хранит данные о пилотах (имя, фамилия, гоночный номер, очки). Каждый пилот привязан к команде через \texttt{team\_id}.
+\end{itemize}
+
+Управление миграциями осуществляется через \textbf{Flyway}: при запуске приложения автоматически применяется скрипт \texttt{V1\_\_init.sql}, создающий таблицы и наполняющий их реальными данными сезона 2026 года (11 команд F1, 4 команды F2, 4 команды FE и 38 пилотов).
+
+\subsection*{JPA-сущности и связи}
+Связи между сущностями реализованы через аннотации JPA:
+
+\begin{minted}{java}
+// В RacingSeries.java
+@OneToMany(mappedBy = "series", cascade = CascadeType.ALL)
+private List<RacingTeam> teams;
+
+// В RacingTeam.java
+@ManyToOne(fetch = FetchType.LAZY)
+@JoinColumn(name = "series_id", nullable = false)
+private RacingSeries series;
+
+@OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+private List<RacingDriver> drivers;
+\end{minted}
+
+Такой подход позволяет Hibernate автоматически выстраивать граф объектов при загрузке, не требуя написания SQL JOIN"=запросов.
+
+\subsection*{Получение рейтинга пилотов по сериям}
+Для отображения личного зачёта пилотов по каждой серии в репозитории объявлен производный запрос Spring Data:
+
+\begin{minted}{java}
+List<RacingDriver> findByTeam_SeriesIdOrderByPointsDesc(Long seriesId);
+\end{minted}
+
+Spring Data JPA автоматически генерирует SQL"=запрос на основе имени метода. Сервис формирует \texttt{LinkedHashMap<RacingSeries, List<RacingDriver>>}, который Thymeleaf итерирует для отрисовки таблицы личного зачёта с разделителями по сериям.
+
+\subsection*{Веб-интерфейс}
+Интерфейс реализован как многостраничное веб-приложение в стиле Catppuccin Mocha (тёмная тема). Главная страница \texttt{index.html} содержит три раздела:
+\begin{itemize}
+  \item[$-$] \textbf{Таблица команд}: команды сгруппированы по чемпионатам. Каждая группа начинается с цветного заголовка-разделителя, содержащего метаданные серии (год основания, количество этапов, штаб-квартира, управляющая организация).
+  \item[$-$] \textbf{Таблица пилотов}: полный список всех пилотов также с разделителями по сериям (\texttt{<th:block>} внутри \texttt{<tbody>}).
+  \item[$-$] \textbf{Личный зачёт}: пилоты отсортированы по очкам внутри каждой серии.
+\end{itemize}
+
+\section*{Вывод}
+В ходе выполнения лабораторной работы было разработано веб-приложение на Java с использованием фреймворка Spring Boot, СУБД PostgreSQL, Hibernate и шаблонизатора Thymeleaf. Из лабораторных работ №1 и №2 была перенесена и расширена предметная область <<Управление гоночными командами>>. Реализованы нормализованная схема БД в 3НФ, автоматические миграции Flyway, CRUD-операции для трёх сущностей и структурированный веб-интерфейс с группировкой данных по сериям и отображением личного зачёта пилотов.
+
+\newpage
+
+\section*{Приложение А1. Сущность RacingSeries.java}
+\inputminted{java}{code/src/main/java/com/vyatsu/racing/models/RacingSeries.java}
+
+\section*{Приложение А2. Сущность RacingTeam.java}
+\inputminted{java}{code/src/main/java/com/vyatsu/racing/models/RacingTeam.java}
+
+\section*{Приложение А3. Сущность RacingDriver.java}
+\inputminted{java}{code/src/main/java/com/vyatsu/racing/models/RacingDriver.java}
+
+\section*{Приложение А4. RacingDriverRepository.java}
+\inputminted{java}{code/src/main/java/com/vyatsu/racing/repositories/RacingDriverRepository.java}
+
+\section*{Приложение А5. RacingService.java}
+\inputminted{java}{code/src/main/java/com/vyatsu/racing/services/RacingService.java}
+
+\section*{Приложение А6. RacingController.java}
+\inputminted{java}{code/src/main/java/com/vyatsu/racing/controllers/RacingController.java}
+
+\section*{Приложение А7. Скрипт миграции V1\_\_init.sql}
+\inputminted{sql}{code/src/main/resources/db/migration/V1__init.sql}
+
+\section*{Приложение А8. Главная страница index.html}
+\inputminted{html}{code/src/main/resources/templates/index.html}
+
+\end{document}

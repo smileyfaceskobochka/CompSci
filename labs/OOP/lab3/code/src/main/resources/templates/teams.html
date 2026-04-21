@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teams — Racing Management</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<nav class="navbar">
+    <div class="navbar-inner">
+        <a href="/" class="nav-brand">🏎 Racing System</a>
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/teams">Teams</a>
+            <a href="/drivers">Drivers</a>
+        </div>
+    </div>
+</nav>
+<main class="content">
+<div class="page-header">
+    <div>
+        <h1>🏁 Racing Teams</h1>
+    </div>
+    <a href="/teams/add" class="btn btn-add">+ Add Team</a>
+</div>
+
+<div th:each="series : ${seriesList}">
+    <div class="series-header"
+         th:classappend="${series.name == 'Formula 1' ? 'f1' : (series.name == 'Formula 2' ? 'f2' : (series.name == 'Formula E' ? 'fe' : (series.name == 'WEC' ? 'wec' : (series.name == 'IndyCar' ? 'indy' : (series.name == 'MotoGP' ? 'moto' : '')))))}">
+        <div>
+            <div class="series-name" th:text="${series.name}"></div>
+            <div class="series-official" th:text="${series.officialName}"></div>
+        </div>
+        <div class="series-pills">
+            <div class="pill">Founded <b th:text="${series.foundedYear}"></b></div>
+            <div class="pill"><b th:text="${series.rounds}"></b> Rounds</div>
+            <div class="pill" th:text="${series.headquarters}"></div>
+        </div>
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Team</th><th>Principal</th><th>HQ</th><th>Power Unit</th><th>Points</th><th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="team : ${series.teams}">
+                <td class="name">
+                    <span class="team-accent" th:style="'background-color:' + ${team.teamColor}"></span>
+                    <span th:text="${team.name}"></span>
+                </td>
+                <td th:text="${team.principalName}"></td>
+                <td th:text="${team.baseLocation}"></td>
+                <td><span class="badge pu" th:text="${team.powerUnit ?: '—'}"></span></td>
+                <td class="pts yellow" th:text="${team.points}"></td>
+                <td class="actions">
+                    <a th:href="@{/teams/edit/{id}(id=${team.id})}" class="btn btn-sm edit">Edit</a>
+                    <a th:href="@{/teams/delete/{id}(id=${team.id})}" class="btn btn-sm del"
+                       onclick="return confirm('Delete this team?');">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</main>
+</body>
+</html>

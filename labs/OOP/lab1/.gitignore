@@ -1,0 +1,18 @@
+# C++ / Xmake
+code/build/
+code/.xmake/
+.xmake/
+*.o
+*.obj
+*.exe
+*.out
+
+# LaTeX
+_minted*/
+*.aux
+*.log
+*.out
+*.toc
+*.pdf
+*.pyg
+*.synctex.gz

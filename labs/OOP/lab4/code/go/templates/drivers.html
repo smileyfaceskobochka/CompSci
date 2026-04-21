@@ -1,0 +1,68 @@
+{{template "layout.html" .}}
+{{define "title"}}Drivers — Racing System{{end}}
+{{define "content"}}
+<div class="page-header">
+    <h1>Drivers Championship</h1>
+    <a href="/drivers/new" class="btn btn-add">+ Add Driver</a>
+</div>
+
+<form class="filter-bar" method="GET" action="/drivers">
+    <select name="series_id" class="filter-select">
+        <option value="">All Series</option>
+        {{range .Series}}
+        <option value="{{.ID}}" {{if eq (printf "%d" .ID) $.SelectedSeries}}selected{{end}}>{{.Name}}</option>
+        {{end}}
+    </select>
+    <select name="sort" class="filter-select">
+        <option value="points">Sort: Points</option>
+        <option value="name">Sort: Name</option>
+        <option value="number">Sort: Number</option>
+    </select>
+    <select name="order" class="filter-select">
+        <option value="desc">Descending</option>
+        <option value="asc">Ascending</option>
+    </select>
+    <button class="btn" type="submit">Apply</button>
+    <a href="/drivers" class="btn btn-ghost">Reset</a>
+</form>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>#</th><th>Driver</th><th>No.</th><th>Pts</th><th>Team</th><th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {{range .Series}}
+        <tr class="series-row {{seriesClass .Name}}">
+            <td colspan="6">{{.Name}} — {{.OfficialName}}</td>
+        </tr>
+        {{$sID := .ID}}
+        {{range $.Drivers}}
+            {{if .Team}}
+                {{if eq .Team.SeriesID $sID}}
+                <tr>
+                    <td class="dim">{{.ID}}</td>
+                    <td class="name">
+                        <span class="team-accent" style="background-color: {{.Team.TeamColor}}"></span>
+                        {{.FullName}}
+                    </td>
+                    <td><span class="badge num">#{{.RacingNumber}}</span></td>
+                    <td class="pts yellow">{{.Points}}</td>
+                    <td>{{.Team.Name}}</td>
+                    <td class="actions">
+                        <a href="/drivers/{{.ID}}/edit" class="btn btn-sm edit">Edit</a>
+                        <form method="POST" action="/drivers/{{.ID}}/delete" style="display:inline" onsubmit="return confirm('Delete driver?')">
+                            <button class="btn btn-sm del">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {{end}}
+            {{end}}
+        {{end}}
+    {{else}}
+    <tr><td colspan="6" class="empty">No data found</td></tr>
+    {{end}}
+    </tbody>
+</table>
+{{end}}

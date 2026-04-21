@@ -1,0 +1,24 @@
+# Python
+code/python/__pycache__/
+code/python/venv/
+code/python/*.log
+code/python/.env
+venv/
+__pycache__/
+*.pyc
+
+# Go
+code/go/main
+code/go/*.log
+code/go/tmp/
+go.sum
+
+# LaTeX
+_minted*/
+*.aux
+*.log
+*.out
+*.toc
+*.pdf
+*.pyg
+*.synctex.gz

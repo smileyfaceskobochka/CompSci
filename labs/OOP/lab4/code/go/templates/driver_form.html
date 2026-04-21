@@ -1,0 +1,69 @@
+{{template "layout.html" .}}
+{{define "title"}}{{if .IsNew}}New Driver{{else}}Edit Driver{{end}} — Racing System{{end}}
+{{define "content"}}
+<div class="page-header">
+    <h1>{{if .IsNew}}New Driver{{else}}Edit Driver{{end}}</h1>
+    <a href="/drivers" class="btn btn-ghost">← Back</a>
+</div>
+
+{{if .Errors}}
+<div class="error-box">
+    {{range .Errors}}<p>⚠ {{.}}</p>{{end}}
+</div>
+{{end}}
+
+<form class="form-card" method="POST"
+      action="{{if .IsNew}}/drivers{{else}}/drivers/{{.Driver.ID}}{{end}}"
+      onsubmit="return validateDriver()">
+    <div class="form-row">
+        <div class="form-group">
+            <label>First Name *</label>
+            <input type="text" name="first_name" id="first_name" value="{{.Driver.FirstName}}" required
+                   placeholder="e.g. Oscar">
+        </div>
+        <div class="form-group">
+            <label>Last Name *</label>
+            <input type="text" name="last_name" id="last_name" value="{{.Driver.LastName}}" required
+                   placeholder="e.g. Piastri">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label>Racing Number * (1–99)</label>
+            <input type="number" name="racing_number" id="racing_number"
+                   value="{{.Driver.RacingNumber}}" min="1" max="99" required>
+        </div>
+        <div class="form-group">
+            <label>Points</label>
+            <input type="number" name="points" value="{{.Driver.Points}}" min="0">
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Team *</label>
+        <select name="team_id" required>
+            <option value="">— Select team —</option>
+            {{range .Teams}}
+            <option value="{{.ID}}" {{if eq .ID $.Driver.TeamID}}selected{{end}}>{{.Name}}</option>
+            {{end}}
+        </select>
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-save">{{if .IsNew}}Create Driver{{else}}Save Changes{{end}}</button>
+        <a href="/drivers" class="btn btn-ghost">Cancel</a>
+    </div>
+</form>
+
+<script>
+function validateDriver() {
+    const fn = document.getElementById('first_name').value.trim();
+    const ln = document.getElementById('last_name').value.trim();
+    const num = parseInt(document.getElementById('racing_number').value);
+    const errs = [];
+    if (!fn) errs.push('First name is required');
+    if (!ln) errs.push('Last name is required');
+    if (isNaN(num) || num < 1 || num > 99) errs.push('Racing number must be 1–99');
+    if (errs.length > 0) { alert(errs.join('\n')); return false; }
+    return true;
+}
+</script>
+{{end}}

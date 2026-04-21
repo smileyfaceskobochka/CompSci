@@ -1,0 +1,10 @@
+add_rules("mode.debug", "mode.release")
+
+target("FormulaRacing")
+    set_kind("binary")
+    set_languages("c++20")
+    set_toolchains("llvm")
+    add_includedirs("src")
+    add_headerfiles("src/**.h")
+    add_files("src/**.cpp")
+    set_targetdir("build")

@@ -1,0 +1,11 @@
+# .NET / C#
+code/src/bin/
+code/src/obj/
+bin/
+obj/
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates

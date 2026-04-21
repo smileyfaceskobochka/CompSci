@@ -1,0 +1,212 @@
+\documentclass[oneside,a4paper,14pt]{extarticle}
+\usepackage[a4paper,letterpaper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\usepackage[russian]{babel}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{minted, fancyvrb}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{float}
+\DeclareUnicodeCharacter{2500}{-}
+\DeclareUnicodeCharacter{1F3CE}{} % 🏎
+\DeclareUnicodeCharacter{1F3C6}{} % 🏆
+\DeclareUnicodeCharacter{1F947}{} % 🥇
+\DeclareUnicodeCharacter{26A1}{}  % ⚡
+\DeclareUnicodeCharacter{1F4CB}{} % 📋
+\DeclareUnicodeCharacter{1F3D7}{} % 🏗
+\DeclareUnicodeCharacter{1F3C1}{} % 🏁
+\DeclareUnicodeCharacter{1F468}{} % 🧑
+\DeclareUnicodeCharacter{200D}{}  % ZWJ
+\DeclareUnicodeCharacter{1F680}{} % 🚀
+\DeclareUnicodeCharacter{270E}{}  % ✎
+
+% Code styling
+\setminted{style = rainbow_dash, fontsize = \small, breaklines}
+
+% Header styles
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+% Spacing
+\renewcommand\baselinestretch{1.33}
+\setlength{\parindent}{1.25cm}
+
+% List styles
+\setlist[enumerate]{
+  left=\parindent,
+  label=\arabic*.,
+  itemsep=0pt,
+  topsep=5pt,
+  partopsep=0pt,
+  parsep=0pt
+}
+\setlist[itemize]{
+  left=\parindent,
+  itemsep=0pt,
+  topsep=5pt,
+  partopsep=0pt,
+  parsep=0pt
+}
+
+% Hyperlinks
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  pdfborder={0 0 0},
+  pdftitle={Система управления гоночными командами — Лабораторная работа 4},
+  pdfauthor={Черкасов А.А.}
+}
+
+\begin{document}
+
+\newpage
+\thispagestyle{empty}
+\begin{center}
+  МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ ОБРАЗОВАТЕЛЬНОЕ УЧРЕЖДЕНИЕ ВЫСШЕГО ОБРАЗОВАНИЯ\\
+  «ВЯТСКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ»\\
+  Институт математики и информационных систем\\
+  Факультет автоматики и вычислительной техники\\
+  Кафедра электронных вычислительных машин
+\end{center}
+\vspace{10mm}
+
+\hfill
+\begin{tabular}{l}
+  \footnotesize Дата сдачи на проверку:                                          \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\ \rule[-1mm]{20mm}{0.10mm}\ 2026 г. \\
+  \footnotesize Проверено:                                                       \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\ \rule[-1mm]{20mm}{0.10mm}\ 2026 г. \\
+\end{tabular}
+\vfill
+
+\begin{center}
+  Разработка распределённой веб-системы Formula Racing Management System на Go и Python с базой данных PostgreSQL. \\
+  Отчёт по лабораторной работе №4\\
+  по дисциплине\\
+  <<Объектно-ориентированное программирование>>\\
+\end{center}
+\vspace{25mm}
+\noindent
+\begin{tabular}{ll}
+  Разработал студент гр. ИВТб-2301-05-00 & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Черкасов А. А./ \\
+                                         & \hspace{25.5mm}\footnotesize(подпись)                    \\
+  Преподаватель                  & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Шмакова Н. А./ \\
+                                         & \hspace{25.5mm}\footnotesize(подпись)                    \\
+\end{tabular}
+
+\noindent
+\begin{tabular}{lp{58mm}r}
+  Работа защищена &  & \hspace{13mm}<<\rule[-1mm]{5mm}{0.10mm}\/>>\ \rule[-1mm]{30mm}{0.10mm}\ 2026 г.
+\end{tabular}
+\vfill
+
+\begin{center}
+  Киров\\
+  2026
+\end{center}
+
+% ──────────────────────────────────────────────────────────────────────────────
+\newpage\thispagestyle{plain}
+
+\section*{Цели лабораторной работы}
+\begin{itemize}
+  \item[$-$] разработать распределённое веб-приложение на базе микросервисной архитектуры;
+  \item[$-$] реализовать бизнес-логику и веб-интерфейс на языке Go;
+  \item[$-$] реализовать слой доступа к данным на Python через ORM SQLAlchemy, подключившись к существующей схеме базы данных из предыдущих лабораторных работ (PostgreSQL);
+  \item[$-$] обеспечить взаимодействие между сервисами через HTTP (REST API).
+\end{itemize}
+
+\section*{Задание}
+\begin{enumerate}
+  \item Использовать базу данных из Лабораторной работы №3 (PostgreSQL) без модификации структуры таблиц.
+  \item Написать слой доступа к данным на Python с использованием SQLAlchemy и паттерна <<Репозиторий>> (CRUD).
+  \item Написать бизнес-логику на Go, реализующую: интерфейс пользователя (HTML/CSS), фильтрацию данных, агрегацию (сумма/среднее), валидацию форм, кэширование In-Memory с TTL, проксирование и методы из ЛР №1.
+  \item Реализовать CRUD-интерфейс для всех объектов: Просмотр, Редактирование, Удаление, Добавление.
+  \item Обеспечить выпадающие списки (Foreign Keys) и отображение связанных сущностей при просмотре объектов (например, Команды и Серии).
+\end{enumerate}
+
+% ──────────────────────────────────────────────────────────────────────────────
+\clearpage
+\section*{Реализация приложения}
+
+\subsection*{Архитектура распределённой системы}
+Проект <<Formula Racing>> реализован в виде трёхзвенной распределённой архитектуры:
+\begin{enumerate}
+    \item \textbf{Клиент (Браузер):} Получает отрендеренные \texttt{HTML/CSS/JS} страницы с сервера Go. Тематическое цветовое оформление реализовано с использованием набора цвета Catppuccin Mocha.
+    \item \textbf{BFF-Сервер (Backend-for-Frontend, Go):} Точка входа для браузера. Выполняет функции рендеринга шаблонов, кэширования запросов к Python-серверу на протяжении 5 минут (in-memory TTLCache), маршрутизации REST-запросов и вычисления бизнес-логики (обработка списков пилотов).
+    \item \textbf{Data-API Сервер (Python/Flask):} Инкапсулирует подключение к существующей базе данных PostgreSQL. Обрабатывает REST-запросы от Go и выполняет SQL-команды используя паттерн ООП Repository.
+\end{enumerate}
+
+\subsection*{Моделирование репозитория на Python}
+Доступ к данным обеспечен через ORM-библиотеку SQLAlchemy. Все сущности строго соответствуют схеме базы данных PostgreSQL (созданной Flyway в ЛР №3): \texttt{racing\_series}, \texttt{racing\_teams}, \texttt{racing\_drivers}.
+
+Для реализации внешних ключей и связей применены \texttt{ForeignKey(..., ondelete='CASCADE')} и \texttt{relationship}:
+\begin{itemize}
+  \item \textbf{В классе RacingDriver:} поле \texttt{team\_id = Column(BigInteger, ForeignKey("racing\_teams.id"))} связывает пилота с его командой, \texttt{relationship} позволяет подгружать связанные сущности через механизмы eager-loading.
+  \item \textbf{В классе RacingTeam:} поле \texttt{series\_id} указывает на гоночный чемпионат (\texttt{RacingSeries}).
+\end{itemize}
+
+Слой API представляет собой приложение на основе Flask, объявляющее роуты (роутинг \texttt{@app.route}) к функциям-репозиториям, скрывающим сложную логику работы с сессиями.
+
+\subsection*{Бизнес-логика и интерфейс на Go}
+Клиентская логика и веб-интерфейс разработаны в пакете Go при помощи стандартных библиотек \texttt{net/http} и \texttt{html/template}.
+
+\textbf{Функции на стороне Go включают:}
+\begin{itemize}
+    \item[$-$] \textbf{ООП-методы (ЛР №1):} Функции \texttt{CalculateF1Points}, \texttt{GetWinRate} написаны на Go и вызываются прямо внутри HTML-шаблонов благодаря \texttt{template.FuncMap}.
+    \item[$-$] \textbf{Агрегация и фильтрация:} Функция \texttt{ComputeStats} обходит массивы структур и высчитывает агрегированные данные: среднее количество очков, максимальное количество очков у лидирующего пилота. Функция \texttt{SortDrivers} позволяет клиенту динамически отсортировать результат.
+    \item[$-$] \textbf{Валидация перед отправкой:} Функции проверки бизнес-правил (\texttt{ValidateTeam}, \texttt{ValidateDriver}) исполняются на сервере Go перед отправкой запроса на сервер Python. Таким образом Data-сервер изолирован от "грязных" данных.
+    \item[$-$] \textbf{In-Memory кэширование:} Реализован модуль \texttt{cache.go} с использованием RW-блокировок (\texttt{sync.RWMutex}) и встроенного сборщика мусора на независимой горутине. При частых GET-запросах, результат возвращается мгновенно, минуя Python-сервер (TTL 5 минут).
+\end{itemize}
+
+Для добавления или изменения Команд/Пилотов используются HTML-формы с выпадающими списками (загружающими связанные чемпионаты или команды через подгруженные Foreign Keys с Python API), реализуя полноценный CRUD-цикл.
+
+\section*{Вывод}
+В результате выполнения лабораторной работы была успешно внедрена распределённая клиент-серверная микросервисная архитектура без изменения исходной схемы базы данных. Перенос операций хранения на Python с использованием ORM-репозиториев в связке с легковесным, кеширующим сервером отображения на Go позволил получить масштабируемую, стабильную и независимую систему с удобным графическим Catppuccin веб-интерфейсом.
+
+\newpage
+
+\section*{Приложение А1. Go: Выделенные предметные модели (models.go)}
+\inputminted{go}{code/go/models.go}
+
+\section*{Приложение А2. Go: Бизнес-логика и агрегация (business.go)}
+\inputminted{go}{code/go/business.go}
+
+\section*{Приложение А3. Go: Модуль In-Memory кэширования (cache.go)}
+\inputminted{go}{code/go/cache.go}
+
+\section*{Приложение А4. Go: API-клиент (api\_client.go)}
+\inputminted{go}{code/go/api_client.go}
+
+\section*{Приложение А5. Go: Основные HTTP обработчики (handlers.go)}
+\inputminted{go}{code/go/handlers.go}
+
+\section*{Приложение А6. Go: Обертка инициализации (main.go)}
+\inputminted{go}{code/go/main.go}
+
+\section*{Приложение В1. Python: Модели БД SQLAlchemy (models.py)}
+\inputminted{python}{code/python/models.py}
+
+\section*{Приложение В2. Python: CRUD-репозиторий (repository.py)}
+\inputminted{python}{code/python/repository.py}
+
+\section*{Приложение В3. Python: Flask REST API (app.py)}
+\inputminted{python}{code/python/app.py}
+
+\section*{Приложение С1. Веб-интерфейс: Главная страница (templates/index.html)}
+\inputminted{html}{code/go/templates/index.html}
+
+\section*{Приложение С2. Веб-интерфейс: Список команд (templates/teams.html)}
+\inputminted{html}{code/go/templates/teams.html}
+
+\section*{Приложение С3. Веб-интерфейс: Список пилотов (templates/drivers.html)}
+\inputminted{html}{code/go/templates/drivers.html}
+
+\section*{Приложение С4. Веб-интерфейс: Стили (static/style.css)}
+\inputminted{css}{code/go/static/style.css}
+
+\end{document}

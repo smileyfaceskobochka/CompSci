@@ -1,0 +1,205 @@
+\documentclass[oneside,a4paper,14pt]{extarticle}
+\usepackage[a4paper,letterpaper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\usepackage[russian]{babel}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{minted, fancyvrb}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+% Code styling
+\setminted{style = rainbow_dash, fontsize = \small, breaklines}
+
+% Header styles
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+% Spacing
+\renewcommand\baselinestretch{1.33}
+
+\setlength{\parindent}{1.25cm}  % длина красной строки
+
+% List styles
+\setlist[enumerate]{
+  left=\parindent,
+  label=\arabic*.,
+  itemsep=0pt,
+  topsep=5pt,
+  partopsep=0pt,
+  parsep=0pt
+}
+
+\setlist[itemize]{
+  left=\parindent,
+  itemsep=0pt,
+  topsep=5pt,
+  partopsep=0pt,
+  parsep=0pt
+}
+
+% Hyperlinks
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  pdfborder={0 0 0},
+  pdftitle={Система управления гоночными командами Formula Racing},
+  pdfauthor={Черкасов А.А.}
+}
+
+\begin{document}
+
+\newpage
+\thispagestyle{empty}
+\begin{center}
+  МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ ОБРАЗОВАТЕЛЬНОЕ УЧРЕЖДЕНИЕ ВЫСШЕГО ОБРАЗОВАНИЯ\\
+  «ВЯТСКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ»\\
+  Институт математики и информационных систем\\
+  Факультет автоматики и вычислительной техники\\
+  Кафедра электронных вычислительных машин
+\end{center}
+\vspace{10mm}
+
+\hfill
+\begin{tabular}{l}
+  \footnotesize Дата сдачи на проверку:                                          \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2026 г. \\
+  \footnotesize Проверено:                                                       \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2026 г. \\
+\end{tabular}
+\vfill
+
+\begin{center}
+  Разработка иерархии классов Formula Racing Management System на C++. \\
+  Отчёт по лабораторной работе №1\\
+  по дисциплине\\
+  <<Объектно-ориентированное программирование>>\\
+\end{center}
+\vspace{25mm}
+\noindent
+\begin{tabular}{ll}
+  Разработал студент гр. ИВТб-2301-05-00 & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Черкасов А. А./ \\
+                                         & \hspace{25.5mm}\footnotesize(подпись)                    \\
+  Преподователь                  & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Шмакова Н. А./   \\
+                                         & \hspace{25.5mm}\footnotesize(подпись)                    \\
+\end{tabular}
+
+\noindent
+\begin{tabular}{lp{58mm}r}
+  Работа защищена &  & \hspace{13mm}<<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{30mm}{0.10mm}\ 2026 г.
+\end{tabular}
+\vfill
+
+\begin{center}
+  Киров\\
+  2026
+\end{center}
+
+\newpage\thispagestyle{plain}
+
+\section*{Цели лабораторной работы}
+\begin{itemize}
+  \item[$-$] изучить принципы инкапсуляции, наследования и полиморфизма в языке C++;
+  \item[$-$] научиться проектировать иерархию классов с использованием абстрактных базовых классов и виртуальных функций;
+  \item[$-$] освоить работу с объектами через указатели базового типа и использование векторов смарт-указателей.
+\end{itemize}
+
+\section*{Задание}
+Разработать приложение <<Formula Racing Management System>>, демонстрирующее принципы ООП, со следующими требованиями:
+\begin{enumerate}
+  \item Создать иерархию классов: один родительский (абстрактный) и три дочерних (F1Team, F2Team, FormulaETeam).
+  \item В каждом классе определить не менее двух данных-членов и двух собственных методов.
+  \item Для дочерних классов реализовать не менее двух унаследованных и двух перекрытых функций.
+  \item Доступ к полям реализовать только через геттеры и сеттеры.
+  \item Обеспечить наличие не менее 3-х конструкторов в дочерних классах.
+  \item Работу с объектами осуществлять только через переменные родительского типа (полиморфизм).
+  \item Каждый класс должен находиться в отдельном файле.
+  \item Продемонстрировать перегрузку операторов ($+=, ==, >, <<$).
+\end{enumerate}
+
+\clearpage
+\section*{Реализация приложения}
+
+\subsection*{Предметная область}
+Система предназначена для управления гоночными командами различных серий (Formula 1, Formula 2 и Formula E). Каждая серия имеет свои особенности начисления очков, бюджетные ограничения и технические параметры, что делает их идеальными кандидатами для демонстрации наследования и полиморфизма.
+
+\subsection*{Диаграмма классов}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{pics/class_diagram.png}
+  \caption{Диаграмма классов системы управления гоночными командами}
+\end{figure}
+
+Описание иерархии:
+\begin{itemize}
+  \item[$-$] \texttt{FormulaTeam} (Abstract) $-$ базовый класс, хранящий общую информацию (название, руководитель, очки, победы, подиумы). Содержит чистые виртуальные методы displayInfo(), getSeriesName(), calculatePoints();
+  \item[$-$] \texttt{F1Team} $-$ дочерний класс, добавляющий параметры бюджета, позиции в чемпионате и силовой установки.
+  \item[$-$] \texttt{F2Team} $-$ дочерний класс, фокусирующийся на подготовке пилотов (выпускники F1) и модели шасси.
+  \item[$-$] \texttt{FormulaETeam} $-$ дочерний класс, учитывающий экологический рейтинг, емкость батарей и энергетических партнеров.
+\end{itemize}
+
+\subsection*{Особенности реализации}
+
+\subsubsection*{Абстрактный базовый класс}
+Базовый класс \texttt{FormulaTeam} является абстрактным, так как содержит чистые виртуальные функции. Это гарантирует, что мы не сможем создать экземпляр общего типа <<Команда>>, а будем работать только с конкретными реализациями.
+
+\begin{minted}{cpp}
+virtual void displayInfo() const = 0;
+virtual std::string getSeriesName() const = 0;
+virtual int calculatePoints(int position) const = 0;
+\end{minted}
+
+\subsubsection*{Полиморфизм и смарт-указатели}
+В \texttt{main.cpp} используется \texttt{std::vector\textless FormulaTeam*\textgreater}, что позволяет хранить объекты разных типов в одном контейнере и вызывать их методы через интерфейс базового класса. Очистка памяти производится вручную в конце программы.
+
+\begin{minted}{cpp}
+for (const auto* team : teams) {
+    team->displayInfo(); // Вызов перекрытого метода
+}
+\end{minted}
+
+\subsubsection*{Перегрузка операторов}
+Реализована перегрузка операторов для удобной работы с объектами:
+\begin{itemize}
+  \item \texttt{operator+=} $-$ добавление очков;
+  \item \texttt{operator==} $-$ сравнение команд по названию;
+  \item \texttt{operator\textgreater} $-$ сравнение по количеству очков (используется для сортировки);
+  \item \texttt{operator\textless\textless} $-$ потоковый вывод краткой информации.
+\end{itemize}
+
+\section*{Вывод}
+В ходе выполнения лабораторной работы была разработана иерархия классов для управления гоночными командами. Были успешно продемонстрированы ключевые принципы ООП: инкапсуляция через приватные поля и методы доступа, наследование функционала базового класса и полиморфизм при обработке контейнера объектов разных типов через указатель базового класса. Использование раздельной компиляции (каждый класс в своем файле) делает проект масштабируемым и легкочитаемым.
+
+\newpage
+
+\section*{Приложение А1. Базовый класс FormulaTeam.h}
+\inputminted{cpp}{code/src/core/FormulaTeam.h}
+
+\section*{Приложение А2. Базовый класс FormulaTeam.cpp}
+\inputminted{cpp}{code/src/core/FormulaTeam.cpp}
+
+\section*{Приложение А3. Класс F1Team.h}
+\inputminted{cpp}{code/src/core/F1Team.h}
+
+\section*{Приложение А4. Класс F1Team.cpp}
+\inputminted{cpp}{code/src/core/F1Team.cpp}
+
+\section*{Приложение А5. Класс F2Team.h}
+\inputminted{cpp}{code/src/core/F2Team.h}
+
+\section*{Приложение А6. Класс F2Team.cpp}
+\inputminted{cpp}{code/src/core/F2Team.cpp}
+
+\section*{Приложение А7. Класс FormulaETeam.h}
+\inputminted{cpp}{code/src/core/FormulaETeam.h}
+
+\section*{Приложение А8. Класс FormulaETeam.cpp}
+\inputminted{cpp}{code/src/core/FormulaETeam.cpp}
+
+\section*{Приложение А9. Главный файл main.cpp}
+\inputminted{cpp}{code/src/main.cpp}
+
+\end{document}

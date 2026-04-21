@@ -1,0 +1,70 @@
+{{template "layout.html" .}}
+{{define "title"}}Teams — Racing System{{end}}
+{{define "content"}}
+<div class="page-header">
+    <h1>Racing Teams</h1>
+    <a href="/teams/new" class="btn btn-add">+ Add Team</a>
+</div>
+
+<!-- Business filters -->
+<form class="filter-bar" method="GET" action="/teams">
+    <select name="sort" class="filter-select">
+        <option value="">Sort by…</option>
+        <option value="points" {{if eq .SortField "points"}}selected{{end}}>Points</option>
+        <option value="name" {{if eq .SortField "name"}}selected{{end}}>Name</option>
+    </select>
+    <select name="order" class="filter-select">
+        <option value="desc" {{if eq .SortOrder "desc"}}selected{{end}}>Descending</option>
+        <option value="asc"  {{if eq .SortOrder "asc"}}selected{{end}}>Ascending</option>
+    </select>
+    <input name="min_points" type="number" placeholder="Min points" class="filter-input" value="{{.MinPoints}}">
+    <button class="btn" type="submit">Apply</button>
+    <a href="/teams" class="btn btn-ghost">Reset</a>
+</form>
+
+{{range .Series}}
+    <div class="series-header {{seriesClass .Name}}">
+        <div>
+            <div class="series-name">{{.Name}}</div>
+            <div class="series-official">{{.OfficialName}}</div>
+        </div>
+        <div class="series-pills">
+            <div class="pill">Founded <b>{{.FoundedYear}}</b></div>
+            <div class="pill"><b>{{.Rounds}}</b> Rounds</div>
+            <div class="pill">{{.Headquarters}}</div>
+        </div>
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Team</th><th>Principal</th><th>HQ</th><th>Power Unit</th><th>Points</th><th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {{$sID := .ID}}
+        {{range $.Teams}}
+            {{if eq .SeriesID $sID}}
+            <tr>
+                <td class="name">
+                    <span class="team-accent" style="background-color: {{.TeamColor}}"></span>
+                    {{.Name}}
+                </td>
+                <td>{{.PrincipalName}}</td>
+                <td>{{.BaseLocation}}</td>
+                <td><span class="badge pu">{{if .PowerUnit}}{{.PowerUnit}}{{else}}—{{end}}</span></td>
+                <td class="pts yellow">{{.Points}}</td>
+                <td class="actions">
+                    <a href="/teams/{{.ID}}/edit" class="btn btn-sm edit">Edit</a>
+                    <form method="POST" action="/teams/{{.ID}}/delete" style="display:inline" onsubmit="return confirm('Delete team?')">
+                        <button class="btn btn-sm del">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {{end}}
+        {{end}}
+        </tbody>
+    </table>
+{{else}}
+    <div class="empty">No data available</div>
+{{end}}
+{{end}}

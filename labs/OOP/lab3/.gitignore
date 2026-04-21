@@ -1,0 +1,17 @@
+# Java / Maven
+code/target/
+target/
+code/boot.log
+*.class
+*.jar
+*.war
+*.ear
+*.log
+
+# IDEs
+.idea/
+.classpath
+.project
+.settings/
+*.iml
+.DS_Store

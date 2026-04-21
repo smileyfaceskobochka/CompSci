@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drivers — Racing Management</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="/" class="nav-brand">🏎 Racing System</a>
+            <div class="nav-links">
+                <a href="/">Dashboard</a>
+                <a href="/teams">Teams</a>
+                <a href="/drivers">Drivers</a>
+            </div>
+        </div>
+    </nav>
+    <main class="content">
+
+        <div class="page-header">
+            <div>
+                <h1>All Drivers</h1>
+            </div>
+            <a href="/drivers/add" class="btn btn-add">+ Add Driver</a>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Driver</th>
+                    <th>No.</th>
+                    <th>Pts</th>
+                    <th>Team</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <th:block th:each="series : ${seriesList}">
+                    <tr class="series-row"
+                    th:classappend="${series.name == 'Formula 1' ? 'f1' : (series.name == 'Formula 2' ? 'f2' : (series.name == 'Formula E' ? 'fe' : (series.name == 'WEC' ? 'wec' : (series.name == 'IndyCar' ? 'indy' : (series.name == 'MotoGP' ? 'moto' : '')))))}">
+                        <td colspan="6" th:text="${series.name + ' — ' + series.officialName}"></td>
+                    </tr>
+                    <th:block th:each="team : ${series.teams}">
+                        <tr th:each="driver : ${team.drivers}">
+                            <td th:text="${driver.id}" class="dim"></td>
+                            <td class="name">
+                                <span class="team-accent" th:style="'background-color:' + ${team.teamColor}"></span>
+                                <span th:text="${driver.firstName + ' ' + driver.lastName}"></span>
+                            </td>
+                            <td><span class="badge num" th:text="'#' + ${driver.racingNumber}"></span></td>
+                            <td class="pts yellow" th:text="${driver.points}"></td>
+                            <td th:text="${team.name}"></td>
+                            <td class="actions">
+                                <a th:href="@{/drivers/edit/{id}(id=${driver.id})}" class="btn btn-sm edit">Edit</a>
+                                <a th:href="@{/drivers/delete/{id}(id=${driver.id})}" class="btn btn-sm del"
+                                    onclick="return confirm('Delete this driver?');">Delete</a>
+                            </td>
+                        </tr>
+                    </th:block>
+                </th:block>
+            </tbody>
+        </table>
+
+    </main>
+</body>
+
+</html>

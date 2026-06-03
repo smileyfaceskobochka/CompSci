@@ -10,6 +10,7 @@
 \usepackage{enumitem}
 \usepackage{float}
 \DeclareUnicodeCharacter{2500}{-}
+\DeclareUnicodeCharacter{2550}{-}
 \DeclareUnicodeCharacter{1F3CE}{} % 🏎
 \DeclareUnicodeCharacter{1F3C6}{} % 🏆
 \DeclareUnicodeCharacter{1F947}{} % 🥇
@@ -21,6 +22,7 @@
 \DeclareUnicodeCharacter{200D}{}  % ZWJ
 \DeclareUnicodeCharacter{1F680}{} % 🚀
 \DeclareUnicodeCharacter{270E}{}  % ✎
+\DeclareUnicodeCharacter{26A0}{WARNING}
 
 % Code styling
 \setminted{style = rainbow_dash, fontsize = \small, breaklines}
@@ -109,10 +111,11 @@
   2026
 \end{center}
 
-% ──────────────────────────────────────────────────────────────────────────────
 \newpage\thispagestyle{plain}
+\tableofcontents
+\newpage
 
-\section*{Цели лабораторной работы}
+\section{Цель работы}
 \begin{itemize}
   \item[$-$] разработать распределённое веб-приложение на базе микросервисной архитектуры;
   \item[$-$] реализовать бизнес-логику и веб-интерфейс на языке Go;
@@ -120,7 +123,7 @@
   \item[$-$] обеспечить взаимодействие между сервисами через HTTP (REST API).
 \end{itemize}
 
-\section*{Задание}
+\section{Задание}
 \begin{enumerate}
   \item Использовать базу данных из Лабораторной работы №3 (PostgreSQL) без модификации структуры таблиц.
   \item Написать слой доступа к данным на Python с использованием SQLAlchemy и паттерна <<Репозиторий>> (CRUD).
@@ -129,20 +132,20 @@
   \item Обеспечить выпадающие списки (Foreign Keys) и отображение связанных сущностей при просмотре объектов (например, Команды и Серии).
 \end{enumerate}
 
-% ──────────────────────────────────────────────────────────────────────────────
 \clearpage
 \section*{Реализация приложения}
 
 \subsection*{Архитектура распределённой системы}
 Проект <<Formula Racing>> реализован в виде трёхзвенной распределённой архитектуры:
 \begin{enumerate}
-    \item \textbf{Клиент (Браузер):} Получает отрендеренные \texttt{HTML/CSS/JS} страницы с сервера Go. Тематическое цветовое оформление реализовано с использованием набора цвета Catppuccin Mocha.
+    \item \textbf{Клиент (Браузер):} Получает отрендеренные \texttt{HTML/CSS/JS} страницы с сервера Go.
     \item \textbf{BFF-Сервер (Backend-for-Frontend, Go):} Точка входа для браузера. Выполняет функции рендеринга шаблонов, кэширования запросов к Python-серверу на протяжении 5 минут (in-memory TTLCache), маршрутизации REST-запросов и вычисления бизнес-логики (обработка списков пилотов).
     \item \textbf{Data-API Сервер (Python/Flask):} Инкапсулирует подключение к существующей базе данных PostgreSQL. Обрабатывает REST-запросы от Go и выполняет SQL-команды используя паттерн ООП Repository.
 \end{enumerate}
 
 \subsection*{Моделирование репозитория на Python}
-Доступ к данным обеспечен через ORM-библиотеку SQLAlchemy. Все сущности строго соответствуют схеме базы данных PostgreSQL (созданной Flyway в ЛР №3): \texttt{racing\_series}, \texttt{racing\_teams}, \texttt{racing\_drivers}.
+Доступ к данным обеспечен через ORM-библиотеку SQLAlchemy. Сущности соответствуют схеме PostgreSQL (созданной Flyway в ЛР №3 и расширенной под ЛР №2): \texttt{racing\_series}, \texttt{racing\_teams}, \texttt{racing\_drivers}. База данных PostgreSQL является единым источником данных для лабораторных работ 2–4.
+
 
 Для реализации внешних ключей и связей применены \texttt{ForeignKey(..., ondelete='CASCADE')} и \texttt{relationship}:
 \begin{itemize}
@@ -165,8 +168,18 @@
 
 Для добавления или изменения Команд/Пилотов используются HTML-формы с выпадающими списками (загружающими связанные чемпионаты или команды через подгруженные Foreign Keys с Python API), реализуя полноценный CRUD-цикл.
 
+Веб-интерфейс использует единый базовый шаблон \texttt{layout.html} с наследованием через \texttt{block} для страниц списков и форм.
+
+\subsection*{Развёртывание в Docker}
+Каждый сервис упакован в отдельный Docker-образ:
+\begin{itemize}
+    \item[$-$] \textbf{Python API} — собран на \texttt{python:3.14-slim}, установлены \texttt{gcc}, \texttt{libc-dev}, \texttt{libpq-dev} для компиляции \texttt{psycopg2-binary} (wheel отсутствует для Python 3.14);
+    \item[$-$] \textbf{Go BFF} — многоступенчатая сборка: \texttt{golang:1.22-alpine} (builder) $\to$ \texttt{alpine:3.19} (runtime) для минимального размера образа.
+\end{itemize}
+Оба контейнера подключены к внешней сети \texttt{racing-net}, разделяя PostgreSQL с лабораторными работами №2 и №3.
+
 \section*{Вывод}
-В результате выполнения лабораторной работы была успешно внедрена распределённая клиент-серверная микросервисная архитектура без изменения исходной схемы базы данных. Перенос операций хранения на Python с использованием ORM-репозиториев в связке с легковесным, кеширующим сервером отображения на Go позволил получить масштабируемую, стабильную и независимую систему с удобным графическим Catppuccin веб-интерфейсом.
+В результате выполнения лабораторной работы внедрена распределённая клиент-серверная архитектура без изменения исходной схемы базы данных. Перенос операций хранения на Python с использованием ORM-репозиториев в связке с кеширующим сервером на Go позволил получить систему с веб-интерфейсом.
 
 \newpage
 
@@ -197,16 +210,25 @@
 \section*{Приложение В3. Python: Flask REST API (app.py)}
 \inputminted{python}{code/python/app.py}
 
-\section*{Приложение С1. Веб-интерфейс: Главная страница (templates/index.html)}
+\section*{Приложение С1. Веб-интерфейс: Базовый шаблон (templates/layout.html)}
+\inputminted{html}{code/go/templates/layout.html}
+
+\section*{Приложение С2. Веб-интерфейс: Главная страница (templates/index.html)}
 \inputminted{html}{code/go/templates/index.html}
 
-\section*{Приложение С2. Веб-интерфейс: Список команд (templates/teams.html)}
+\section*{Приложение С3. Веб-интерфейс: Список команд (templates/teams.html)}
 \inputminted{html}{code/go/templates/teams.html}
 
-\section*{Приложение С3. Веб-интерфейс: Список пилотов (templates/drivers.html)}
+\section*{Приложение С4. Веб-интерфейс: Список пилотов (templates/drivers.html)}
 \inputminted{html}{code/go/templates/drivers.html}
 
-\section*{Приложение С4. Веб-интерфейс: Стили (static/style.css)}
+\section*{Приложение С5. Веб-интерфейс: Форма команды (templates/team\_form.html)}
+\inputminted{html}{code/go/templates/team_form.html}
+
+\section*{Приложение С6. Веб-интерфейс: Форма пилота (templates/driver\_form.html)}
+\inputminted{html}{code/go/templates/driver_form.html}
+
+\section*{Приложение С7. Веб-интерфейс: Стили (static/style.css)}
 \inputminted{css}{code/go/static/style.css}
 
 \end{document}

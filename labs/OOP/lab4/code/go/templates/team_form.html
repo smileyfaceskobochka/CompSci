@@ -1,56 +1,58 @@
 {{template "layout.html" .}}
-{{define "title"}}{{if .IsNew}}New Team{{else}}Edit Team{{end}} — Racing System{{end}}
+{{define "title"}}{{if .IsNew}}NEW TEAM{{else}}EDIT TEAM{{end}} — Racing System{{end}}
+{{define "sidebar_actions"}}
+<a href="/teams" class="sidebar-btn">← BACK</a>
+{{end}}
 {{define "content"}}
 <div class="page-header">
-    <h1>{{if .IsNew}}New Team{{else}}Edit Team{{end}}</h1>
-    <a href="/teams" class="btn btn-ghost">← Back</a>
+  <h1>{{if .IsNew}}NEW TEAM{{else}}EDIT TEAM{{end}}</h1>
 </div>
 
 {{if .Errors}}
 <div class="error-box">
-    {{range .Errors}}<p>⚠ {{.}}</p>{{end}}
+  {{range .Errors}}<p>⚠ {{.}}</p>{{end}}
 </div>
 {{end}}
 
 <form class="form-card" method="POST" action="{{if .IsNew}}/teams{{else}}/teams/{{.Team.ID}}{{end}}">
-    <div class="form-group">
-        <label>Team Name *</label>
-        <input type="text" name="name" value="{{.Team.Name}}" required
-               placeholder="e.g. McLaren F1 Team"
-               oninvalid="this.setCustomValidity('Team name is required')"
-               oninput="this.setCustomValidity('')">
-    </div>
-    <div class="form-group">
-        <label>Principal *</label>
-        <input type="text" name="principal_name" value="{{.Team.PrincipalName}}" required
-               placeholder="e.g. Andrea Stella">
-    </div>
-    <div class="form-group">
-        <label>Base Location *</label>
-        <input type="text" name="base_location" value="{{.Team.BaseLocation}}" required
-               placeholder="e.g. Woking, UK">
-    </div>
-    <div class="form-group">
-        <label>Power Unit</label>
-        <input type="text" name="power_unit" value="{{.Team.PowerUnit}}"
-               placeholder="e.g. Mercedes, Ferrari, Ford RBPT">
-    </div>
-    <div class="form-group">
-        <label>Points</label>
-        <input type="number" name="points" value="{{.Team.Points}}" min="0">
-    </div>
-    <div class="form-group">
-        <label>Series *</label>
-        <select name="series_id" required>
-            <option value="">— Select series —</option>
-            {{range .Series}}
-            <option value="{{.ID}}" {{if eq .ID $.Team.SeriesID}}selected{{end}}>{{.Name}}</option>
-            {{end}}
-        </select>
-    </div>
-    <div class="form-actions">
-        <button type="submit" class="btn btn-save">{{if .IsNew}}Create Team{{else}}Save Changes{{end}}</button>
-        <a href="/teams" class="btn btn-ghost">Cancel</a>
-    </div>
+  <div class="form-group">
+    <label>Team Name *</label>
+    <input type="text" name="name" value="{{.Team.Name}}" required
+           placeholder="e.g. McLaren F1 Team"
+           oninvalid="this.setCustomValidity('Team name is required')"
+           oninput="this.setCustomValidity('')">
+  </div>
+  <div class="form-group">
+    <label>Principal *</label>
+    <input type="text" name="principal_name" value="{{.Team.PrincipalName}}" required
+           placeholder="e.g. Andrea Stella">
+  </div>
+  <div class="form-group">
+    <label>Base Location *</label>
+    <input type="text" name="base_location" value="{{.Team.BaseLocation}}" required
+           placeholder="e.g. Woking, UK">
+  </div>
+  <div class="form-group">
+    <label>Power Unit</label>
+    <input type="text" name="power_unit" value="{{.Team.PowerUnit}}"
+           placeholder="e.g. Mercedes, Ferrari, Ford RBPT">
+  </div>
+  <div class="form-group">
+    <label>Points</label>
+    <input type="number" name="points" value="{{.Team.Points}}" min="0">
+  </div>
+  <div class="form-group">
+    <label>Series *</label>
+    <select name="series_id" required>
+      <option value="">— SELECT SERIES —</option>
+      {{range .Series}}
+      <option value="{{.ID}}" {{if eq .ID $.Team.SeriesID}}selected{{end}}>{{.Name}}</option>
+      {{end}}
+    </select>
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-save">{{if .IsNew}}CREATE TEAM{{else}}SAVE CHANGES{{end}}</button>
+    <a href="/teams" class="btn btn-ghost">CANCEL</a>
+  </div>
 </form>
 {{end}}

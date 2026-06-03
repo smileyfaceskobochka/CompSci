@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "Driver.h"
+#include "FormulaDriver.h"
 
 // Abstract base class for all formula racing teams
 class FormulaTeam {
@@ -13,7 +13,7 @@ protected:
   int championshipPoints;
   int raceWins;
   int podiums;
-  std::vector<Driver> drivers;
+  std::vector<FormulaDriver> drivers;
 
 public:
 
@@ -50,9 +50,9 @@ public:
   double getWinRate(int totalRaces) const;
 
   // Driver Management
-  void addDriver(const Driver &driver);
-  const std::vector<Driver> &getDrivers() const;
-  std::vector<Driver> &getDriversRef();
+  void addDriver(const FormulaDriver &driver);
+  const std::vector<FormulaDriver> &getDrivers() const;
+  std::vector<FormulaDriver> &getDriversRef();
 
   // Pure virtual methods
   virtual void displayInfo() const = 0;

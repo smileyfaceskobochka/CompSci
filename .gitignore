@@ -97,3 +97,20 @@ windows/flutter/generated_plugin_registrant.cc
 
 # Web
 web/index.html
+
+# DataBase
+racing.db
+
+#Python venv
+
+.venv
+
+# C# / .NET build and user folders
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+
+# LaTeX minted temp directories
+_minted-*/
+_minted/

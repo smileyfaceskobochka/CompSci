@@ -7,18 +7,54 @@
 <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-<nav class="navbar">
-    <div class="navbar-inner">
-        <a href="/" class="nav-brand">🏎 Racing System</a>
-        <div class="nav-links">
-            <a href="/">Dashboard</a>
-            <a href="/teams">Teams</a>
-            <a href="/drivers">Drivers</a>
-        </div>
+
+<div class="topbar">
+  <a href="/" class="topbar-brand">RACING SYSTEM</a>
+  <nav class="topbar-nav">
+    <a href="/">DASHBOARD</a>
+    <a href="/teams">TEAMS</a>
+    <a href="/drivers">DRIVERS</a>
+  </nav>
+  <div class="topbar-status">
+    <span class="status-dot live"></span>
+    <span class="status-label">LIVE</span>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Navigation</div>
+      <a href="/" class="sidebar-btn">DASHBOARD</a>
+      <a href="/teams" class="sidebar-btn">TEAMS</a>
+      <a href="/drivers" class="sidebar-btn">DRIVERS</a>
     </div>
-</nav>
-<main class="content">
-{{block "content" .}}{{end}}
-</main>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Actions</div>
+      {{block "sidebar_actions" .}}{{end}}
+    </div>
+  </aside>
+
+  <main class="main-content">
+    {{block "content" .}}{{end}}
+  </main>
+
+  <aside class="sidebar-right">
+    {{block "sidebar_right" .}}{{end}}
+  </aside>
+
+</div>
+
+<div class="bottombar">
+  <div class="stat">
+    <span class="stat-dot"></span>
+    <span class="stat-label-bot">DB</span>
+    <span class="stat-value-bot">LIVE</span>
+  </div>
+  {{block "bottombar" .}}{{end}}
+  <div class="db">Go / Python / PostgreSQL</div>
+</div>
+
 </body>
 </html>

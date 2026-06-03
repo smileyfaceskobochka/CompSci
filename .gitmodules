@@ -1,0 +1,6 @@
+[submodule "labs/Optim/lab1/code/external/imgui"]
+	path = labs/Optim/lab1/code/external/imgui
+	url = https://github.com/ocornut/imgui
+[submodule "labs/OOP/lab1/code/external/ftxui"]
+	path = labs/OOP/lab1/code/external/ftxui
+	url = https://github.com/ArthurSonzogni/FTXUI.git

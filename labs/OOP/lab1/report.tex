@@ -8,6 +8,31 @@
 \usepackage{minted, fancyvrb}
 \usepackage{hyperref}
 \usepackage{enumitem}
+\usepackage{newunicodechar}
+\newunicodechar{┌}{+}
+\newunicodechar{─}{-}
+\newunicodechar{┐}{+}
+\newunicodechar{│}{|}
+\newunicodechar{└}{+}
+\newunicodechar{┘}{+}
+\newunicodechar{═}{=}
+\newunicodechar{╔}{+}
+\newunicodechar{╗}{+}
+\newunicodechar{╚}{+}
+\newunicodechar{╝}{+}
+\newunicodechar{║}{|}
+\newunicodechar{▂}{\_}
+\newunicodechar{▃}{\_}
+\newunicodechar{▄}{\_}
+\newunicodechar{▅}{\_}
+\newunicodechar{▆}{\_}
+\newunicodechar{▇}{\_}
+\newunicodechar{█}{\_}
+\newunicodechar{▕}{|}
+\newunicodechar{▏}{|}
+\newunicodechar{✓}{v}
+\newunicodechar{✗}{x}
+
 
 % Code styling
 \setminted{style = rainbow_dash, fontsize = \small, breaklines}
@@ -83,7 +108,7 @@
 \begin{tabular}{ll}
   Разработал студент гр. ИВТб-2301-05-00 & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Черкасов А. А./ \\
                                          & \hspace{25.5mm}\footnotesize(подпись)                    \\
-  Преподователь                  & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Шмакова Н. А./   \\
+  Преподаватель                  & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Шмакова Н. А./   \\
                                          & \hspace{25.5mm}\footnotesize(подпись)                    \\
 \end{tabular}
 
@@ -153,10 +178,11 @@ virtual int calculatePoints(int position) const = 0;
 \end{minted}
 
 \subsubsection*{Полиморфизм и смарт-указатели}
-В \texttt{main.cpp} используется \texttt{std::vector\textless FormulaTeam*\textgreater}, что позволяет хранить объекты разных типов в одном контейнере и вызывать их методы через интерфейс базового класса. Очистка памяти производится вручную в конце программы.
+Для автоматического управления временем жизни объектов в куче используются умные указатели \texttt{std::shared\_ptr\textless FormulaTeam\textgreater}. Это позволяет автоматически освобождать ресурсы при уничтожении контейнера и исключить утечки памяти. Работа с объектами разных гоночных серий происходит через полиморфный вектор родительского типа.
 
 \begin{minted}{cpp}
-for (const auto* team : teams) {
+std::vector<std::shared_ptr<FormulaTeam>> teams = createTeams();
+for (const auto& team : teams) {
     team->displayInfo(); // Вызов перекрытого метода
 }
 \end{minted}
@@ -199,7 +225,25 @@ for (const auto* team : teams) {
 \section*{Приложение А8. Класс FormulaETeam.cpp}
 \inputminted{cpp}{code/src/core/FormulaETeam.cpp}
 
-\section*{Приложение А9. Главный файл main.cpp}
+\section*{Приложение А9. Класс FormulaDriver.h}
+\inputminted{cpp}{code/src/core/FormulaDriver.h}
+
+\section*{Приложение А10. Класс FormulaDriver.cpp}
+\inputminted{cpp}{code/src/core/FormulaDriver.cpp}
+
+\section*{Приложение А11. Главный файл main.cpp}
 \inputminted{cpp}{code/src/main.cpp}
+
+\section*{Приложение А12. Фабрика команд TeamFactory.h}
+\inputminted{cpp}{code/src/core/TeamFactory.h}
+
+\section*{Приложение А13. Фабрика команд TeamFactory.cpp}
+\inputminted{cpp}{code/src/core/TeamFactory.cpp}
+
+\section*{Приложение А14. Класс интерфейса UI.h}
+\inputminted{cpp}{code/src/ui/UI.h}
+
+\section*{Приложение А15. Класс интерфейса UI.cpp}
+\inputminted{cpp}{code/src/ui/UI.cpp}
 
 \end{document}

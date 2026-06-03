@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title th:text="${series.id == null} ? 'NEW SERIES — Racing' : 'EDIT SERIES — Racing'"></title>
+<link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+
+<div class="topbar">
+  <a href="/" class="topbar-brand">RACING SYSTEM</a>
+  <nav class="topbar-nav">
+    <a href="/">DASHBOARD</a>
+    <a href="/series" class="active">SERIES</a>
+    <a href="/teams">TEAMS</a>
+    <a href="/drivers">DRIVERS</a>
+  </nav>
+  <div class="topbar-status">
+    <span class="status-dot live"></span>
+    <span class="status-label">LIVE</span>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Navigation</div>
+      <a href="/" class="sidebar-btn">DASHBOARD</a>
+      <a href="/series" class="sidebar-btn primary">SERIES</a>
+      <a href="/teams" class="sidebar-btn">TEAMS</a>
+      <a href="/drivers" class="sidebar-btn">DRIVERS</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <div class="page-header">
+      <h1 th:text="${series.id == null} ? 'NEW SERIES' : 'EDIT SERIES'"></h1>
+      <a href="/series" class="btn btn-ghost">← BACK</a>
+    </div>
+
+    <form class="form-card" action="#" th:action="@{/series/save}" th:object="${series}" method="post">
+      <input type="hidden" th:field="*{id}" />
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Name *</label>
+          <input type="text" th:field="*{name}" required />
+        </div>
+        <div class="form-group">
+          <label>Official Name</label>
+          <input type="text" th:field="*{officialName}" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Headquarters *</label>
+          <input type="text" th:field="*{headquarters}" required />
+        </div>
+        <div class="form-group">
+          <label>Governing Body</label>
+          <input type="text" th:field="*{governingBody}" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Founded Year</label>
+          <input type="number" th:field="*{foundedYear}" />
+        </div>
+        <div class="form-group">
+          <label>Rounds</label>
+          <input type="number" th:field="*{rounds}" />
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-save">SAVE SERIES</button>
+        <a href="/series" class="btn btn-ghost">CANCEL</a>
+      </div>
+    </form>
+
+  </main>
+
+</div>
+
+<div class="bottombar">
+  <div class="stat">
+    <span class="stat-dot"></span>
+    <span class="stat-label-bot">DB</span>
+    <span class="stat-value-bot">LIVE</span>
+  </div>
+  <div class="stat">
+    <span class="stat-label-bot">Mode</span>
+    <span class="stat-value-bot">EDITOR</span>
+  </div>
+  <div class="db">Java / Spring Boot 2.6 / Thymeleaf</div>
+</div>
+
+</body>
+</html>

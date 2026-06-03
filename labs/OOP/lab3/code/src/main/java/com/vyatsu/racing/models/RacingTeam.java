@@ -40,6 +40,37 @@ public class RacingTeam {
     @Column(name = "team_color")
     private String teamColor = "#FFFFFF";
 
+    // Lab3 V5: extra fields from lab2
+    @Column(nullable = false)
+    private Integer wins = 0;
+
+    @Column(nullable = false)
+    private Integer podiums = 0;
+
+    @Column(name = "budget_cap")
+    private Double budgetCap = 0.0;
+
+    @Column(name = "constructor_pos")
+    private Integer constructorPos = 0;
+
+    @Column(name = "chassis_model")
+    private String chassisModel;
+
+    @Column(nullable = false)
+    private Integer graduates = 0;
+
+    @Column(name = "is_feeder")
+    private Boolean isFeeder = false;
+
+    @Column(name = "energy_partner")
+    private String energyPartner;
+
+    @Column(name = "battery_kwh")
+    private Double batteryKwh = 0.0;
+
+    @Column(name = "sustain_score")
+    private Integer sustainScore = 0;
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -66,4 +97,34 @@ public class RacingTeam {
 
     public List<RacingDriver> getDrivers() { return drivers; }
     public void setDrivers(List<RacingDriver> drivers) { this.drivers = drivers; }
+
+    public Integer getWins() { return wins; }
+    public void setWins(Integer wins) { this.wins = wins; }
+
+    public Integer getPodiums() { return podiums; }
+    public void setPodiums(Integer podiums) { this.podiums = podiums; }
+
+    public Double getBudgetCap() { return budgetCap; }
+    public void setBudgetCap(Double budgetCap) { this.budgetCap = budgetCap; }
+
+    public Integer getConstructorPos() { return constructorPos; }
+    public void setConstructorPos(Integer constructorPos) { this.constructorPos = constructorPos; }
+
+    public String getChassisModel() { return chassisModel; }
+    public void setChassisModel(String chassisModel) { this.chassisModel = chassisModel; }
+
+    public Integer getGraduates() { return graduates; }
+    public void setGraduates(Integer graduates) { this.graduates = graduates; }
+
+    public Boolean getIsFeeder() { return isFeeder; }
+    public void setIsFeeder(Boolean isFeeder) { this.isFeeder = isFeeder; }
+
+    public String getEnergyPartner() { return energyPartner; }
+    public void setEnergyPartner(String energyPartner) { this.energyPartner = energyPartner; }
+
+    public Double getBatteryKwh() { return batteryKwh; }
+    public void setBatteryKwh(Double batteryKwh) { this.batteryKwh = batteryKwh; }
+
+    public Integer getSustainScore() { return sustainScore; }
+    public void setSustainScore(Integer sustainScore) { this.sustainScore = sustainScore; }
 }

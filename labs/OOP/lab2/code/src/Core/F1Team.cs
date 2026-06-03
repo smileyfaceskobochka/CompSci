@@ -41,6 +41,9 @@ namespace RacingSystem.Core
             return $"{PowerUnit} [Development]";
         }
 
+        [System.Text.Json.Serialization.JsonPropertyName("engine_status")]
+        public string EngineStatus => GetPowerUnitStatus();
+
         public override string GetSummary()
         {
             return $"{base.GetSummary()} | PU: {PowerUnit} | Budget: ${BudgetCapMln}M";

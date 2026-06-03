@@ -40,6 +40,9 @@ namespace RacingSystem.Core
             return "Developing Feeder";
         }
 
+        [System.Text.Json.Serialization.JsonPropertyName("feeder_status_text")]
+        public string FeederStatusText => GetFeederStatus();
+
         public override string GetSummary()
         {
             return $"{base.GetSummary()} | Chassis: {ChassisModel} | F1 Grads: {F1Graduates}";

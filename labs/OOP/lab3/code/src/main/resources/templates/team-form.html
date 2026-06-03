@@ -1,72 +1,164 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team Editor</title>
-    <link rel="stylesheet" th:href="@{/style.css}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title th:text="${team.id == null} ? 'NEW TEAM — Racing' : 'EDIT TEAM — Racing'"></title>
+<link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
-<nav class="navbar">
-    <div class="navbar-inner">
-        <a href="/" class="nav-brand">🏎 Racing System</a>
-        <div class="nav-links">
-            <a href="/">Dashboard</a>
-            <a href="/teams">Teams</a>
-            <a href="/drivers">Drivers</a>
-        </div>
-    </div>
-</nav>
 
-<main class="content">
+<div class="topbar">
+  <a href="/" class="topbar-brand">RACING SYSTEM</a>
+  <nav class="topbar-nav">
+    <a href="/">DASHBOARD</a>
+    <a href="/series">SERIES</a>
+    <a href="/teams" class="active">TEAMS</a>
+    <a href="/drivers">DRIVERS</a>
+  </nav>
+  <div class="topbar-status">
+    <span class="status-dot live"></span>
+    <span class="status-label">LIVE</span>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Navigation</div>
+      <a href="/" class="sidebar-btn">DASHBOARD</a>
+      <a href="/series" class="sidebar-btn">SERIES</a>
+      <a href="/teams" class="sidebar-btn primary">TEAMS</a>
+      <a href="/drivers" class="sidebar-btn">DRIVERS</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
     <div class="page-header">
-        <h1 th:text="${team.id == null} ? 'Add New Team' : 'Edit Team'"></h1>
-        <a href="/" class="btn btn-ghost">← Back</a>
+      <h1 th:text="${team.id == null} ? 'NEW TEAM' : 'EDIT TEAM'"></h1>
+      <a href="/teams" class="btn btn-ghost">← BACK</a>
     </div>
 
     <form class="form-card" action="#" th:action="@{/teams/save}" th:object="${team}" method="post">
-        <input type="hidden" th:field="*{id}" />
+      <input type="hidden" th:field="*{id}" />
 
+      <div class="form-group">
+        <label>Series *</label>
+        <select th:field="*{series.id}" required>
+          <option value="">— SELECT SERIES —</option>
+          <option th:each="ser : ${seriesList}"
+                  th:value="${ser.id}"
+                  th:text="${ser.name}"></option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Team Name *</label>
+        <input type="text" th:field="*{name}" required />
+      </div>
+
+      <div class="form-group">
+        <label>Principal Name *</label>
+        <input type="text" th:field="*{principalName}" required />
+      </div>
+
+      <div class="form-group">
+        <label>Base Location *</label>
+        <input type="text" th:field="*{baseLocation}" required />
+      </div>
+
+      <div class="form-group">
+        <label>Power Unit</label>
+        <input type="text" th:field="*{powerUnit}" />
+      </div>
+
+      <div class="form-group">
+        <label>Points</label>
+        <input type="number" th:field="*{points}" required />
+      </div>
+
+      <div class="form-row">
         <div class="form-group">
-            <label>Series *</label>
-            <select th:field="*{series.id}" required>
-                <option value="">— Select Series —</option>
-                <option th:each="ser : ${seriesList}"
-                        th:value="${ser.id}"
-                        th:text="${ser.name}"></option>
-            </select>
+          <label>Wins</label>
+          <input type="number" th:field="*{wins}" />
         </div>
-
         <div class="form-group">
-            <label>Team Name *</label>
-            <input type="text" th:field="*{name}" required />
+          <label>Podiums</label>
+          <input type="number" th:field="*{podiums}" />
         </div>
+      </div>
 
+      <div class="form-row">
         <div class="form-group">
-            <label>Principal Name *</label>
-            <input type="text" th:field="*{principalName}" required />
+          <label>Budget Cap (M)</label>
+          <input type="number" step="0.1" th:field="*{budgetCap}" />
         </div>
-
         <div class="form-group">
-            <label>Base Location *</label>
-            <input type="text" th:field="*{baseLocation}" required />
+          <label>Constructor Pos</label>
+          <input type="number" th:field="*{constructorPos}" />
         </div>
+      </div>
 
+      <div class="form-row">
         <div class="form-group">
-            <label>Power Unit</label>
-            <input type="text" th:field="*{powerUnit}" />
+          <label>Chassis Model</label>
+          <input type="text" th:field="*{chassisModel}" />
         </div>
-
         <div class="form-group">
-            <label>Points</label>
-            <input type="number" th:field="*{points}" required />
+          <label>Graduates</label>
+          <input type="number" th:field="*{graduates}" />
         </div>
+      </div>
 
-        <div class="form-actions">
-            <button type="submit" class="btn btn-save">Save Team</button>
-            <a href="/" class="btn btn-ghost">Cancel</a>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Energy Partner</label>
+          <input type="text" th:field="*{energyPartner}" />
         </div>
+        <div class="form-group">
+          <label>Battery kWh</label>
+          <input type="number" step="0.1" th:field="*{batteryKwh}" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Sustainability Score</label>
+          <input type="number" th:field="*{sustainScore}" />
+        </div>
+        <div class="form-group">
+          <label>Is Feeder</label>
+          <select th:field="*{isFeeder}">
+            <option th:value="false" th:selected="${team.isFeeder == false}">No</option>
+            <option th:value="true" th:selected="${team.isFeeder == true}">Yes</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-save">SAVE TEAM</button>
+        <a href="/teams" class="btn btn-ghost">CANCEL</a>
+      </div>
     </form>
-</main>
+
+  </main>
+
+</div>
+
+<div class="bottombar">
+  <div class="stat">
+    <span class="stat-dot"></span>
+    <span class="stat-label-bot">DB</span>
+    <span class="stat-value-bot">LIVE</span>
+  </div>
+  <div class="stat">
+    <span class="stat-label-bot">Mode</span>
+    <span class="stat-value-bot">EDITOR</span>
+  </div>
+  <div class="db">Java / Spring Boot 2.6 / Thymeleaf</div>
+</div>
+
 </body>
 </html>

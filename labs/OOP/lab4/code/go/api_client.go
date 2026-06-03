@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-const pythonBase = "http://localhost:8000"
+var pythonBase = getEnv("PYTHON_API_URL", "http://localhost:8000")
 
 func apiGet(path string, out any) error {
 	if cached, ok := cache.Get(path); ok {

@@ -1,0 +1,31 @@
+# Shared PostgreSQL runs from root OOP docker-compose.yml:
+#   docker compose -f ../docker-compose.yml up -d
+# Then start Lab4:
+#   docker compose up -d
+
+services:
+  python-api:
+    build: ./code/python
+    container_name: lab4-python-api
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@racing-postgres:5432/postgres
+    networks:
+      - racing-net
+
+  go-bff:
+    build: ./code/go
+    container_name: lab4-go-bff
+    ports:
+      - "8080:8080"
+    environment:
+      GO_PORT: "8080"
+      PYTHON_API_URL: http://python-api:8000
+    networks:
+      - racing-net
+
+networks:
+  racing-net:
+    name: racing-net
+    external: true

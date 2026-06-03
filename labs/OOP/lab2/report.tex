@@ -1,5 +1,6 @@
 \documentclass[oneside,a4paper,14pt]{extarticle}
-\usepackage[a4paper,letterpaper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\usepackage[a4paper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\emergencystretch=3em
 \usepackage[russian]{babel}
 \usepackage{indentfirst}
 \usepackage{graphicx}
@@ -51,175 +52,319 @@
 
 \begin{document}
 
-\newpage
-\thispagestyle{empty}
+\newpage\thispagestyle{empty}
 \begin{center}
-  МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ ОБРАЗОВАТЕЛЬНОЕ УЧРЕЖДЕНИЕ ВЫСШЕГО ОБРАЗОВАНИЯ\\
-  «ВЯТСКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ»\\
+  \MakeUppercase{
+    Министерство науки и высшего образования Российской Федерации\\
+    Федеральное государственное бюджетное образовательное учреждение высшего образования\\
+    <<Вятский Государственный Университет>>\\
+  }
   Институт математики и информационных систем\\
   Факультет автоматики и вычислительной техники\\
   Кафедра электронных вычислительных машин
 \end{center}
-\vspace{10mm}
-
-\hfill
-\begin{tabular}{l}
-  \footnotesize Дата сдачи на проверку:                                          \\
-  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\ \rule[-1mm]{20mm}{0.10mm}\ 2026 г. \\
-  \footnotesize Проверено:                                                       \\
-  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\ \rule[-1mm]{20mm}{0.10mm}\ 2026 г. \\
-\end{tabular}
 \vfill
 
 \begin{center}
-  Разработка GUI-приложения Formula Racing Management System на языке C\# с использованием базы данных. \\
-  Отчёт по лабораторной работе №2\\
+  Отчет по лабораторной работе №2\\
   по дисциплине\\
   <<Объектно-ориентированное программирование>>\\
 \end{center}
-\vspace{25mm}
-\noindent
-\begin{tabular}{ll}
-  Разработал студент гр. ИВТб-2301-05-00 & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Черкасов А. А./ \\
-                                         & \hspace{25.5mm}\footnotesize(подпись)                    \\
-  Преподаватель                  & \hspace{18mm}\rule[-1mm]{30mm}{0.10mm}\,/Шмакова Н. А./ \\
-                                         & \hspace{25.5mm}\footnotesize(подпись)                    \\
-\end{tabular}
-
-\noindent
-\begin{tabular}{lp{58mm}r}
-  Работа защищена &  & \hspace{13mm}<<\rule[-1mm]{5mm}{0.10mm}\/>>\ \rule[-1mm]{30mm}{0.10mm}\ 2026 г.
-\end{tabular}
 \vfill
 
+\noindent
+\begin{tabular}{ll}
+  Выполнил студент гр. ИВТб-2301-05-00 \hspace{5mm} & \rule[-1mm]{25mm}{0.10mm}\,/Черкасов А. А./ \\
+  Руководитель преподаватель                        & \rule[-1mm]{25mm}{0.10mm}\,/Шмакова Н. А./ \\
+\end{tabular}
+
+\vfill
 \begin{center}
-  Киров\\
-  2026
+  Киров 2026
 \end{center}
 
-% ──────────────────────────────────────────────────────────────────────────────
-\newpage\thispagestyle{plain}
+\newpage
+\section*{\hspace{12.5mm}Цель работы}
+Цель работы: изучить и освоить принципы объектно-ориентированного программирования, включая инкапсуляцию, наследование и полиморфизм, путем создания иерархии классов в выбранной предметной области (управление гоночными командами), взаимодействия с базой данных и графическим веб-интерфейсом.
 
-\section*{Цели лабораторной работы}
+\section*{\hspace{12.5mm}Задание}
+На основании согласованной в первой лабораторной работе предметной области разработать приложение с графическим интерфейсом пользователя, используя классы и особенности C\#. Сведения об объектах предметной области необходимо хранить в БД.
+
+\section*{\hspace{12.5mm}Решение}
+Предметная область описывает управление гоночными командами трех различных серий (Formula 1, Formula 2, Formula E). Система позволяет хранить информацию о командах и их гонщиках, учитывать их специфические характеристики, проводить симуляцию гонок с начислением очков гонщикам и командам по правилам конкретной серии, выполнять сравнение команд по очкам через перегруженные операторы и выводить информацию о них в удобном виде.
+
+Программа содержит классы <<FormulaTeam>>, представляющий базовый абстрактный класс команды, <<F1Team>>, наследованный от <<FormulaTeam>> и представляющий класс команды Formula 1, <<F2Team>>, наследованный от <<FormulaTeam>> и представляющий класс команды Formula 2, <<FormulaETeam>>, наследованный от <<FormulaTeam>> и представляющий класс команды Formula E, а также вспомогательный класс <<FormulaDriver>> для хранения информации о гонщиках.
+
+Базовый класс <<FormulaTeam>> содержит:
 \begin{itemize}
-  \item[$-$] перенести иерархию классов из Лабораторной работы №1 на язык C\#, сохранив все принципы ООП;
-  \item[$-$] разработать графический интерфейс пользователя (GUI) для управления объектами предметной области;
-  \item[$-$] обеспечить персистентное хранение данных в реляционной базе данных с нормализованной схемой;
-  \item[$-$] реализовать полный набор CRUD"=операций и методы предметной области из первой работы.
+  \item[--] Свойства:
+  \begin{itemize}
+    \item[--] public int Id \{ get; set; \} -- свойство, уникальный идентификатор;
+    \item[--] public string TeamName \{ get; set; \} -- свойство, название команды;
+    \item[--] public string PrincipalName \{ get; set; \} -- свойство, имя руководителя команды;
+    \item[--] public string Headquarters \{ get; set; \} -- свойство, штаб-квартира команды;
+    \item[--] public string? TeamColor \{ get; set; \} -- свойство, цвет команды;
+    \item[--] public int ChampionshipPoints \{ get; set; \} -- свойство, очки чемпионата;
+    \item[--] public int RaceWins \{ get; set; \} -- свойство, количество побед;
+    \item[--] public int Podiums \{ get; set; \} -- свойство, количество подиумов;
+    \item[--] public List<FormulaDriver> Drivers \{ get; set; \} -- свойство, список гонщиков;
+  \end{itemize}
+  \item[--] Конструкторы:
+  \begin{itemize}
+    \item[--] protected FormulaTeam() -- защищенный конструктор по умолчанию;
+    \item[--] protected FormulaTeam(string name, string principal, string hq) -- защищенный конструктор, принимает название, имя руководителя и штаб-квартиру;
+    \item[--] protected FormulaTeam(string name, string principal, string hq, int points, int wins, int podiums) -- защищенный конструктор, принимает все основные параметры;
+  \end{itemize}
+  \item[--] Абстрактные методы:
+  \begin{itemize}
+    \item[--] public abstract string GetSeriesName() -- публичный абстрактный метод, возвращающий название серии;
+    \item[--] public abstract int CalculatePoints(int position) -- публичный абстрактный метод, возвращающий очки за занятую позицию;
+  \end{itemize}
+  \item[--] Перегруженные операторы:
+  \begin{itemize}
+    \item[--] public static bool operator >(FormulaTeam a, FormulaTeam b) -- оператор больше, сравнивает очки команд;
+    \item[--] public static bool operator <(FormulaTeam a, FormulaTeam b) -- оператор меньше, сравнивает очки команд;
+  \end{itemize}
+  \item[--] Собственные методы:
+  \begin{itemize}
+    \item[--] public void AddPoints(int pts) -- публичный метод, добавляет очки команде;
+    \item[--] public void AddWin() -- публичный метод, увеличивает количество побед и подиумов;
+    \item[--] public void AddPodium() -- публичный метод, увеличивает количество подиумов;
+    \item[--] public double GetWinRate(int totalRaces) -- публичный метод, рассчитывает процент побед;
+    \item[--] public virtual string GetSummary() -- публичный виртуальный метод, возвращает сводку по команде.
+  \end{itemize}
 \end{itemize}
 
-\section*{Задание}
-На основании иерархии классов из Лабораторной работы №1 разработать GUI"=приложение:
-\begin{enumerate}
-  \item Все требования первой работы остаются в силе: каждый класс в отдельном файле, базовый класс абстрактный, наследование, доступ к полям только через свойства/геттеры-сеттеры.
-  \item Реализовать графический интерфейс. Платформа — Avalonia UI (кроссплатформенная альтернатива WinForms; использование согласовано с преподавателем).
-  \item Данные хранить в БД SQLite. Данные не скопом в одной таблице — используется стратегия «Таблица для каждого типа» (Table-Per-Type). Реализованы все основные CRUD-функции.
-  \item Методы классов первой работы (\texttt{CalculatePoints}, \texttt{AddPoints}, \texttt{GetWinRate}) доступны и используются в GUI.
-  \item В отчёте описана диаграмма классов вместе с классами форм (Views/ViewModels), а также особенности подключения к БД.
-\end{enumerate}
-
-% ──────────────────────────────────────────────────────────────────────────────
-\clearpage
-\section*{Реализация приложения}
-
-\subsection*{Предметная область}
-Система управления гоночными командами охватывает три чемпионата: Formula~1, Formula~2 и Formula~E. Каждая команда может участвовать симуляции гонки с начислением очков по реальной системе, сравнением с соперниками и подсчётом побед и подиумов.
-
-\subsection*{Описание иерархии классов предметной области}
-Иерархия классов перенесена из C++ (Лаб.~1) на C\# с сохранением структуры и полиморфизма:
-
+Класс <<F1Team>>, наследованный от класса <<FormulaTeam>> содержит:
 \begin{itemize}
-  \item[$-$] \texttt{FormulaTeam} (abstract) --- базовый абстрактный класс в файле \texttt{Core/FormulaTeam.cs}. Хранит общие данные: \texttt{TeamName}, \texttt{PrincipalName}, \texttt{Headquarters}, \texttt{ChampionshipPoints}, \texttt{RaceWins}, \texttt{Podiums}, \texttt{Drivers}. Все поля доступны только через C\#"=свойства (\texttt{get}/\texttt{set}). Содержит абстрактные методы \texttt{GetSeriesName()} и \texttt{CalculatePoints(int position)}, а также конкретные: \texttt{AddPoints()}, \texttt{AddWin()}, \texttt{AddPodium()}, \texttt{GetWinRate()}. Перегружены операторы \texttt{>} и \texttt{<} для сравнения команд по очкам.
-
-  \item[$-$] \texttt{F1Team : FormulaTeam} --- класс Formula~1 в файле \texttt{Core/F1Team.cs}. Добавляет: \texttt{PowerUnit}, \texttt{BudgetCapMln}, \texttt{ConstructorPos}. Реализует \texttt{CalculatePoints} по системе 25\,–\,18\,–\,15\,–\,12\,–\,10\,–\,8\,–\,6\,–\,4\,–\,2\,–\,1. Собственные методы: \texttt{CalculateBudgetAllocation()} и \texttt{GetPowerUnitStatus()}.
-
-  \item[$-$] \texttt{F2Team : FormulaTeam} --- класс Formula~2 в файле \texttt{Core/F2Team.cs}. Добавляет: \texttt{ChassisModel}, \texttt{F1Graduates}, \texttt{IsFeederSeries}. Реализует \texttt{CalculatePoints} по системе 10\,–\,8\,–\,6\,–\,... Собственные методы: \texttt{GetFeederStatus()}, \texttt{GetGraduateStats()}.
-
-  \item[$-$] \texttt{FormulaETeam : FormulaTeam} --- класс Formula~E в файле \texttt{Core/FormulaETeam.cs}. Добавляет: \texttt{EnergyPartner}, \texttt{BatteryCapacityKwh}, \texttt{SustainabilityScore}. Реализует \texttt{CalculatePoints} по системе Formula~E. Собственные методы: \texttt{GetEcoRating()}, \texttt{GetBatteryEfficiency()}.
-
-  \item[$-$] \texttt{FormulaDriver} --- вспомогательный класс в файле \texttt{Core/FormulaDriver.cs}. Хранит данные пилота: \texttt{Id}, \texttt{TeamId}, \texttt{FirstName}, \texttt{LastName}, \texttt{RacingNumber}, \texttt{Points}. Вычисляемые свойства: \texttt{FullName}, \texttt{DisplayString}.
+  \item[--] Собственные свойства:
+  \begin{itemize}
+    \item[--] public string PowerUnit \{ get; set; \} -- свойство, тип силовой установки;
+    \item[--] public double BudgetCapMln \{ get; set; \} -- свойство, лимит бюджета в миллионах;
+    \item[--] public int ConstructorPos \{ get; set; \} -- свойство, позиция в кубке конструкторов;
+  \end{itemize}
+  \item[--] Конструкторы:
+  \begin{itemize}
+    \item[--] public F1Team() : base() -- публичный конструктор по умолчанию;
+    \item[--] public F1Team(string name, string principal, string hq, string powerUnit) : base(name, principal, hq) -- конструктор, принимающий основные параметры;
+    \item[--] public F1Team(string name, string principal, string hq, string powerUnit, double budget, int ctorPos, int points, int wins, int podiums) : base(name, principal, hq, points, wins, podiums) -- конструктор, принимающий все параметры;
+  \end{itemize}
+  \item[--] Переопределенные методы:
+  \begin{itemize}
+    \item[--] public override string GetSeriesName() -- возвращает <<Formula 1>>;
+    \item[--] public override int CalculatePoints(int position) -- возвращает очки по системе F1 (25-18-15-12-10-8-6-4-2-1);
+    \item[--] public override string GetSummary() -- возвращает сводку с учетом силовой установки и бюджета;
+  \end{itemize}
+  \item[--] Собственные методы:
+  \begin{itemize}
+    \item[--] public double CalculateBudgetAllocation(double percentage) -- метод расчета выделения бюджета;
+    \item[--] public string GetPowerUnitStatus() -- возвращает статус силовой установки (Dominant, Competitive, Development).
+  \end{itemize}
 \end{itemize}
 
-\subsection*{Описание классов графического интерфейса (Views и ViewModels)}
-Приложение построено по паттерну \textbf{MVVM} (Model-View-ViewModel), реализованному с помощью библиотеки \texttt{CommunityToolkit.Mvvm}. Каждое окно (View) связано со своей ViewModel через механизм привязки данных (Data Binding) Avalonia:
-
+Класс <<F2Team>>, наследованный от класса <<FormulaTeam>> содержит:
 \begin{itemize}
-  \item[$-$] \texttt{MainWindow} / \texttt{MainViewModel} --- главное окно приложения. ViewModel хранит коллекцию \texttt{ObservableCollection<object> ListItems} (команды и заголовки серий), ссылку на выбранную команду \texttt{SelectedTeam}, флаги режимов отображения \texttt{IsStandingsView} и \texttt{IsDriverStandingsView}. Команды (ICommand): \texttt{DeleteTeamCommand}, \texttt{LoadTeamsCommand}. Публичный метод \texttt{DeleteTeamById(int id)} вызывается из code-behind при нажатии кнопки удаления.
-
-  \item[$-$] \texttt{TeamEditorWindow} / \texttt{TeamEditorViewModel} --- диалоговое окно добавления и редактирования команды. ViewModel содержит поля формы, привязанные к контролам, выпадающий список серий, проверку типа команды. Метод \texttt{ToTeam()} преобразует состояние формы в объект \texttt{FormulaTeam} нужного подтипа.
-
-  \item[$-$] \texttt{TeamComparisonWindow} / \texttt{ComparisonViewModel} --- окно сравнения двух команд. Принимает выбранную команду и полный список команд; формирует текстовое сравнение по очкам, победам и подиумам.
-
-  \item[$-$] \texttt{RaceSimulationWindow} --- окно симуляции гонки. Позволяет ввести позицию финиша; возвращает результат \texttt{ResultPosition} вызывающему коду, который затем вызывает \texttt{CalculatePoints()} и \texttt{AddWin()}, демонстрируя использование методов из Лаб.~1.
+  \item[--] Собственные свойства:
+  \begin{itemize}
+    \item[--] public string ChassisModel \{ get; set; \} -- свойство, модель шасси;
+    \item[--] public int F1Graduates \{ get; set; \} -- свойство, число выпускников, перешедших в F1;
+    \item[--] public bool IsFeederSeries \{ get; set; \} -- свойство, является ли молодежной серией;
+  \end{itemize}
+  \item[--] Конструкторы:
+  \begin{itemize}
+    \item[--] public F2Team() : base() -- конструктор по умолчанию;
+    \item[--] public F2Team(string name, string principal, string hq, string chassis) : base(name, principal, hq) -- конструктор, принимающий основные параметры;
+    \item[--] public F2Team(string name, string principal, string hq, string chassis, int graduates, bool feeder, int points, int wins, int podiums) : base(name, principal, hq, points, wins, podiums) -- конструктор, принимающий все параметры;
+  \end{itemize}
+  \item[--] Переопределенные методы:
+  \begin{itemize}
+    \item[--] public override string GetSeriesName() -- возвращает <<Formula 2>>;
+    \item[--] public override int CalculatePoints(int position) -- возвращает очки по системе F2 (15-12-10-8-6-5-4-3-2-1);
+    \item[--] public override string GetSummary() -- возвращает сводку с учетом модели шасси и числа выпускников;
+    \item[--] public string GetFeederStatus() -- возвращает статус молодежной команды.
+  \end{itemize}
 \end{itemize}
 
-\subsection*{Особенности подключения к базе данных}
-Для хранения данных используется \textbf{SQLite} — встроенная реляционная СУБД, не требующая установки отдельного сервера. Работа с базой данных инкапсулирована в классе \texttt{DatabaseManager} (\texttt{Database/DatabaseManager.cs}).
+Класс <<FormulaETeam>>, наследованный от класса <<FormulaTeam>> содержит:
+\begin{itemize}
+  \item[--] Собственные свойства:
+  \begin{itemize}
+    \item[--] public int SustainabilityScore \{ get; set; \} -- свойство, рейтинг экологичности;
+    \item[--] public double BatteryCapacityKwh \{ get; set; \} -- свойство, емкость батареи;
+    \item[--] public string EnergyPartner \{ get; set; \} -- свойство, энергетический партнер;
+  \end{itemize}
+  \item[--] Конструкторы:
+  \begin{itemize}
+    \item[--] public FormulaETeam() : base() -- конструктор по умолчанию;
+    \item[--] public FormulaETeam(string name, string principal, string hq, string energyPartner) : base(name, principal, hq) -- конструктор с основными параметрами;
+    \item[--] public FormulaETeam(string name, string principal, string hq, string energyPartner, int sustainScore, double batteryKwh, int points, int wins, int podiums) : base(name, principal, hq, points, wins, podiums) -- конструктор со всеми параметрами;
+  \end{itemize}
+  \item[--] Переопределенные методы:
+  \begin{itemize}
+    \item[--] public override string GetSeriesName() -- возвращает <<Formula E>>;
+    \item[--] public override int CalculatePoints(int position) -- возвращает очки по системе Formula E;
+    \item[--] public override string GetSummary() -- возвращает сводку с учетом экологичности и емкости батареи;
+  \end{itemize}
+  \item[--] Собственные методы:
+  \begin{itemize}
+    \item[--] public string GetBatteryEfficiencyRating() -- возвращает рейтинг эффективности батареи.
+  \end{itemize}
+\end{itemize}
 
-\subsubsection*{Подключение и инифиализация}
-Подключение выполняется через ADO.NET-провайдер \texttt{Microsoft.Data.Sqlite}. Строка подключения задаётся в конструкторе:
+Класс <<FormulaDriver>> представляет гонщика и содержит:
+\begin{itemize}
+  \item[--] Свойства:
+  \begin{itemize}
+    \item[--] public int Id \{ get; set; \} -- свойство, уникальный идентификатор;
+    \item[--] public int TeamId \{ get; set; \} -- свойство, идентификатор команды (внешний ключ);
+    \item[--] public string FirstName \{ get; set; \} -- свойство, имя гонщика;
+    \item[--] public string LastName \{ get; set; \} -- свойство, фамилия гонщика;
+    \item[--] public int RacingNumber \{ get; set; \} -- свойство, гоночный номер;
+    \item[--] public int Points \{ get; set; \} -- свойство, набранные очки;
+  \end{itemize}
+  \item[--] Конструкторы:
+  \begin{itemize}
+    \item[--] public FormulaDriver() -- публичный конструктор по умолчанию;
+    \item[--] public FormulaDriver(string firstName, string lastName, int number, int points = 0) -- параметризованный конструктор;
+  \end{itemize}
+  \item[--] Собственные методы:
+  \begin{itemize}
+    \item[--] public void AddPoints(int pts) -- увеличивает количество набранных очков;
+  \end{itemize}
+  \item[--] Вычисляемые свойства:
+  \begin{itemize}
+    \item[--] public string FullName \{ get; \} -- возвращает полное имя гонщика;
+    \item[--] public string DisplayString \{ get; \} -- возвращает строку отображения пилота.
+  \end{itemize}
+\end{itemize}
 
+Диаграмма классов сущностей представлена на рисунке 1.
+
+\pagebreak
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.95\linewidth,height=0.45\textheight,keepaspectratio]{pics/uml-1.png}
+\end{figure}
+\begin{center}
+  Рисунок 1 – Диаграмма классов сущностей
+\end{center}
+
+Разработаны серверное приложение на бэкенде в виде REST API на C\# и клиентское приложение в виде веб-интерфейса (React). Серверное приложение содержит подключение к базе данных PostgreSQL, конфигурацию моделей с использованием TPH и маршруты API.
+
+Подключение к базе данных происходит с помощью следующей строки подключения в методе OnConfiguring класса RacingDbContext:
 \begin{minted}{csharp}
-private readonly string _connectionString;
+optionsBuilder.UseNpgsql(
+    "Host=localhost;Database=postgres;" +
+    "Username=postgres;Password=postgres");
+\end{minted}
 
-public DatabaseManager(string dbPath = "racing.db")
+И сам класс контекста:
+\begin{minted}{csharp}
+public class RacingDbContext : DbContext
 {
-    _connectionString = $"Data Source={dbPath}";
-    InitializeDatabase(); // создание таблиц и начальных данных
+    public DbSet<FormulaTeam> Teams { get; set; } = null!;
+    public DbSet<FormulaDriver> Drivers { get; set; } = null!;
+
+    protected override void OnConfiguring(
+        DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseNpgsql(
+            "Host=localhost;Database=postgres;" +
+            "Username=postgres;Password=postgres");
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // Настройка TPH и связей
+        base.OnModelCreating(modelBuilder);
+    }
 }
 \end{minted}
 
-При каждом запуске приложения вызывается \texttt{InitializeDatabase()}, создающий таблицы (\texttt{CREATE TABLE IF NOT EXISTS}) и при необходимости — начальные данные (seeding).
-
-\subsubsection*{Схема базы данных (Table-Per-Type)}
-Данные не хранятся в одной таблице. Применяется стратегия «Таблица для каждого конкретного типа»: общая таблица \texttt{Teams} плюс отдельные таблицы с дополнительными полями для каждого подтипа, связанные внешним ключом:
-
-\begin{itemize}
-  \item[$-$] \textbf{Teams}: Id, Type, Name, Principal, HQ, Points, Wins, Podiums.
-  \item[$-$] \textbf{F1Details}: TeamId (FK → Teams.Id), PowerUnit, BudgetCap, ConstructorPos.
-  \item[$-$] \textbf{F2Details}: TeamId (FK → Teams.Id), ChassisModel, Graduates, IsFeeder.
-  \item[$-$] \textbf{FEDetails}: TeamId (FK → Teams.Id), EnergyPartner, BatteryKwh, SustainScore.
-  \item[$-$] \textbf{FormulaDrivers}: Id, TeamId (FK → Teams.Id), FirstName, LastName, RacingNumber, Points.
-\end{itemize}
-
-\subsubsection*{Объектно-реляционное отображение с Dapper}
-Для маппинга строк результата запросов в объекты C\# используется микро-ORM \textbf{Dapper}. Он не требует конфигурации сущностей, но позволяет избежать ручного разбора \texttt{SqliteDataReader}:
-
+Конфигурация сущности FormulaTeam с использованием стратегии Table-per-Hierarchy (TPH) содержит настройку дискриминатора по полю series\_id для деления на F1, F2 и Formula E:
 \begin{minted}{csharp}
-// Чтение всех команд с JOIN деталей
-var baseTeams = connection.Query("SELECT * FROM Teams").ToList();
-var allDrivers = connection.Query<FormulaDriver>(
-    "SELECT * FROM FormulaDrivers").ToList();
-
-// Для F1-команды дополнительно читаем F1Details
-var details = connection.QuerySingle(
-    "SELECT * FROM F1Details WHERE TeamId = @Id", new { Id = id });
-
-team = new F1Team(name, principal, hq,
-    (string)details.PowerUnit, (double)details.BudgetCap, ...);
+modelBuilder.Entity<FormulaTeam>()
+    .ToTable("racing_teams")
+    .HasDiscriminator<long>("series_id")
+    .HasValue<F1Team>(1)
+    .HasValue<F2Team>(2)
+    .HasValue<FormulaETeam>(3);
 \end{minted}
 
-\subsubsection*{CRUD-операции}
-Класс \texttt{DatabaseManager} реализует полный набор операций:
+Следующим шагом является маршрутизация API-запросов от клиентов. Обработчик ProcessRequest в классе Program выполняет роль маршрутизатора API.
+
+Содержит следующие методы:
 \begin{itemize}
-  \item[$-$] \textbf{Create / Update} --- метод \texttt{SaveTeam(FormulaTeam team)}: если \texttt{team.Id == 0} --- INSERT с получением нового Id через \texttt{last\_insert\_rowid()}, иначе --- UPDATE. Все операции обёрнуты в транзакцию.
-  \item[$-$] \textbf{Read} --- метод \texttt{GetAllTeams()} восстанавливает полный граф объектов (команды + пилоты). Метод \texttt{GetAllDrivers()} возвращает всех пилотов, отсортированных по очкам.
-  \item[$-$] \textbf{Delete} --- метод \texttt{DeleteTeam(int id)} удаляет запись из \texttt{Teams}. Каскадное удаление (ON DELETE CASCADE) автоматически очищает связанные таблицы-деталей и пилотов.
+  \item[--] GET /api/teams -- возвращает список всех команд с их гонщиками, отсортированных по очкам;
+  \item[--] POST /api/teams -- создает новую команду;
+  \item[--] PUT /api/teams/\{id\} -- обновляет существующую команду;
+  \item[--] DELETE /api/teams/\{id\} -- удаляет команду и каскадно удаляет привязанных к ней гонщиков;
+  \item[--] POST /api/teams/\{id\}/simulate-race -- симулирует гонку для команды, полиморфно вычисляя очки по занятому месту и сохраняя изменения в базе данных:
+\begin{minted}{csharp}
+int points = team.CalculatePoints(position);
+driver.AddPoints(points);
+team.AddPoints(points);
+\end{minted}
+  \item[--] GET /api/drivers -- возвращает список всех гонщиков;
+  \item[--] POST /api/drivers -- создает запись о гонщике;
+  \item[--] PUT /api/drivers/\{id\} -- обновляет запись о гонщике;
+  \item[--] DELETE /api/drivers/\{id\} -- удаляет запись о гонщике по идентификатору;
+  \item[--] GET /api/teams/compare -- метод сравнения двух команд по очкам с помощью перегруженных операторов:
+\begin{minted}{csharp}
+public static bool operator >(FormulaTeam a, FormulaTeam b) 
+    => a.ChampionshipPoints > b.ChampionshipPoints;
+\end{minted}
 \end{itemize}
 
-\subsection*{Методы классов первой работы в GUI}
-Методы доменной логики, разработанные в Лаб.~1, активно используются в GUI:
-\begin{itemize}
-  \item[$-$] \texttt{CalculatePoints(position)} --- вызывается в \texttt{RaceSimulationWindow} для начисления очков после симуляции финиша;
-  \item[$-$] \texttt{AddPoints()}, \texttt{AddWin()}, \texttt{AddPodium()} --- обновляют состояние объекта и сохраняются в БД через \texttt{SaveTeam()};
-  \item[$-$] \texttt{GetWinRate()} --- отображается в окне сравнения команд;
-  \item[$-$] Перегруженный оператор \texttt{>} --- используется при сортировке списка команд по позиции в чемпионате.
-\end{itemize}
+Диаграмма классов контроллеров и конфигураций сущностей представлены на рисунке 2.
 
-\section*{Вывод}
-В ходе выполнения лабораторной работы была разработана полноценная кроссплатформенная GUI"=система на языке C\# с использованием Avalonia UI. Иерархия классов из Лаб.~1 перенесена без изменений: базовый абстрактный класс \texttt{FormulaTeam} с тремя дочерними (\texttt{F1Team}, \texttt{F2Team}, \texttt{FormulaETeam}), каждый в отдельном файле, доступ к полям только через свойства. Данные хранятся в нормализованной СУБД SQLite по стратегии Table-Per-Type. Реализованы CRUD"=операции, каскадное удаление и начальное заполнение БД (seeding). Методы предметной области из первой работы используются непосредственно в интерактивных функциях GUI: симуляция гонки, сравнение команд и управление личным зачётом пилотов.
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.95\linewidth,height=0.42\textheight,keepaspectratio]{pics/uml-2.png}
+\end{figure}
+\begin{center}
+  Рисунок 2 – Диаграмма классов базы данных и API
+\end{center}
 
-% ──────────────────────────────────────────────────────────────────────────────
+Также разработан веб-интерфейс для взаимодействия с WEB API, экранные формы которого представлены на рисунках 3, 4, 5 и 6.
+
+\pagebreak
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.95\linewidth,height=0.35\textheight,keepaspectratio]{pics/form-1.png}
+\end{figure}
+\begin{center}
+  Рисунок 3 – Экранная форма вкладки команд (standings)
+\end{center}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.95\linewidth,height=0.35\textheight,keepaspectratio]{pics/form-2.png}
+\end{figure}
+\begin{center}
+  Рисунок 4 – Экранная форма вкладки гонщиков
+\end{center}
+
+\pagebreak
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.95\linewidth,height=0.35\textheight,keepaspectratio]{pics/form-3.png}
+\end{figure}
+\begin{center}
+  Рисунок 5 – Экранная форма создания и редактирования команд
+\end{center}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.95\linewidth,height=0.35\textheight,keepaspectratio]{pics/form-4.png}
+\end{figure}
+\begin{center}
+  Рисунок 6 – Экранная форма создания и редактирования гонщиков
+\end{center}
+
+\section*{\hspace{12.5mm}Вывод}
+В ходе выполнения лабораторной работы была разработана и реализована на языке C\# иерархия классов, моделирующая управление гоночными командами различных серий. Изучены основные принципы объектно-ориентированного программирования: инкапсуляция, наследование, полиморфизм. Реализованы механизмы работы с реляционной базой данных PostgreSQL через Entity Framework Core с использованием стратегии Table-per-Hierarchy (TPH). Разработано веб-приложение на базе React и бэкенда на C\# REST API, демонстрирующее корректное применение данных принципов.
+
 \newpage
 
 \section*{Приложение А1. Базовый класс FormulaTeam.cs}
@@ -236,17 +381,5 @@ team = new F1Team(name, principal, hq,
 
 \section*{Приложение А5. Класс FormulaDriver.cs}
 \inputminted{csharp}{code/src/Core/FormulaDriver.cs}
-
-\section*{Приложение А6. Класс DatabaseManager.cs}
-\inputminted{csharp}{code/src/Database/DatabaseManager.cs}
-
-\section*{Приложение А7. MainViewModel.cs}
-\inputminted{csharp}{code/src/ViewModels/MainViewModel.cs}
-
-\section*{Приложение А8. TeamEditorViewModel.cs}
-\inputminted{csharp}{code/src/ViewModels/TeamEditorViewModel.cs}
-
-\section*{Приложение А9. MainWindow.axaml.cs}
-\inputminted{csharp}{code/src/Views/MainWindow.axaml.cs}
 
 \end{document}

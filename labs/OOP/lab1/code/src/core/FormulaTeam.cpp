@@ -2,8 +2,6 @@
 #include <iomanip>
 #include <sstream>
 
-
-
 FormulaTeam::FormulaTeam()
     : teamName("Unknown"), principalName("Unknown"), headquarters("Unknown"),
       championshipPoints(0), raceWins(0), podiums(0) {}
@@ -17,8 +15,6 @@ FormulaTeam::FormulaTeam(const std::string &name, const std::string &principal,
                          const std::string &hq, int points, int wins, int pods)
     : teamName(name), principalName(principal), headquarters(hq),
       championshipPoints(points), raceWins(wins), podiums(pods) {}
-
-
 
 void FormulaTeam::addPoints(int pts) {
   if (pts > 0)
@@ -44,17 +40,15 @@ double FormulaTeam::getWinRate(int totalRaces) const {
   return static_cast<double>(raceWins) / totalRaces * 100.0;
 }
 
-void FormulaTeam::addDriver(const Driver &driver) {
+void FormulaTeam::addDriver(const FormulaDriver &driver) {
   drivers.push_back(driver);
 }
 
-const std::vector<Driver> &FormulaTeam::getDrivers() const {
+const std::vector<FormulaDriver> &FormulaTeam::getDrivers() const {
   return drivers;
 }
 
-std::vector<Driver> &FormulaTeam::getDriversRef() {
-  return drivers;
-}
+std::vector<FormulaDriver> &FormulaTeam::getDriversRef() { return drivers; }
 
 void FormulaTeam::displayStats() const {
   std::cout << "  Points : " << championshipPoints << "\n"
@@ -68,8 +62,6 @@ std::string FormulaTeam::getSummary() const {
       << " | Pts: " << championshipPoints << " | Wins: " << raceWins;
   return oss.str();
 }
-
-
 
 FormulaTeam &FormulaTeam::operator+=(int pts) {
   addPoints(pts);

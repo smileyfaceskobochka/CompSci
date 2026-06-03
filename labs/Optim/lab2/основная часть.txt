@@ -1,0 +1,498 @@
+import numpy as np
+
+
+class Simplex:
+    
+    def __init__(self, c, A, b, signs):
+        self.c = np.array(c, dtype=float)
+        self.A = np.array(A, dtype=float)
+        self.b = np.array(b, dtype=float)
+        self.signs = signs
+        self.m, self.n = A.shape
+        
+    def solve(self):
+        A_phase1 = self.A.copy()
+        b_phase1 = self.b.copy()
+        
+        artificial_vars = []
+        slack_vars = []
+        #преобразование ограничений
+        for i, sign in enumerate(self.signs):
+            if sign == '<=':
+                col = np.zeros(self.m)
+                col[i] = 1
+                A_phase1 = np.column_stack([A_phase1, col])
+                slack_vars.append(A_phase1.shape[1] - 1)
+            elif sign == '>=':
+                col1 = np.zeros(self.m)
+                col1[i] = -1
+                A_phase1 = np.column_stack([A_phase1, col1])
+                slack_vars.append(A_phase1.shape[1] - 1)
+                
+                col2 = np.zeros(self.m)
+                col2[i] = 1
+                A_phase1 = np.column_stack([A_phase1, col2])
+                artificial_vars.append(A_phase1.shape[1] - 1)
+            elif sign == '=':
+                col = np.zeros(self.m)
+                col[i] = 1
+                A_phase1 = np.column_stack([A_phase1, col])
+                artificial_vars.append(A_phase1.shape[1] - 1)
+        
+        total_vars = A_phase1.shape[1]
+        #построение базиса
+        basis = []
+        art_idx = 0
+        slack_idx = 0
+        for i in range(self.m):
+            if self.signs[i] == '<=':
+                basis.append(slack_vars[slack_idx])
+                slack_idx += 1
+            elif self.signs[i] == '>=':
+                basis.append(artificial_vars[art_idx])
+                art_idx += 1
+            elif self.signs[i] == '=':
+                basis.append(artificial_vars[art_idx])
+                art_idx += 1
+        
+        for i in range(self.m):
+            if b_phase1[i] < -1e-7:
+                A_phase1[i] *= -1
+                b_phase1[i] *= -1
+        #w=a1+a2 
+        c_phase1 = np.zeros(total_vars)
+        for art in artificial_vars:
+            c_phase1[art] = 1
+        
+        tableau = np.zeros((self.m + 1, total_vars + 1))
+        tableau[:-1, :-1] = A_phase1
+        tableau[:-1, -1] = b_phase1
+        tableau[-1, :-1] = c_phase1
+        
+        for i in range(self.m):
+            if basis[i] in artificial_vars:
+                tableau[-1] -= tableau[i] 
+        
+        for _ in range(100):
+            if np.all(tableau[-1, :-1] >= -1e-7):  #оптимум
+                break
+            
+            col = np.argmin(tableau[-1, :-1]) #самая отрицательная
+            
+            ratios = []
+            for i in range(self.m):
+                if tableau[i, col] > 1e-7:
+                    ratios.append(tableau[i, -1] / tableau[i, col])
+                else:
+                    ratios.append(np.inf)
+            
+            if np.all(np.isinf(ratios)):
+                return {'status': 'infeasible', 'solution': None, 'value': None}
+            
+            row = np.argmin(ratios)
+            
+            pivot = tableau[row, col]
+            tableau[row] /= pivot
+            for i in range(self.m + 1):
+                if i != row:
+                    tableau[i] -= tableau[i, col] * tableau[row]
+            basis[row] = col
+        #если остались искусственные переменные то все плохо
+        if abs(tableau[-1, -1]) > 1e-6:
+            return {'status': 'infeasible', 'solution': None, 'value': None}
+        
+        if artificial_vars:
+            tableau = np.delete(tableau, artificial_vars, axis=1) #убираем искусственные переменные
+            for var in sorted(artificial_vars, reverse=True):
+                for j in range(len(basis)):
+                    if basis[j] == var:
+                        basis[j] = -1
+                    elif basis[j] > var:
+                        basis[j] -= 1
+            total_vars = tableau.shape[1] - 1
+        
+        c_phase2 = np.zeros(total_vars) #исходная функция
+        c_phase2[:self.n] = self.c
+        tableau[-1, :-1] = -c_phase2
+        
+        for i in range(self.m):
+            if basis[i] >= 0 and basis[i] < total_vars:
+                tableau[-1] += tableau[i] * c_phase2[basis[i]] #корректируем под базис
+        
+        for _ in range(100):
+            if np.all(tableau[-1, :-1] >= -1e-7):
+                break
+            
+            col = np.argmin(tableau[-1, :-1])
+            
+            if np.all(tableau[:-1, col] <= 1e-7):
+                return {'status': 'unbounded', 'solution': None, 'value': float('inf')}
+            
+            ratios = []
+            for i in range(self.m):
+                if tableau[i, col] > 1e-7:
+                    ratios.append(tableau[i, -1] / tableau[i, col])
+                else:
+                    ratios.append(np.inf)
+            
+            if np.all(np.isinf(ratios)):
+                return {'status': 'unbounded', 'solution': None, 'value': float('inf')}
+            
+            row = np.argmin(ratios)
+            
+            pivot = tableau[row, col]
+            tableau[row] /= pivot
+            for i in range(self.m + 1):
+                if i != row:
+                    tableau[i] -= tableau[i, col] * tableau[row]
+            basis[row] = col
+        
+        x = np.zeros(self.n)
+        for i in range(self.m):
+            if basis[i] >= 0 and basis[i] < self.n:
+                x[basis[i]] = tableau[i, -1]
+        
+        value = tableau[-1, -1]
+        
+        return {'status': 'optimal', 'solution': x, 'value': value}
+
+
+class BranchAndBound:
+    """Метод ветвей и границ для целочисленного линейного программирования"""
+    
+    def __init__(self, c, A, b, signs, int_vars=None):
+        self.c = np.array(c, dtype=float)
+        self.A = np.array(A, dtype=float)
+        self.b = np.array(b, dtype=float)
+        self.signs = signs
+        self.int_vars = int_vars if int_vars else list(range(len(c)))
+        self.best_x = None
+        self.best_val = -np.inf
+        self.nodes = []
+        self.solutions = []
+        self.is_unbounded = False
+        self.explored_branches = set()  # для отслеживания исследованных ветвей
+
+    #целое или нет    
+    def is_integer(self, x, eps=1e-5):
+        if x is None:
+            return False
+        for i in self.int_vars:
+            if i < len(x) and abs(x[i] - round(x[i])) > eps:
+                return False
+        return True
+    
+    #поиск дробной переменной
+    def get_fractional(self, x):
+        if x is None:
+            return None, None
+        
+        max_frac = 0
+        frac_idx = None
+        frac_val = None
+        
+        for i in self.int_vars:
+            if i < len(x):
+                frac = abs(x[i] - round(x[i]))
+                if frac > 1e-5 and frac > max_frac:
+                    max_frac = frac
+                    frac_idx = i
+                    frac_val = x[i]
+        
+        return frac_idx, frac_val
+    
+    #ветвление
+    def add_constraint(self, A, b, signs, var_idx, bound_type, value):
+        new_A = A.copy()
+        new_b = b.copy()
+        new_signs = signs.copy()
+        
+        row = np.zeros(A.shape[1])
+        row[var_idx] = 1
+        new_A = np.vstack([new_A, row])
+        new_b = np.append(new_b, value)
+        new_signs.append(bound_type)
+        
+        return new_A, new_b, new_signs
+    
+    def format_constraints(self, A, b, signs):
+        constraints_str = []
+        for i in range(len(b)):
+            terms = []
+            for j in range(A.shape[1]):
+                if abs(A[i,j]) > 1e-6:
+                    if A[i,j] >= 0:
+                        terms.append(f"{A[i,j]:.0f}*x{j+1}")
+                    else:
+                        terms.append(f"({A[i,j]:.0f})*x{j+1}")
+            row_str = " + ".join(terms) if terms else "0"
+            constraints_str.append(f"{row_str} {signs[i]} {b[i]:.0f}")
+        return constraints_str
+    
+    def branch(self, A, b, signs, level=0, info="корень"):
+        if self.is_unbounded:
+            return
+        
+        # Ограничение глубины
+        if level > 10:
+            return
+            
+        node_num = len(self.nodes) + 1 #создаем узел
+        
+        node_data = {
+            'num': node_num,
+            'level': level,
+            'info': info,
+            'constraints': self.format_constraints(A, b, signs) if level == 0 else None
+        }
+        
+        solver = Simplex(self.c, A, b, signs) #каждую ветку считаем
+        res = solver.solve()
+        
+        node_data['status'] = res['status']
+        
+        if res['status'] == 'unbounded':
+            node_data['note'] = 'задача неограничена'
+            self.is_unbounded = True
+            self.nodes.append(node_data)
+            return
+        
+        if res['status'] == 'infeasible':
+            node_data['note'] = 'недопустима - отсечение'
+            self.nodes.append(node_data)
+            return
+        
+        if res['status'] != 'optimal':
+            self.nodes.append(node_data)
+            return
+        
+        x, val = res['solution'], res['value']
+        node_data['x'] = x.copy()
+        node_data['val'] = val
+        node_data['integer'] = self.is_integer(x) #целое или нет
+        
+        #если значение хуже рекорда - отсекаем
+        if val < self.best_val - 1e-6:
+            node_data['pruned'] = f'по границе ({val:.3f} < {self.best_val:.3f})'
+            self.nodes.append(node_data)
+            return
+        
+        frac_idx, frac_val = self.get_fractional(x)
+        
+        #нашли целое значение
+        if frac_idx is None:
+            node_data['note'] = 'найдено целочисленное решение'
+            self.solutions.append({'x': x.copy(), 'val': val, 'node': node_num})
+            if val > self.best_val:
+                self.best_val = val
+                self.best_x = x.copy()
+            self.nodes.append(node_data)
+            
+            # Ищем другие решения только если это первое или равно лучшему
+            # и только на первом уровне
+            if level == 0 and val >= self.best_val - 1e-6:
+                # Пробуем только разумные ветвления
+                for i in self.int_vars:
+                    if i < len(x):
+                        current_val = int(round(x[i]))
+                        if current_val > 0:
+                            A_l, b_l, s_l = self.add_constraint(A, b, signs, i, '<=', current_val - 1)
+                            # Проверяем, не исследовали ли уже
+                            key = (i, '<=', current_val - 1)
+                            if key not in self.explored_branches:
+                                self.explored_branches.add(key)
+                                self.branch(A_l, b_l, s_l, level+1, f"лево: x{i+1} <= {current_val - 1}")
+            return
+        
+        # нет целого значит обычное ветвление по дробной
+        node_data['branch_on'] = f'x{frac_idx+1} = {frac_val:.3f} (дробная)'
+        self.nodes.append(node_data)
+        
+        lb = int(np.floor(frac_val))
+        ub = int(np.ceil(frac_val))
+
+        # Левая ветка
+        key_l = (frac_idx, '<=', lb)
+        if key_l not in self.explored_branches:
+            self.explored_branches.add(key_l)
+            A_l, b_l, s_l = self.add_constraint(A, b, signs, frac_idx, '<=', lb)
+            self.branch(A_l, b_l, s_l, level+1, f"лево: x{frac_idx+1} <= {lb}")
+        
+        # Правая ветка
+        key_r = (frac_idx, '>=', ub)
+        if key_r not in self.explored_branches:
+            self.explored_branches.add(key_r)
+            A_r, b_r, s_r = self.add_constraint(A, b, signs, frac_idx, '>=', ub)
+            self.branch(A_r, b_r, s_r, level+1, f"право: x{frac_idx+1} >= {ub}")
+    
+    def solve(self):
+        self.best_x = None
+        self.best_val = -np.inf
+        self.nodes = []
+        self.solutions = []
+        self.is_unbounded = False
+        self.explored_branches = set()
+        
+        #дерево
+        self.branch(self.A, self.b, self.signs)
+        
+        if self.is_unbounded:
+            return {
+                'status': 'unbounded',
+                'x': None,
+                'value': float('inf'),
+                'nodes': self.nodes,
+                'solutions': [],
+                'optimal_solutions': []
+            }
+        #оптимальное решение
+        if self.best_val > -np.inf:
+            # Убираем дубликаты
+            unique_solutions = []
+            seen = set()
+            for s in self.solutions:
+                key = tuple(int(round(s['x'][i])) for i in range(len(s['x'])))
+                if key not in seen:
+                    seen.add(key)
+                    unique_solutions.append(s)
+            self.solutions = unique_solutions
+            
+            optimal_solutions = [s for s in self.solutions if abs(s['val'] - self.best_val) < 1e-6]
+        else:
+            optimal_solutions = []
+        
+        return {
+            'status': 'optimal' if self.best_x is not None else 'no_solution',
+            'x': self.best_x,
+            'value': self.best_val,
+            'nodes': self.nodes,
+            'solutions': self.solutions,
+            'optimal_solutions': optimal_solutions
+        }
+    
+    def print_tree(self):
+        print()
+        print("="*70)
+        print("Дерево ветвей и границ")
+        print("="*70)
+        
+        for node in self.nodes:
+            indent = "  " * node['level']
+            print()
+            print(f"{indent}Узел {node['num']} (уровень {node['level']})")
+            print(f"{indent}  Ветвь: {node['info']}")
+            
+            if 'constraints' in node and node['constraints'] is not None:
+                print(f"{indent}  Ограничения:")
+                for constr in node['constraints']:
+                    print(f"{indent}    {constr}")
+            
+            if 'branch_on' in node:
+                print(f"{indent}  Ветвление по: {node['branch_on']}")
+            
+            if 'x' in node:
+                x_str = ", ".join([f"x{j+1}={v:.3f}" for j, v in enumerate(node['x'])])
+                print(f"{indent}  Решение: {x_str}")
+                print(f"{indent}  Значение: {node['val']:.3f}")
+                
+                if node.get('integer', False):
+                    print(f"{indent}  Статус: целочисленное решение")
+            
+            if 'pruned' in node:
+                print(f"{indent}  Отсечение: {node['pruned']}")
+            
+            if 'note' in node:
+                print(f"{indent}  Примечание: {node['note']}")
+
+
+def read_input(filename):
+    try:
+        with open(filename, 'r', encoding='utf-8') as f:
+            lines = [l.strip() for l in f if l.strip() and not l.startswith('#')]
+    except:
+        with open(filename, 'r') as f:
+            lines = [l.strip() for l in f if l.strip() and not l.startswith('#')]
+    
+    n_vars, n_con = map(int, lines[0].split())
+    
+    A, b, signs = [], [], []
+    for i in range(n_con):
+        parts = lines[1 + i].split()
+        
+        sign_idx = -1
+        for j, part in enumerate(parts):
+            if part in ['<=', '>=', '=']:
+                sign_idx = j
+                break
+        
+        coeffs = list(map(float, parts[:sign_idx]))
+        signs.append(parts[sign_idx])
+        b.append(float(parts[-1]))
+        A.append(coeffs)
+    
+    c = list(map(float, lines[-1].split()))
+    int_vars = list(range(n_vars))
+    
+    return c, np.array(A), np.array(b), signs, int_vars
+
+
+def main():
+    print("="*70)
+    print("Метод ветвей и границ (максимизация)")
+    print("="*70)
+    
+    c, A, b, signs, int_vars = read_input("Input.txt")
+    
+    n_vars = len(c)
+    n_con = len(b)
+    
+    print()
+    print("Исходные данные:")
+    print(f"  Количество переменных: {n_vars}")
+    print(f"  Количество ограничений: {n_con}")
+    print()
+    print("  Целевая функция:")
+    obj_str = " + ".join([f"{c[i]}*x{i+1}" for i in range(n_vars)])
+    print(f"    F = {obj_str} -> max")
+    print()
+    print("  Ограничения:")
+    for i in range(n_con):
+        con_str = " + ".join([f"{A[i,j]}*x{j+1}" for j in range(n_vars)])
+        print(f"    {con_str} {signs[i]} {b[i]}")
+    print("    x1, x2 >= 0, целые")
+    
+    bb = BranchAndBound(c, A, b, signs, int_vars)
+    result = bb.solve()
+    
+    bb.print_tree()
+    
+    print()
+    print("="*70)
+    print("Результат")
+    print("="*70)
+    print()
+    
+    if result['status'] == 'unbounded':
+        print("Задача неограничена.")
+        print("Целевая функция может возрастать бесконечно.")
+    elif result['status'] == 'optimal':
+        print("Найдено оптимальное решение.")
+        print(f"Значение целевой функции: {result['value']:.0f}")
+        print(f"Просмотрено узлов: {len(result['nodes'])}")
+        print(f"Найдено целочисленных решений: {len(result['solutions'])}")
+        print()
+        print("Оптимальные решения:")
+        for i, sol in enumerate(result['optimal_solutions']):
+            x_str = ", ".join([f"x{j+1}={int(sol['x'][j])}" for j in range(n_vars)])
+            print(f"  {i+1}) {x_str}")
+        
+        if len(result['optimal_solutions']) > 1:
+            print()
+            print("Замечание: существует несколько оптимальных решений.")
+    else:
+        print("Нет допустимых целочисленных решений.")
+        print(f"Просмотрено узлов: {len(result['nodes'])}")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,144 @@
+classDiagram
+    direction TB
+
+    class FormulaDriver {
+        -string firstName
+        -string lastName
+        -int racingNumber
+        -int points
+        +FormulaDriver(fName, lName, number, pts)
+        +getFirstName() string
+        +getLastName() string
+        +getFullName() string
+        +getRacingNumber() int
+        +getPoints() int
+        +addPoints(pts) void
+    }
+
+    class FormulaTeam {
+        <<Abstract>>
+        #string teamName
+        #string principalName
+        #string headquarters
+        #int championshipPoints
+        #int raceWins
+        #int podiums
+        #vector~FormulaDriver~ drivers
+        +FormulaTeam()
+        +FormulaTeam(name, principal, hq)
+        +FormulaTeam(name, principal, hq, points, wins, podiums)
+        +virtual ~FormulaTeam()
+        +getTeamName() string
+        +getPrincipalName() string
+        +getHeadquarters() string
+        +getChampionshipPoints() int
+        +getRaceWins() int
+        +getPodiums() int
+        +setTeamName(name) void
+        +setPrincipalName(principal) void
+        +setHeadquarters(hq) void
+        +setChampionshipPoints(pts) void
+        +setRaceWins(wins) void
+        +setPodiums(p) void
+        +addPoints(pts) void
+        +addWin() void
+        +addPodium() void
+        +resetSeason() void
+        +getWinRate(totalRaces) double
+        +addDriver(driver) void
+        +getDrivers() vector~FormulaDriver~
+        +getDriversRef() vector~FormulaDriver~&
+        +virtual displayInfo() void*
+        +virtual getSeriesName() string*
+        +virtual calculatePoints(position) int*
+        +virtual displayStats() void
+        +virtual getSummary() string
+    }
+
+    class F1Team {
+        -string powerUnit
+        -double budgetCapMln
+        -int constructorPos
+        +F1Team()
+        +F1Team(name, principal, hq, powerUnit)
+        +F1Team(name, principal, hq, powerUnit, budget, ctorPos, points, wins, podiums)
+        +getPowerUnit() string
+        +getBudgetCapMln() double
+        +getConstructorPos() int
+        +setPowerUnit(pu) void
+        +setBudgetCapMln(b) void
+        +setConstructorPos(pos) void
+        +calculateBudgetAllocation(percentage) double
+        +getPowerUnitStatus() string
+        +displayInfo() void
+        +getSeriesName() string
+        +calculatePoints(position) int
+        +displayStats() void
+        +getSummary() string
+    }
+
+    class F2Team {
+        -string chassisModel
+        -int f1Graduates
+        -bool isFeederSeries
+        +F2Team()
+        +F2Team(name, principal, hq, chassis)
+        +F2Team(name, principal, hq, chassis, graduates, feeder, points, wins, podiums)
+        +getChassisModel() string
+        +getF1Graduates() int
+        +getIsFeederSeries() bool
+        +setChassisModel(c) void
+        +setF1Graduates(g) void
+        +setIsFeederSeries(f) void
+        +addGraduate() void
+        +getFeederStatus() string
+        +displayInfo() void
+        +getSeriesName() string
+        +calculatePoints(position) int
+        +displayStats() void
+        +getSummary() string
+    }
+
+    class FormulaETeam {
+        -int sustainabilityScore
+        -double batteryCapacityKwh
+        -string energyPartner
+        +FormulaETeam()
+        +FormulaETeam(name, principal, hq, energyPartner)
+        +FormulaETeam(name, principal, hq, energyPartner, sustainScore, batteryKwh, points, wins, podiums)
+        +getSustainabilityScore() int
+        +getBatteryCapacityKwh() double
+        +getEnergyPartner() string
+        +setSustainabilityScore(s) void
+        +setBatteryCapacityKwh(b) void
+        +setEnergyPartner(e) void
+        +updateSustainabilityScore(delta) void
+        +getBatteryEfficiencyRating() string
+        +displayInfo() void
+        +getSeriesName() string
+        +calculatePoints(position) int
+        +displayStats() void
+        +getSummary() string
+    }
+
+    class TeamFactory {
+        <<Utility>>
+        +createTeams() vector~shared_ptr~FormulaTeam~~
+    }
+
+    class UI {
+        -vector~shared_ptr~FormulaTeam~~ teams
+        -vector~string~ logs
+        +UI(initial_teams)
+        +run() void
+        -addLog(text) void
+    }
+
+    FormulaTeam <|-- F1Team : Public Inheritance
+    FormulaTeam <|-- F2Team : Public Inheritance
+    FormulaTeam <|-- FormulaETeam : Public Inheritance
+    FormulaTeam *-- FormulaDriver : Composition (1 to Many)
+    
+    UI --> FormulaTeam : Manages (via shared_ptr)
+    TeamFactory ..> FormulaTeam : Instantiates (Dependency)
+    UI ..> TeamFactory : Uses to seed

@@ -1,0 +1,30 @@
+@import "../styles/globals.css";
+
+@layer base {
+  :root {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  body {
+    @apply block w-full min-w-[320px] min-h-screen relative m-0 bg-[#07080f] text-[#f4f4f5] overflow-x-hidden;
+  }
+}
+
+
+
+@keyframes spin {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion) {
+  *,
+  ::before,
+  ::after {
+    animation: none !important;
+  }
+}

@@ -32,13 +32,21 @@ public class RacingService {
     }
 
     public List<RacingSeries> getAllSeriesWithTeams() {
-        List<RacingSeries> all = new java.util.ArrayList<>();
+        List<RacingSeries> all = new ArrayList<>();
         seriesRepository.findAll().forEach(all::add);
         return all;
     }
 
     public RacingSeries getSeriesById(Long id) {
         return seriesRepository.findById(id).orElse(null);
+    }
+
+    public void saveSeries(RacingSeries series) {
+        seriesRepository.save(series);
+    }
+
+    public void deleteSeries(Long id) {
+        seriesRepository.deleteById(id);
     }
 
     // Teams

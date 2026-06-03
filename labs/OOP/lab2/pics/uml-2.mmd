@@ -1,0 +1,36 @@
+classDiagram
+    direction LR
+
+    class Program {
+        -DatabaseManager db
+        -JsonSerializerOptions jsonOptions
+        +Main(args) void
+        -ProcessRequest(context) void
+        -SendJson(response, data, statusCode) void
+        -SendError(response, message, statusCode) void
+        -ReadBody(request) string
+    }
+
+    class DatabaseManager {
+        +GetAllTeams() List~FormulaTeam~
+        +GetAllDrivers() List~FormulaDriver~
+        +SaveTeam(team) void
+        +SaveDriver(driver) void
+        +DeleteTeam(id) void
+        +DeleteDriver(id) void
+    }
+
+    class RacingDbContext {
+        +DbSet~FormulaTeam~ Teams
+        +DbSet~FormulaDriver~ Drivers
+        #OnConfiguring(optionsBuilder) void
+        #OnModelCreating(modelBuilder) void
+    }
+
+    class DbContext {
+        <<External>>
+    }
+
+    RacingDbContext --|> DbContext : Inherits
+    Program --> DatabaseManager : Uses (via static field db)
+    DatabaseManager --> RacingDbContext : Instantiates and Queries

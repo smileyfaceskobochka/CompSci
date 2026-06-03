@@ -3,11 +3,12 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 )
 
-const goPort = ":8080"
+var goPort = ":" + getEnv("GO_PORT", "8080")
 
 func main() {
 	loadTemplates()
@@ -38,6 +39,13 @@ func main() {
 	// JSON API proxy
 	r.PathPrefix("/api/").HandlerFunc(apiProxy)
 
-	log.Printf("Go server listening on %s", goPort)
+	log.Printf("Go server listening on %s (python API: %s)", goPort, pythonBase)
 	log.Fatal(http.ListenAndServe(goPort, r))
+}
+
+func getEnv(key, fallback string) string {
+	if v := os.Getenv(key); v != "" {
+		return v
+	}
+	return fallback
 }

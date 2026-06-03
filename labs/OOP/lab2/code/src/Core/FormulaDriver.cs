@@ -23,5 +23,7 @@ namespace RacingSystem.Core
 
         public string FullName => $"{FirstName} {LastName}";
         public string DisplayString => $"{FullName} #{RacingNumber}";
+
+        public void AddPoints(int pts) => Points += pts;
     }
 }

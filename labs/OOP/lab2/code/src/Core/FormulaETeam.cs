@@ -39,6 +39,9 @@ namespace RacingSystem.Core
             return "Legacy";
         }
 
+        [System.Text.Json.Serialization.JsonPropertyName("battery_rating_text")]
+        public string BatteryRatingText => GetBatteryEfficiencyRating();
+
         public override string GetSummary()
         {
             return $"{base.GetSummary()} | Eco: {SustainabilityScore}/100 | Battery: {BatteryCapacityKwh} kWh";

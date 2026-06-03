@@ -1,6 +1,7 @@
 package com.vyatsu.racing.controllers;
 
 import com.vyatsu.racing.models.RacingDriver;
+import com.vyatsu.racing.models.RacingSeries;
 import com.vyatsu.racing.models.RacingTeam;
 import com.vyatsu.racing.services.RacingService;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,37 @@ public class RacingController {
         model.addAttribute("seriesList", racingService.getAllSeriesWithTeams());
         model.addAttribute("standingsBySeries", racingService.getStandingsBySeries());
         return "index";
+    }
+
+    // --- SERIES ---
+    @GetMapping("/series")
+    public String viewSeries(Model model) {
+        model.addAttribute("seriesList", racingService.getAllSeriesWithTeams());
+        return "series";
+    }
+
+    @GetMapping("/series/add")
+    public String showAddSeriesForm(Model model) {
+        model.addAttribute("series", new RacingSeries());
+        return "series-form";
+    }
+
+    @GetMapping("/series/edit/{id}")
+    public String showEditSeriesForm(@PathVariable Long id, Model model) {
+        model.addAttribute("series", racingService.getSeriesById(id));
+        return "series-form";
+    }
+
+    @PostMapping("/series/save")
+    public String saveSeries(@ModelAttribute RacingSeries series) {
+        racingService.saveSeries(series);
+        return "redirect:/series";
+    }
+
+    @GetMapping("/series/delete/{id}")
+    public String deleteSeries(@PathVariable Long id) {
+        racingService.deleteSeries(id);
+        return "redirect:/series";
     }
 
     // --- TEAMS ---

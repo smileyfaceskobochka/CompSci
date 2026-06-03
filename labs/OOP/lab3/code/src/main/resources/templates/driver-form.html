@@ -1,71 +1,103 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Driver Editor</title>
-    <link rel="stylesheet" th:href="@{/style.css}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title th:text="${driver.id == null} ? 'NEW DRIVER — Racing' : 'EDIT DRIVER — Racing'"></title>
+<link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
-<nav class="navbar">
-    <div class="navbar-inner">
-        <a href="/" class="nav-brand">🏎 Racing System</a>
-        <div class="nav-links">
-            <a href="/">Dashboard</a>
-            <a href="/teams">Teams</a>
-            <a href="/drivers">Drivers</a>
-        </div>
-    </div>
-</nav>
 
-<main class="content">
+<div class="topbar">
+  <a href="/" class="topbar-brand">RACING SYSTEM</a>
+  <nav class="topbar-nav">
+    <a href="/">DASHBOARD</a>
+    <a href="/series">SERIES</a>
+    <a href="/teams">TEAMS</a>
+    <a href="/drivers" class="active">DRIVERS</a>
+  </nav>
+  <div class="topbar-status">
+    <span class="status-dot live"></span>
+    <span class="status-label">LIVE</span>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Navigation</div>
+      <a href="/" class="sidebar-btn">DASHBOARD</a>
+      <a href="/series" class="sidebar-btn">SERIES</a>
+      <a href="/teams" class="sidebar-btn">TEAMS</a>
+      <a href="/drivers" class="sidebar-btn primary">DRIVERS</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
     <div class="page-header">
-        <h1 th:text="${driver.id == null} ? 'Add New Driver' : 'Edit Driver'"></h1>
-        <a href="/" class="btn btn-ghost">← Back</a>
+      <h1 th:text="${driver.id == null} ? 'NEW DRIVER' : 'EDIT DRIVER'"></h1>
+      <a href="/drivers" class="btn btn-ghost">← BACK</a>
     </div>
 
     <form class="form-card" action="#" th:action="@{/drivers/save}" th:object="${driver}" method="post">
-        <input type="hidden" th:field="*{id}" />
+      <input type="hidden" th:field="*{id}" />
 
+      <div class="form-group">
+        <label>Team *</label>
+        <select th:field="*{team.id}" required>
+          <option value="">— SELECT TEAM —</option>
+          <option th:each="t : ${teams}"
+                  th:value="${t.id}"
+                  th:text="${t.name} + ' (' + ${t.series.name} + ')'"></option>
+        </select>
+      </div>
+
+      <div class="form-row">
         <div class="form-group">
-            <label>Team *</label>
-            <select th:field="*{team.id}" required>
-                <option value="">— Select Team —</option>
-                <option th:each="t : ${teams}"
-                        th:value="${t.id}"
-                        th:text="${t.name} + ' (' + ${t.series.name} + ')'"></option>
-            </select>
+          <label>First Name *</label>
+          <input type="text" th:field="*{firstName}" required />
         </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label>First Name *</label>
-                <input type="text" th:field="*{firstName}" required />
-            </div>
-
-            <div class="form-group">
-                <label>Last Name *</label>
-                <input type="text" th:field="*{lastName}" required />
-            </div>
+        <div class="form-group">
+          <label>Last Name *</label>
+          <input type="text" th:field="*{lastName}" required />
         </div>
+      </div>
 
-        <div class="form-row">
-            <div class="form-group">
-                <label>Racing Number * (1-99)</label>
-                <input type="number" th:field="*{racingNumber}" min="1" max="99" required />
-            </div>
-
-            <div class="form-group">
-                <label>Points</label>
-                <input type="number" th:field="*{points}" required />
-            </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Racing Number * (1-99)</label>
+          <input type="number" th:field="*{racingNumber}" min="1" max="99" required />
         </div>
-
-        <div class="form-actions">
-            <button type="submit" class="btn btn-save">Save Driver</button>
-            <a href="/" class="btn btn-ghost">Cancel</a>
+        <div class="form-group">
+          <label>Points</label>
+          <input type="number" th:field="*{points}" required />
         </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-save">SAVE DRIVER</button>
+        <a href="/drivers" class="btn btn-ghost">CANCEL</a>
+      </div>
     </form>
-</main>
+
+  </main>
+
+</div>
+
+<div class="bottombar">
+  <div class="stat">
+    <span class="stat-dot"></span>
+    <span class="stat-label-bot">DB</span>
+    <span class="stat-value-bot">LIVE</span>
+  </div>
+  <div class="stat">
+    <span class="stat-label-bot">Mode</span>
+    <span class="stat-value-bot">EDITOR</span>
+  </div>
+  <div class="db">Java / Spring Boot 2.6 / Thymeleaf</div>
+</div>
+
 </body>
 </html>

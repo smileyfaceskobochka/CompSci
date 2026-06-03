@@ -3,7 +3,7 @@ code/python/__pycache__/
 code/python/venv/
 code/python/*.log
 code/python/.env
-venv/
+.venv/
 __pycache__/
 *.pyc
 
@@ -22,3 +22,4 @@ _minted*/
 *.pdf
 *.pyg
 *.synctex.gz
+

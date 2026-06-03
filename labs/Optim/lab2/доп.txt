@@ -1,0 +1,310 @@
+import numpy as np
+import time
+from collections import deque
+
+class Simplex:
+    def __init__(self, c, A, b):
+        self.c = np.array(c, dtype=float)
+        self.A = np.array(A, dtype=float)
+        self.b = np.array(b, dtype=float)
+        self.m, self.n = A.shape
+        
+    def solve(self):
+        A_std = np.hstack([self.A, np.eye(self.m)])
+        c_ext = np.hstack([-self.c, np.zeros(self.m)])
+        basis = list(range(self.n, self.n + self.m))
+        
+        tableau = np.zeros((self.m + 1, self.n + self.m + 1))
+        tableau[:-1, :-1] = A_std
+        tableau[:-1, -1] = self.b
+        tableau[-1, :-1] = c_ext
+        
+        for i in range(self.m):
+            if basis[i] < self.n:
+                tableau[-1] += tableau[i] * self.c[basis[i]]
+        
+        for _ in range(50):
+            if np.all(tableau[-1, :-1] >= -1e-6):
+                break
+            
+            col = np.argmin(tableau[-1, :-1])
+            
+            if np.all(tableau[:-1, col] <= 1e-6):
+                return {'status': 'unbounded', 'x': None, 'val': None}
+            
+            ratios = [tableau[i, -1] / tableau[i, col] if tableau[i, col] > 1e-6 else np.inf for i in range(self.m)]
+            row = np.argmin(ratios)
+            
+            if np.isinf(ratios[row]):
+                return {'status': 'unbounded', 'x': None, 'val': None}
+            
+            pivot = tableau[row, col]
+            tableau[row] /= pivot
+            for i in range(self.m + 1):
+                if i != row:
+                    tableau[i] -= tableau[i, col] * tableau[row]
+            basis[row] = col
+        
+        x = np.zeros(self.n)
+        for i in range(self.m):
+            if basis[i] < self.n:
+                x[basis[i]] = tableau[i, -1]
+        
+        return {'status': 'optimal', 'x': x, 'val': tableau[-1, -1]}
+
+
+class BranchAndBound:
+    
+    def __init__(self, c, A, b, var_strategy='max_frac', traversal='dfs'):
+        self.c = c
+        self.A = np.array(A)
+        self.b = np.array(b)
+        self.var_strategy = var_strategy
+        self.traversal = traversal
+        self.best_x = None
+        self.best_val = -np.inf
+        self.nodes = 0
+        self.visited = set()
+        
+    def get_frac_var(self, x):
+        fracs = []
+        for i in range(len(x)):
+            frac = abs(x[i] - round(x[i]))
+            if frac > 1e-4:
+                fracs.append((i, frac))
+        
+        if not fracs:
+            return None, None
+        
+        if self.var_strategy == 'max_frac':
+            idx, _ = max(fracs, key=lambda f: f[1])
+        elif self.var_strategy == 'min_frac':
+            idx, _ = min(fracs, key=lambda f: f[1])
+        elif self.var_strategy == 'first':
+            idx, _ = fracs[0]
+        elif self.var_strategy == 'max_coeff':
+            idx = max(fracs, key=lambda f: abs(self.c[f[0]]))[0]
+        elif self.var_strategy == 'min_coeff':
+            idx = min(fracs, key=lambda f: abs(self.c[f[0]]))[0]
+        else:
+            idx, _ = max(fracs, key=lambda f: f[1])
+            
+        return idx, x[idx]
+    
+    def get_state_key(self, A, b):
+        return (tuple(np.round(b, 4)), A.shape[0])
+    
+    def create_branches(self, A, b, idx, frac_val):
+        branches = []
+        lb, ub = int(np.floor(frac_val)), int(np.ceil(frac_val))
+        
+        if lb >= 0:
+            row_left = np.zeros(A.shape[1])
+            row_left[idx] = 1
+            A_left = np.vstack([A, row_left])
+            b_left = np.append(b, lb)
+            branches.append((A_left, b_left))
+        
+        row_right = np.zeros(A.shape[1])
+        row_right[idx] = -1
+        A_right = np.vstack([A, row_right])
+        b_right = np.append(b, -ub)
+        branches.append((A_right, b_right))
+        
+        return branches
+    
+    def process_node(self, A, b):
+        state_key = self.get_state_key(A, b)
+        if state_key in self.visited:
+            return None
+        self.visited.add(state_key)
+        
+        self.nodes += 1
+        
+        res = Simplex(self.c, A, b).solve()
+        
+        if res['status'] != 'optimal':
+            return None
+        
+        x, val = res['x'], res['val']
+        
+        if val <= self.best_val + 1e-4:
+            return None
+        
+        idx, frac_val = self.get_frac_var(x)
+        
+        if idx is None:
+            if val > self.best_val:
+                self.best_val = val
+                self.best_x = x.copy()
+            return None
+        
+        return self.create_branches(A, b, idx, frac_val)
+    
+    def solve_dfs(self):
+        def dfs(A, b, level=0):
+            if level > 30:
+                return
+            
+            branches = self.process_node(A, b)
+            if branches:
+                for A_br, b_br in branches:
+                    dfs(A_br, b_br, level + 1)
+        
+        dfs(self.A, self.b)
+    
+    def solve_bfs(self):
+        queue = deque()
+        queue.append((self.A.copy(), self.b.copy(), 0))
+        
+        while queue:
+            A, b, level = queue.popleft()
+            
+            if level > 30:
+                continue
+            
+            branches = self.process_node(A, b)
+            if branches:
+                for A_br, b_br in branches:
+                    queue.append((A_br, b_br, level + 1))
+    
+    def solve(self):
+        self.best_x = None
+        self.best_val = -np.inf
+        self.nodes = 0
+        self.visited = set()
+        
+        start = time.time()
+        
+        if self.traversal == 'dfs':
+            self.solve_dfs()
+        elif self.traversal == 'bfs':
+            self.solve_bfs()
+        else:
+            self.solve_dfs()
+        
+        elapsed = time.time() - start
+        
+        return {
+            'nodes': self.nodes,
+            'time': elapsed,
+            'x': self.best_x,
+            'val': self.best_val
+        }
+
+
+# ========== ТЕСТОВЫЕ ЗАДАЧИ ==========
+
+def get_problems():
+    return [
+        {
+            'name': 'n=4, m=3',
+            'c': [5, 7, 3, 4],
+            'A': [
+                [2, 1, 1, 1],
+                [1, 3, 1, 2],
+                [2, 1, 2, 1]
+            ],
+            'b': [15, 20, 18]
+        },
+        {
+            'name': 'n=6, m=4',
+            'c': [8, 5, 6, 3, 7, 4],
+            'A': [
+                [2, 1, 1, 1, 1, 1],
+                [1, 2, 1, 2, 1, 1],
+                [1, 1, 3, 1, 2, 1],
+                [2, 2, 1, 1, 1, 2]
+            ],
+            'b': [25, 22, 28, 20]
+        },
+        {
+            'name': 'n=8, m=5',
+            'c': [6, 4, 8, 3, 5, 7, 2, 9],
+            'A': [
+                [1, 2, 1, 1, 1, 1, 1, 1],
+                [2, 1, 2, 1, 1, 2, 1, 1],
+                [1, 1, 1, 3, 1, 1, 2, 1],
+                [1, 2, 1, 1, 2, 1, 1, 2],
+                [2, 1, 1, 1, 1, 1, 2, 1]
+            ],
+            'b': [30, 28, 32, 25, 27]
+        },
+        {
+            'name': 'n=10, m=6',
+            'c': [12, 8, 15, 6, 10, 14, 7, 11, 9, 13],
+            'A': [
+                [2, 1, 3, 1, 1, 2, 1, 1, 1, 2],
+                [1, 3, 1, 2, 1, 1, 2, 1, 2, 1],
+                [3, 1, 2, 1, 2, 1, 1, 2, 1, 1],
+                [1, 2, 1, 3, 1, 2, 1, 1, 1, 2],
+                [2, 1, 1, 1, 3, 1, 2, 1, 2, 1],
+                [1, 1, 2, 2, 1, 3, 1, 2, 1, 1]
+            ],
+            'b': [15, 14, 16, 13, 15, 14]
+        },
+        {
+            'name': 'n=12, m=7',
+            'c': [14, 9, 16, 7, 12, 15, 8, 10, 13, 11, 17, 9],
+            'A': [
+                [2, 1, 3, 1, 2, 1, 1, 2, 1, 1, 2, 1],
+                [1, 3, 1, 2, 1, 2, 1, 1, 2, 1, 1, 2],
+                [3, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1],
+                [1, 2, 1, 3, 1, 1, 1, 2, 1, 1, 2, 1],
+                [2, 1, 1, 1, 3, 1, 2, 1, 2, 1, 1, 1],
+                [1, 1, 2, 1, 1, 3, 1, 2, 1, 2, 1, 1],
+                [1, 2, 1, 2, 1, 1, 3, 1, 1, 1, 1, 2]
+            ],
+            'b': [18, 16, 17, 15, 18, 16, 17]
+        }
+    ]
+
+
+# ========== ЗАПУСК ИССЛЕДОВАНИЯ ==========
+
+def main():
+    problems = get_problems()
+    var_strategies = ['max_frac', 'min_frac', 'first', 'max_coeff', 'min_coeff']
+    traversal_strategies = ['dfs', 'bfs']
+    
+    strat_names = {
+        'max_frac': 'макс.дробь',
+        'min_frac': 'мин.дробь',
+        'first': 'первая',
+        'max_coeff': 'макс.коэфф',
+        'min_coeff': 'мин.коэфф'
+    }
+    
+    trav_names = {'dfs': 'в глубину', 'bfs': 'в ширину'}
+    
+    print("ВЛИЯНИЕ СТРАТЕГИИ ВЫБОРА ПЕРЕМЕННОЙ")
+    
+    for prob in problems:
+        print(f"\nЗадача: {prob['name']}")
+        print(f"n={len(prob['c'])}, m={len(prob['b'])}")
+        print(f"\n{'Стратегия':<15} {'Узлов':<12} {'Время(с)':<12} {'Оптимум':<12}")
+        print("-"*55)
+        
+        for s in var_strategies:
+            bb = BranchAndBound(prob['c'], prob['A'], prob['b'], 
+                               var_strategy=s, traversal='dfs')
+            res = bb.solve()
+            print(f"{strat_names[s]:<15} {res['nodes']:<12} {res['time']:<12.4f} {res['val']:<12.0f}")
+    
+    print("\nСРАВНЕНИЕ СТРАТЕГИЙ ОБХОДА (со стратегией макс.коэфф)")
+    
+    for prob in problems:
+        print(f"\n{'='*80}")
+        print(f"Задача: {prob['name']}")
+        print(f"\n{'Стратегия обхода':<20} {'Узлов':<12} {'Время(с)':<12} {'Оптимум':<12}")
+        print("-"*60)
+        
+        for t in traversal_strategies:
+            bb = BranchAndBound(prob['c'], prob['A'], prob['b'], 
+                               var_strategy='max_coeff', traversal=t)
+            res = bb.solve()
+            print(f"{trav_names[t]:<20} {res['nodes']:<12} {res['time']:<12.4f} {res['val']:<12.0f}")
+
+
+if __name__ == "__main__":
+    main()

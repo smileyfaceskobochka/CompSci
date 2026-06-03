@@ -1,112 +1,176 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard — Racing Management System</title>
-    <link rel="stylesheet" th:href="@{/style.css}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DASHBOARD — Racing Management</title>
+<link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
-<nav class="navbar">
-    <div class="navbar-inner">
-        <a href="/" class="nav-brand">🏎 Racing System</a>
-        <div class="nav-links">
-            <a href="/">Dashboard</a>
-            <a href="/teams">Teams</a>
-            <a href="/drivers">Drivers</a>
-        </div>
-    </div>
-</nav>
-<main class="content">
-<div class="page-header">
-    <div>
-        <h1>🏆 Racing World Management System</h1>
-        <p class="subtitle">F1 · WEC · IndyCar · MotoGP — 2026 Season</p>
-    </div>
+
+<div class="topbar">
+  <a href="/" class="topbar-brand">RACING SYSTEM</a>
+  <nav class="topbar-nav">
+    <a href="/" class="active">DASHBOARD</a>
+    <a href="/series">SERIES</a>
+    <a href="/teams">TEAMS</a>
+    <a href="/drivers">DRIVERS</a>
+  </nav>
+  <div class="topbar-status">
+    <span class="status-dot live"></span>
+    <span class="status-label">LIVE</span>
+  </div>
 </div>
 
-<div class="stats-grid">
-    <div class="stat-card">
-        <div class="stat-label">Series</div>
-        <div class="stat-value purple" th:text="${seriesList.size()}"></div>
+<div class="page-wrap">
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Navigation</div>
+      <a href="/" class="sidebar-btn primary">DASHBOARD</a>
+      <a href="/series" class="sidebar-btn">SERIES</a>
+      <a href="/teams" class="sidebar-btn">TEAMS</a>
+      <a href="/drivers" class="sidebar-btn">DRIVERS</a>
     </div>
-    <div class="stat-card">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Quick Actions</div>
+      <a href="/series/add" class="sidebar-btn add">+ ADD SERIES</a>
+      <a href="/teams/add" class="sidebar-btn add">+ ADD TEAM</a>
+      <a href="/drivers/add" class="sidebar-btn add">+ ADD DRIVER</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <div class="page-header">
+      <div>
+        <h1>RACING WORLD MANAGEMENT</h1>
+        <p class="subtitle">F1 · F2 · FE · WEC · INDYCAR · MotoGP — 2026 SEASON</p>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card highlight">
+        <div class="stat-label">Series</div>
+        <div class="stat-value mauve" th:text="${seriesList.size()}"></div>
+      </div>
+      <div class="stat-card highlight">
         <div class="stat-label">Teams</div>
         <div class="stat-value blue" th:text="${teams.size()}"></div>
-    </div>
-    <div class="stat-card">
+      </div>
+      <div class="stat-card highlight">
         <div class="stat-label">Drivers</div>
         <div class="stat-value teal" th:text="${drivers.size()}"></div>
-    </div>
-    <div class="stat-card wide">
-        <div class="stat-label">🏆 Top Driver</div>
+      </div>
+      <div class="stat-card wide highlight">
+        <div class="stat-label">Championship Leader</div>
         <div class="stat-value peach" th:text="${drivers[0].firstName + ' ' + drivers[0].lastName}"></div>
-        <div class="stat-sub" th:text="${drivers[0].points + ' pts · ' + drivers[0].team.name}"></div>
+        <div class="stat-sub" th:text="${drivers[0].points + ' pts - ' + drivers[0].team.name}"></div>
+      </div>
     </div>
-</div>
 
-<!-- Business Logic: Points Calculator -->
-<div class="section-title">⚡ F1 Points System (Business Logic)</div>
-<div class="pts-grid">
-    <div class="pts-row"><span class="pos">P1</span><span class="pts yellow">25</span></div>
-    <div class="pts-row"><span class="pos">P2</span><span class="pts">18</span></div>
-    <div class="pts-row"><span class="pos">P3</span><span class="pts peach">15</span></div>
-    <div class="pts-row"><span class="pos">P4</span><span class="pts">12</span></div>
-    <div class="pts-row"><span class="pos">P5</span><span class="pts">10</span></div>
-    <div class="pts-row"><span class="pos">P6</span><span class="pts">8</span></div>
-    <div class="pts-row"><span class="pos">P7</span><span class="pts">6</span></div>
-    <div class="pts-row"><span class="pos">P8</span><span class="pts">4</span></div>
-    <div class="pts-row"><span class="pos">P9</span><span class="pts">2</span></div>
-    <div class="pts-row"><span class="pos">P10</span><span class="pts">1</span></div>
-</div>
+    <div class="section-title">F1 Points System</div>
+    <div class="pts-grid">
+      <div class="pts-item"><span class="pos">P1</span><span class="pts yellow">25</span></div>
+      <div class="pts-item"><span class="pos">P2</span><span class="pts">18</span></div>
+      <div class="pts-item"><span class="pos">P3</span><span class="pts peach">15</span></div>
+      <div class="pts-item"><span class="pos">P4</span><span class="pts">12</span></div>
+      <div class="pts-item"><span class="pos">P5</span><span class="pts">10</span></div>
+      <div class="pts-item"><span class="pos">P6</span><span class="pts">8</span></div>
+      <div class="pts-item"><span class="pos">P7</span><span class="pts">6</span></div>
+      <div class="pts-item"><span class="pos">P8</span><span class="pts">4</span></div>
+      <div class="pts-item"><span class="pos">P9</span><span class="pts">2</span></div>
+      <div class="pts-item"><span class="pos">P10</span><span class="pts">1</span></div>
+    </div>
 
-<div class="section-title">📋 Series Overview</div>
-<div class="series-grid">
-    <th:block th:each="series : ${seriesList}">
-        <div class="series-card" th:classappend="${series.name == 'Formula 1' ? 'f1' : (series.name == 'Formula 2' ? 'f2' : (series.name == 'Formula E' ? 'fe' : (series.name == 'WEC' ? 'wec' : (series.name == 'IndyCar' ? 'indy' : (series.name == 'MotoGP' ? 'moto' : '')))))}">
-            <div class="sc-name" th:text="${series.name}"></div>
-            <div class="sc-official" th:text="${series.officialName}"></div>
-            <div class="sc-meta">
-                <span th:text="'Founded ' + ${series.foundedYear}"></span>
-                <span th:text="${series.rounds} + ' rounds'"></span>
-                <span th:text="${series.headquarters}"></span>
-            </div>
+    <div class="section-title">Series Overview</div>
+    <div class="series-grid">
+      <th:block th:each="series : ${seriesList}">
+        <div class="series-card"
+             th:classappend="${series.name == 'Formula 1' ? 'f1' : (series.name == 'Formula 2' ? 'f2' : (series.name == 'Formula E' ? 'fe' : (series.name == 'WEC' ? 'wec' : (series.name == 'IndyCar' ? 'indy' : (series.name == 'MotoGP' ? 'moto' : '')))))}">
+          <div class="sc-name" th:text="${series.name}"></div>
+          <div class="sc-official" th:text="${series.officialName}"></div>
+          <div class="sc-meta">
+            <span th:text="'Founded ' + ${series.foundedYear}"></span>
+            <span th:text="${series.rounds} + ' rounds'"></span>
+            <span th:text="${series.headquarters}"></span>
+          </div>
         </div>
-    </th:block>
+      </th:block>
+    </div>
+
+    <div class="section-title" style="color:var(--peach)">Drivers Championship Standings</div>
+    <table class="data-table">
+      <thead>
+        <tr><th>Pos</th><th>Driver</th><th>No.</th><th>Team</th><th>Points</th></tr>
+      </thead>
+      <tbody>
+        <th:block th:each="series : ${seriesList}">
+          <tr class="series-row"
+              th:classappend="${series.name == 'Formula 1' ? 'f1' : (series.name == 'Formula 2' ? 'f2' : (series.name == 'Formula E' ? 'fe' : (series.name == 'WEC' ? 'wec' : (series.name == 'IndyCar' ? 'indy' : (series.name == 'MotoGP' ? 'moto' : '')))))}">
+            <td colspan="5" th:text="${series.name + ' CHAMPIONSHIP'}"></td>
+          </tr>
+          <th:block th:each="entry : ${standingsBySeries.entrySet()}">
+            <th:block th:if="${entry.key.id == series.id}">
+              <tr th:each="driver, iter : ${entry.value}" th:classappend="${iter.index == 0} ? 'leader' : ''">
+                <td th:classappend="${iter.index == 0} ? 'gold' : (${iter.index == 1} ? 'silver' : (${iter.index == 2} ? 'bronze' : 'dim'))"
+                    th:text="${iter.count}"></td>
+                <td class="name">
+                  <span class="team-accent" th:style="'background-color:' + ${driver.team.teamColor}"></span>
+                  <span th:text="${driver.firstName + ' ' + driver.lastName}"></span>
+                </td>
+                <td><span class="badge num" th:text="'#' + ${driver.racingNumber}"></span></td>
+                <td th:text="${driver.team.name}"></td>
+                <td class="pts yellow" th:text="${driver.points}"></td>
+              </tr>
+            </th:block>
+          </th:block>
+        </th:block>
+      </tbody>
+    </table>
+
+  </main>
+
+  <aside class="sidebar-right">
+    <div class="tlm-panel">
+      <div class="tlm-panel-header">System Status</div>
+      <div class="tlm-panel-value green" style="font-size:14px">ONLINE</div>
+      <div class="tlm-panel-sub">PostgreSQL connected</div>
+    </div>
+    <div class="tlm-panel">
+      <div class="tlm-panel-header">Total Points Awarded</div>
+      <div class="tlm-panel-value yellow" style="font-size:20px" th:text="${drivers.size()}"></div>
+      <div class="tlm-panel-sub">registered drivers</div>
+    </div>
+    <div class="tlm-panel">
+      <div class="tlm-panel-header">Active Series</div>
+      <div class="tlm-panel-value mauve" style="font-size:20px" th:text="${seriesList.size()}"></div>
+      <div class="tlm-panel-sub">racing championships</div>
+    </div>
+  </aside>
+
 </div>
 
+<div class="bottombar">
+  <div class="stat">
+    <span class="stat-dot"></span>
+    <span class="stat-label-bot">DB</span>
+    <span class="stat-value-bot">LIVE</span>
+  </div>
+  <div class="stat">
+    <span class="stat-label-bot">Series</span>
+    <span class="stat-value-bot" th:text="${seriesList.size()}"></span>
+  </div>
+  <div class="stat">
+    <span class="stat-label-bot">Teams</span>
+    <span class="stat-value-bot" th:text="${teams.size()}"></span>
+  </div>
+  <div class="stat">
+    <span class="stat-label-bot">Drivers</span>
+    <span class="stat-value-bot" th:text="${drivers.size()}"></span>
+  </div>
+  <div class="db">Java / Spring Boot 2.6 / Thymeleaf</div>
+</div>
 
-<!-- ══════════════════════ STANDINGS ══════════════════════ -->
-<div class="section-title" style="color:#fab387">🏆 Drivers Championship Standings</div>
-<table class="data-table">
-    <thead>
-        <tr><th>Pos</th><th>Driver</th><th>No.</th><th>Team</th><th>Points</th></tr>
-    </thead>
-    <tbody>
-        <th:block th:each="series : ${seriesList}">
-            <tr class="series-row"
-                th:classappend="${series.name == 'Formula 1' ? 'f1' : (series.name == 'Formula 2' ? 'f2' : (series.name == 'Formula E' ? 'fe' : (series.name == 'WEC' ? 'wec' : (series.name == 'IndyCar' ? 'indy' : (series.name == 'MotoGP' ? 'moto' : '')))))}">
-                <td colspan="5" th:text="${series.name + ' Championship'}"></td>
-            </tr>
-            <th:block th:each="entry : ${standingsBySeries.entrySet()}">
-                <th:block th:if="${entry.key.id == series.id}">
-                    <tr th:each="driver, iter : ${entry.value}" th:classappend="${iter.index == 0} ? 'leader' : ''">
-                        <td th:classappend="${iter.index == 0} ? 'gold' : (${iter.index == 1} ? 'silver' : (${iter.index == 2} ? 'bronze' : 'dim'))"
-                            th:text="${iter.count}"></td>
-                        <td class="name">
-                            <span class="team-accent" th:style="'background-color:' + ${driver.team.teamColor}"></span>
-                            <span th:text="${driver.firstName + ' ' + driver.lastName}"></span>
-                        </td>
-                        <td><span class="badge num" th:text="'#' + ${driver.racingNumber}"></span></td>
-                        <td th:text="${driver.team.name}"></td>
-                        <td class="pts yellow" th:text="${driver.points}"></td>
-                    </tr>
-                </th:block>
-            </th:block>
-        </th:block>
-    </tbody>
-</table>
-
-</main>
 </body>
 </html>

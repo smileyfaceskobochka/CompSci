@@ -1,126 +1,156 @@
 {{template "layout.html" .}}
-{{define "title"}}Dashboard — Racing System{{end}}
+{{define "title"}}DASHBOARD — Racing System{{end}}
+{{define "sidebar_actions"}}
+<a href="/teams/new" class="sidebar-btn add">+ ADD TEAM</a>
+<a href="/drivers/new" class="sidebar-btn add">+ ADD DRIVER</a>
+{{end}}
+{{define "sidebar_right"}}
+<div class="tlm-panel">
+  <div class="tlm-panel-header">System Status</div>
+  <div class="tlm-panel-value green" style="font-size:14px">ONLINE</div>
+  <div class="tlm-panel-sub">Go + Python + PostgreSQL</div>
+</div>
+{{if .Stats.TopTeam}}
+<div class="tlm-panel">
+  <div class="tlm-panel-header">Top Constructor</div>
+  <div class="tlm-panel-value peach" style="font-size:14px">{{.Stats.TopTeam.Name}}</div>
+  <div class="tlm-panel-sub">{{.Stats.TopTeam.Points}} pts</div>
+</div>
+{{end}}
+<div class="tlm-panel">
+  <div class="tlm-panel-header">Active Series</div>
+  <div class="tlm-panel-value mauve" style="font-size:20px">{{.Stats.TotalSeries}}</div>
+  <div class="tlm-panel-sub">racing championships</div>
+</div>
+{{end}}
+{{define "bottombar"}}
+<div class="stat">
+  <span class="stat-label-bot">Series</span>
+  <span class="stat-value-bot">{{.Stats.TotalSeries}}</span>
+</div>
+<div class="stat">
+  <span class="stat-label-bot">Teams</span>
+  <span class="stat-value-bot">{{.Stats.TotalTeams}}</span>
+</div>
+<div class="stat">
+  <span class="stat-label-bot">Drivers</span>
+  <span class="stat-value-bot">{{.Stats.TotalDrivers}}</span>
+</div>
+{{end}}
 {{define "content"}}
 <div class="page-header">
-    <h1>🏆 Racing World Management System</h1>
-    <p class="subtitle">F1 · WEC · IndyCar · MotoGP — 2026 Season · Lab 4 (Go + Python + PostgreSQL)</p>
+  <div>
+    <h1>RACING WORLD MANAGEMENT</h1>
+    <p class="subtitle">F1 · F2 · FE · WEC · INDYCAR · MotoGP — 2026 SEASON · LAB 4 (GO + PYTHON)</p>
+  </div>
 </div>
 
-<!-- Stats cards -->
 <div class="stats-grid">
-    <div class="stat-card">
-        <div class="stat-label">Series</div>
-        <div class="stat-value purple">{{.Stats.TotalSeries}}</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-label">Teams</div>
-        <div class="stat-value blue">{{.Stats.TotalTeams}}</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-label">Drivers</div>
-        <div class="stat-value teal">{{.Stats.TotalDrivers}}</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-label">Avg Team Pts</div>
-        <div class="stat-value yellow">{{formatFloat .Stats.AvgTeamPoints}}</div>
-    </div>
-    {{if .Stats.TopTeam}}
-    <div class="stat-card wide">
-        <div class="stat-label">🏆 Top Constructors</div>
-        <div class="stat-value peach">{{.Stats.TopTeam.Name}}</div>
-        <div class="stat-sub">{{.Stats.TopTeam.Points}} pts</div>
-    </div>
-    {{end}}
-    {{if .Stats.TopDriver}}
-    <div class="stat-card wide">
-        <div class="stat-label">🥇 Championship Leader</div>
-        <div class="stat-value green">{{.Stats.TopDriver.FullName}}</div>
-        <div class="stat-sub">{{.Stats.TopDriver.Points}} pts · #{{.Stats.TopDriver.RacingNumber}}</div>
-    </div>
-    {{end}}
+  <div class="stat-card highlight">
+    <div class="stat-label">Series</div>
+    <div class="stat-value mauve">{{.Stats.TotalSeries}}</div>
+  </div>
+  <div class="stat-card highlight">
+    <div class="stat-label">Teams</div>
+    <div class="stat-value blue">{{.Stats.TotalTeams}}</div>
+  </div>
+  <div class="stat-card highlight">
+    <div class="stat-label">Drivers</div>
+    <div class="stat-value teal">{{.Stats.TotalDrivers}}</div>
+  </div>
+  <div class="stat-card highlight">
+    <div class="stat-label">Avg Team Pts</div>
+    <div class="stat-value yellow">{{formatFloat .Stats.AvgTeamPoints}}</div>
+  </div>
+  {{if .Stats.TopTeam}}
+  <div class="stat-card wide highlight">
+    <div class="stat-label">Top Constructor</div>
+    <div class="stat-value peach">{{.Stats.TopTeam.Name}}</div>
+    <div class="stat-sub">{{.Stats.TopTeam.Points}} pts</div>
+  </div>
+  {{end}}
+  {{if .Stats.TopDriver}}
+  <div class="stat-card wide highlight">
+    <div class="stat-label">Championship Leader</div>
+    <div class="stat-value green">{{.Stats.TopDriver.FullName}}</div>
+    <div class="stat-sub">{{.Stats.TopDriver.Points}} pts · #{{.Stats.TopDriver.RacingNumber}}</div>
+  </div>
+  {{end}}
 </div>
 
-<!-- Business Logic: Points Calculator -->
-<div class="section-title">⚡ F1 Points Calculator (Business Logic)</div>
-<div class="points-table">
-    <div class="pts-grid">
-        <div class="pts-row"><span class="pos">P1</span><span class="pts yellow">{{f1pts 1}}</span></div>
-        <div class="pts-row"><span class="pos">P2</span><span class="pts">{{f1pts 2}}</span></div>
-        <div class="pts-row"><span class="pos">P3</span><span class="pts peach">{{f1pts 3}}</span></div>
-        <div class="pts-row"><span class="pos">P4</span><span class="pts">{{f1pts 4}}</span></div>
-        <div class="pts-row"><span class="pos">P5</span><span class="pts">{{f1pts 5}}</span></div>
-        <div class="pts-row"><span class="pos">P6</span><span class="pts">{{f1pts 6}}</span></div>
-        <div class="pts-row"><span class="pos">P7</span><span class="pts">{{f1pts 7}}</span></div>
-        <div class="pts-row"><span class="pos">P8</span><span class="pts">{{f1pts 8}}</span></div>
-        <div class="pts-row"><span class="pos">P9</span><span class="pts">{{f1pts 9}}</span></div>
-        <div class="pts-row"><span class="pos">P10</span><span class="pts">{{f1pts 10}}</span></div>
-        <div class="pts-row"><span class="pos">P11+</span><span class="pts dim">0</span></div>
-    </div>
+<div class="section-title">F1 Points System</div>
+<div class="pts-grid">
+  <div class="pts-item"><span class="pos">P1</span><span class="pts yellow">{{f1pts 1}}</span></div>
+  <div class="pts-item"><span class="pos">P2</span><span class="pts">{{f1pts 2}}</span></div>
+  <div class="pts-item"><span class="pos">P3</span><span class="pts peach">{{f1pts 3}}</span></div>
+  <div class="pts-item"><span class="pos">P4</span><span class="pts">{{f1pts 4}}</span></div>
+  <div class="pts-item"><span class="pos">P5</span><span class="pts">{{f1pts 5}}</span></div>
+  <div class="pts-item"><span class="pos">P6</span><span class="pts">{{f1pts 6}}</span></div>
+  <div class="pts-item"><span class="pos">P7</span><span class="pts">{{f1pts 7}}</span></div>
+  <div class="pts-item"><span class="pos">P8</span><span class="pts">{{f1pts 8}}</span></div>
+  <div class="pts-item"><span class="pos">P9</span><span class="pts">{{f1pts 9}}</span></div>
+  <div class="pts-item"><span class="pos">P10</span><span class="pts">{{f1pts 10}}</span></div>
+  <div class="pts-item"><span class="pos">P11+</span><span class="pts dim">0</span></div>
 </div>
 
-<!-- Series overview -->
-<div class="section-title">📋 Series Overview</div>
+<div class="section-title">Series Overview</div>
 <div class="series-grid">
 {{range .Series}}
 <div class="series-card {{seriesClass .Name}}">
-    <div class="sc-name">{{.Name}}</div>
-    <div class="sc-official">{{.OfficialName}}</div>
-    <div class="sc-meta">
-        <span>Founded {{.FoundedYear}}</span>
-        <span>{{.Rounds}} rounds</span>
-        <span>{{.Headquarters}}</span>
-    </div>
+  <div class="sc-name">{{.Name}}</div>
+  <div class="sc-official">{{.OfficialName}}</div>
+  <div class="sc-meta">
+    <span>Founded {{.FoundedYear}}</span>
+    <span>{{.Rounds}} rounds</span>
+    <span>{{.Headquarters}}</span>
+  </div>
 </div>
 {{end}}
 </div>
 
-<!-- Top teams -->
-<div class="section-title">🏗 Constructors</div>
+<div class="section-title">Constructors</div>
 <table class="data-table">
-    <thead><tr><th>Pos</th><th>Team</th><th>Principal</th><th>Power Unit</th><th>Points</th><th>Series</th><th>Actions</th></tr></thead>
-    <tbody>
-    {{range $i, $t := .Teams}}
-    <tr>
-        <td class="dim">{{add $i 1}}</td>
-        <td class="name">
-            <span class="team-accent" style="background-color: {{.TeamColor}}"></span>
-            {{$t.Name}}
-        </td>
-        <td>{{$t.PrincipalName}}</td>
-        <td><span class="badge pu">{{if $t.PowerUnit}}{{$t.PowerUnit}}{{else}}—{{end}}</span></td>
-        <td class="pts yellow">{{$t.Points}}</td>
-        <td>{{if $t.Series}}{{$t.Series.Name}}{{else}}—{{end}}</td>
-        <td class="actions">
-            <a href="/teams/{{$t.ID}}/edit" class="btn btn-sm edit">Edit</a>
-            <form method="POST" action="/teams/{{$t.ID}}/delete" style="display:inline" onsubmit="return confirm('Delete team?')">
-                <button class="btn btn-sm del">Del</button>
-            </form>
-        </td>
-    </tr>
-    {{end}}
-    </tbody>
+  <thead><tr><th>Pos</th><th>Team</th><th>Principal</th><th>Power Unit</th><th>Points</th><th>Series</th><th>Actions</th></tr></thead>
+  <tbody>
+  {{range $i, $t := .Teams}}
+  <tr>
+    <td class="dim">{{add $i 1}}</td>
+    <td class="name">
+      <span class="team-accent" style="background-color: {{.TeamColor}}"></span>
+      {{$t.Name}}
+    </td>
+    <td>{{$t.PrincipalName}}</td>
+    <td><span class="badge pu">{{if $t.PowerUnit}}{{$t.PowerUnit}}{{else}}—{{end}}</span></td>
+    <td class="pts yellow">{{$t.Points}}</td>
+    <td>{{if $t.Series}}{{$t.Series.Name}}{{else}}—{{end}}</td>
+    <td class="actions">
+      <a href="/teams/{{$t.ID}}/edit" class="btn btn-sm edit">Edit</a>
+      <form method="POST" action="/teams/{{$t.ID}}/delete" style="display:inline" onsubmit="return confirm('Delete team?')">
+        <button class="btn btn-sm del">Del</button>
+      </form>
+    </td>
+  </tr>
+  {{end}}
+  </tbody>
 </table>
 
-<!-- Top drivers -->
-<div class="section-title" style="color:#fab387">🏆 Drivers Championship</div>
+<div class="section-title" style="color:var(--peach)">Drivers Championship</div>
 <table class="data-table">
-    <thead><tr><th>Pos</th><th>Driver</th><th>#</th><th>Points</th><th>Team</th><th>Series</th></tr></thead>
-    <tbody>
-    {{range $i, $d := .Drivers}}
-    <tr {{if eq $i 0}}class="leader"{{end}}>
-        <td class="{{if eq $i 0}}gold{{else if eq $i 1}}silver{{else if eq $i 2}}bronze{{else}}dim{{end}}">{{add $i 1}}</td>
-        <td class="name">
-            {{if .Team}}
-                <span class="team-accent" style="background-color: {{.Team.TeamColor}}"></span>
-            {{end}}
-            {{$d.FullName}}
-        </td>
-        <td><span class="badge num">#{{$d.RacingNumber}}</span></td>
-        <td class="pts yellow">{{$d.Points}}</td>
-        <td>{{if $d.Team}}{{$d.Team.Name}}{{else}}—{{end}}</td>
-        <td>{{if $d.Team}}{{if $d.Team.Series}}{{$d.Team.Series.Name}}{{end}}{{end}}</td>
-    </tr>
-    {{end}}
-    </tbody>
+  <thead><tr><th>Pos</th><th>Driver</th><th>#</th><th>Points</th><th>Team</th><th>Series</th></tr></thead>
+  <tbody>
+  {{range $i, $d := .Drivers}}
+  <tr {{if eq $i 0}}class="leader"{{end}}>
+    <td class="{{if eq $i 0}}gold{{else if eq $i 1}}silver{{else if eq $i 2}}bronze{{else}}dim{{end}}">{{add $i 1}}</td>
+    <td class="name">
+      {{if .Team}}<span class="team-accent" style="background-color: {{.Team.TeamColor}}"></span>{{end}}
+      {{$d.FullName}}
+    </td>
+    <td><span class="badge num">#{{$d.RacingNumber}}</span></td>
+    <td class="pts yellow">{{$d.Points}}</td>
+    <td>{{if $d.Team}}{{$d.Team.Name}}{{else}}—{{end}}</td>
+    <td>{{if $d.Team}}{{$d.Team.Series.Name}}{{end}}</td>
+  </tr>
+  {{end}}
+  </tbody>
 </table>
 {{end}}

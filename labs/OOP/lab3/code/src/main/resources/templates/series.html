@@ -1,98 +1,38 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SERIES — Racing Management</title>
-<link rel="stylesheet" th:href="@{/style.css}">
+<meta charset="UTF-8"/>
+<title>Racing Series</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
 </head>
 <body>
-
-<div class="topbar">
-  <a href="/" class="topbar-brand">RACING SYSTEM</a>
-  <nav class="topbar-nav">
-    <a href="/">DASHBOARD</a>
-    <a href="/series" class="active">SERIES</a>
-    <a href="/teams">TEAMS</a>
-    <a href="/drivers">DRIVERS</a>
-  </nav>
-  <div class="topbar-status">
-    <span class="status-dot live"></span>
-    <span class="status-label">LIVE</span>
-  </div>
+<div class="container mt-4">
+<h1>Racing Series</h1>
+<nav class="nav nav-pills mb-4">
+<a class="nav-link" href="/">Home</a>
+<a class="nav-link active" href="/series">Series</a>
+<a class="nav-link" href="/teams">Teams</a>
+<a class="nav-link" href="/drivers">Drivers</a>
+</nav>
+<a class="btn btn-primary mb-3" href="/series/add">Add Series</a>
+<table class="table table-striped">
+<thead><tr><th>ID</th><th>Name</th><th>Official Name</th><th>Headquarters</th><th>Governing Body</th><th>Founded</th><th>Rounds</th><th>Actions</th></tr></thead>
+<tbody>
+<tr th:each="series : ${seriesList}">
+<td th:text="${series.id}">1</td>
+<td th:text="${series.name}">Name</td>
+<td th:text="${series.officialName}">Official</td>
+<td th:text="${series.headquarters}">HQ</td>
+<td th:text="${series.governingBody}">Body</td>
+<td th:text="${series.foundedYear}">Year</td>
+<td th:text="${series.rounds}">Rounds</td>
+<td>
+<a class="btn btn-sm btn-warning" th:href="@{/series/edit/{id}(id=${series.id})}">Edit</a>
+<a class="btn btn-sm btn-danger" th:href="@{/series/delete/{id}(id=${series.id})}" onclick="return confirm('Delete this series?')">Delete</a>
+</td>
+</tr>
+</tbody>
+</table>
 </div>
-
-<div class="page-wrap">
-
-  <aside class="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-label">Navigation</div>
-      <a href="/" class="sidebar-btn">DASHBOARD</a>
-      <a href="/series" class="sidebar-btn primary">SERIES</a>
-      <a href="/teams" class="sidebar-btn">TEAMS</a>
-      <a href="/drivers" class="sidebar-btn">DRIVERS</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-label">Actions</div>
-      <a href="/series/add" class="sidebar-btn add">+ ADD SERIES</a>
-    </div>
-  </aside>
-
-  <main class="main-content">
-
-    <div class="page-header">
-      <h1>RACING SERIES</h1>
-      <a href="/series/add" class="btn btn-add">+ ADD SERIES</a>
-    </div>
-
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Name</th><th>Official Name</th><th>HQ</th><th>Governing Body</th><th>Founded</th><th>Rounds</th><th>Teams</th><th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr th:each="series : ${seriesList}">
-          <td class="name"><span th:text="${series.name}"></span></td>
-          <td th:text="${series.officialName}"></td>
-          <td th:text="${series.headquarters}"></td>
-          <td th:text="${series.governingBody}"></td>
-          <td th:text="${series.foundedYear}"></td>
-          <td th:text="${series.rounds}"></td>
-          <td th:text="${series.teams.size()}"></td>
-          <td class="actions">
-            <a th:href="@{/series/edit/{id}(id=${series.id})}" class="btn btn-sm edit">Edit</a>
-            <a th:href="@{/series/delete/{id}(id=${series.id})}" class="btn btn-sm del"
-               onclick="return confirm('Delete this series and all its teams/drivers?');">Delete</a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-  </main>
-
-  <aside class="sidebar-right">
-    <div class="tlm-panel">
-      <div class="tlm-panel-header">Total Series</div>
-      <div class="tlm-panel-value mauve" style="font-size:20px" th:text="${seriesList.size()}"></div>
-      <div class="tlm-panel-sub">racing championships managed</div>
-    </div>
-  </aside>
-
-</div>
-
-<div class="bottombar">
-  <div class="stat">
-    <span class="stat-dot"></span>
-    <span class="stat-label-bot">DB</span>
-    <span class="stat-value-bot">LIVE</span>
-  </div>
-  <div class="stat">
-    <span class="stat-label-bot">Series</span>
-    <span class="stat-value-bot" th:text="${seriesList.size()}"></span>
-  </div>
-  <div class="db">Java / Spring Boot 2.6 / Thymeleaf</div>
-</div>
-
 </body>
 </html>

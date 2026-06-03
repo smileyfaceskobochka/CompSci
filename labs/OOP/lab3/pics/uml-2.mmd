@@ -1,0 +1,46 @@
+classDiagram
+    direction TB
+
+    class RacingRestController {
+        -RacingTeamRepository teamRepository
+        -RacingDriverRepository driverRepository
+        -RacingSeriesRepository seriesRepository
+        +getAllTeams() ResponseEntity
+        +createTeam(dto) ResponseEntity
+        +updateTeam(id, dto) ResponseEntity
+        +deleteTeam(id) ResponseEntity
+        +getAllDrivers() ResponseEntity
+        +createDriver(dto) ResponseEntity
+        +updateDriver(id, dto) ResponseEntity
+        +deleteDriver(id) ResponseEntity
+        +simulateRace(id, position, driverId) ResponseEntity
+        +compareTeams(teamIdA, teamIdB) ResponseEntity
+        +simulateGlobalRace(raceResults) ResponseEntity
+        +getStats(series) ResponseEntity
+    }
+
+    class RacingTeamRepository {
+        <<interface>>
+    }
+
+    class RacingDriverRepository {
+        <<interface>>
+        +findByTeam_SeriesIdOrderByPointsDesc(seriesId) List
+    }
+
+    class RacingSeriesRepository {
+        <<interface>>
+    }
+
+    class JpaRepository {
+        <<interface>>
+        <<External>>
+    }
+
+    RacingRestController --> RacingTeamRepository : Uses
+    RacingRestController --> RacingDriverRepository : Uses
+    RacingRestController --> RacingSeriesRepository : Uses
+
+    RacingTeamRepository --|> JpaRepository
+    RacingDriverRepository --|> JpaRepository
+    RacingSeriesRepository --|> JpaRepository

@@ -1,0 +1,77 @@
+classDiagram
+    direction LR
+
+    subgraph Go BFF Models
+        class Series {
+            +int64 ID
+            +string Name
+            +string OfficialName
+            +string Headquarters
+            +string GoverningBody
+            +int FoundedYear
+            +int Rounds
+            +[]Team Teams
+        }
+        class Team {
+            +int64 ID
+            +string Name
+            +string PrincipalName
+            +string BaseLocation
+            +string PowerUnit
+            +int Points
+            +int64 SeriesID
+            +string TeamColor
+            +*Series Series
+            +[]Driver Drivers
+        }
+        class Driver {
+            +int64 ID
+            +string FirstName
+            +string LastName
+            +string FullName
+            +int RacingNumber
+            +int Points
+            +int64 TeamID
+            +*Team Team
+        }
+    end
+
+    subgraph Python ORM Models
+        class RacingSeries {
+            +BigInteger id
+            +String name
+            +String official_name
+            +String headquarters
+            +String governing_body
+            +Integer founded_year
+            +Integer rounds
+            +relationship teams
+        }
+        class RacingTeam {
+            +BigInteger id
+            +String name
+            +String principal_name
+            +String base_location
+            +String power_unit
+            +Integer points
+            +BigInteger series_id
+            +String team_color
+            +relationship series
+            +relationship drivers
+        }
+        class RacingDriver {
+            +BigInteger id
+            +String first_name
+            +String last_name
+            +Integer racing_number
+            +Integer points
+            +BigInteger team_id
+            +relationship team
+        }
+    end
+
+    Series "1" *-- "many" Team
+    Team "1" *-- "many" Driver
+
+    RacingSeries "1" *-- "many" RacingTeam
+    RacingTeam "1" *-- "many" RacingDriver

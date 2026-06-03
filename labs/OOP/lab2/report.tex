@@ -50,6 +50,10 @@
   pdfauthor={Черкасов А.А.}
 }
 
+% Compile Mermaid diagrams on the fly using shell-escape
+\immediate\write18{bunx @mermaid-js/mermaid-cli -i pics/uml-1.mmd -o pics/uml-1.png -b white}
+\immediate\write18{bunx @mermaid-js/mermaid-cli -i pics/uml-2.mmd -o pics/uml-2.png -b white}
+
 \begin{document}
 
 \newpage\thispagestyle{empty}

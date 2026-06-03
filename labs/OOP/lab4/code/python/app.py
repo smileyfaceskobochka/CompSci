@@ -85,7 +85,7 @@ def list_teams():
         teams = repo.get_by_series(series_id)
     else:
         teams = repo.get_all()
-    data = [t.to_dict(include_series=True) for t in teams]
+    data = [t.to_dict(include_series=True, include_drivers=True) for t in teams]
     db.close()
     return jsonify(data)
 

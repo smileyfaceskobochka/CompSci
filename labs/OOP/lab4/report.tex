@@ -63,6 +63,9 @@
   pdfauthor={Черкасов А.А.}
 }
 
+% Compile Mermaid diagrams on the fly using shell-escape
+\immediate\write18{bunx @mermaid-js/mermaid-cli -i pics/class_diagram.mmd -o pics/class_diagram.png -b white}
+
 \begin{document}
 
 \newpage
@@ -112,79 +115,92 @@
 \end{center}
 
 \newpage\thispagestyle{plain}
-\tableofcontents
 \newpage
 
 \section{Цель работы}
 \begin{itemize}
   \item[$-$] разработать распределённое веб-приложение на базе микросервисной архитектуры;
-  \item[$-$] реализовать бизнес-логику и веб-интерфейс на языке Go;
+  \item[$-$] реализовать BFF-шлюз (Backend-for-Frontend) на языке Go с использованием горутин, паттерна Circuit Breaker, middleware-конвейера и graceful shutdown;
   \item[$-$] реализовать слой доступа к данным на Python через ORM SQLAlchemy, подключившись к существующей схеме базы данных из предыдущих лабораторных работ (PostgreSQL);
-  \item[$-$] обеспечить взаимодействие между сервисами через HTTP (REST API).
+  \item[$-$] обеспечить взаимодействие между сервисами через HTTP (REST API), используя единый React-интерфейс из ЛР №2.
 \end{itemize}
 
 \section{Задание}
 \begin{enumerate}
   \item Использовать базу данных из Лабораторной работы №3 (PostgreSQL) без модификации структуры таблиц.
   \item Написать слой доступа к данным на Python с использованием SQLAlchemy и паттерна <<Репозиторий>> (CRUD).
-  \item Написать бизнес-логику на Go, реализующую: интерфейс пользователя (HTML/CSS), фильтрацию данных, агрегацию (сумма/среднее), валидацию форм, кэширование In-Memory с TTL, проксирование и методы из ЛР №1.
-  \item Реализовать CRUD-интерфейс для всех объектов: Просмотр, Редактирование, Удаление, Добавление.
-  \item Обеспечить выпадающие списки (Foreign Keys) и отображение связанных сущностей при просмотре объектов (например, Команды и Серии).
+  \item Написать BFF-шлюз на Go, реализующий: трансляцию данных между Python API и React GUI, фильтрацию данных, агрегацию (сумма/среднее), кэширование In-Memory с TTL и автоинвалидацией, методы из ЛР №1.
+  \item Реализовать паттерны распределённых систем: параллельный ввод-вывод (горутины), Circuit Breaker, middleware-конвейер (логирование, recovery), graceful shutdown.
+  \item Реализовать CRUD-интерфейс для всех объектов через единый React-дашборд.
 \end{enumerate}
 
 \clearpage
 \section*{Реализация приложения}
 
 \subsection*{Архитектура распределённой системы}
-Проект <<Formula Racing>> реализован в виде трёхзвенной распределённой архитектуры:
+Проект <<Formula Racing>> реализован в виде четырёхзвенной распределённой архитектуры:
 \begin{enumerate}
-    \item \textbf{Клиент (Браузер):} Получает отрендеренные \texttt{HTML/CSS/JS} страницы с сервера Go.
-    \item \textbf{BFF-Сервер (Backend-for-Frontend, Go):} Точка входа для браузера. Выполняет функции рендеринга шаблонов, кэширования запросов к Python-серверу на протяжении 5 минут (in-memory TTLCache), маршрутизации REST-запросов и вычисления бизнес-логики (обработка списков пилотов).
-    \item \textbf{Data-API Сервер (Python/Flask):} Инкапсулирует подключение к существующей базе данных PostgreSQL. Обрабатывает REST-запросы от Go и выполняет SQL-команды используя паттерн ООП Repository.
+    \item \textbf{Клиент (React Dashboard, порт 3000):} SPA-приложение на React/TypeScript, проксирующее \texttt{/api/*} запросы на BFF-сервер. Единый интерфейс для ЛР №2--4.
+    \item \textbf{BFF-Шлюз (Go, порт 5070):} Точка входа для фронтенда. Выполняет трансляцию DTO (camelCase $\leftrightarrow$ snake\_case), параллельную загрузку данных через горутины, Circuit Breaker для отказоустойчивости, In-Memory кэширование с TTL и автоинвалидацией, middleware-конвейер (логирование, перехват паник), graceful shutdown.
+    \item \textbf{Data-API Сервер (Python/Flask, порт 8000):} Инкапсулирует подключение к существующей базе данных PostgreSQL. Обрабатывает REST-запросы от Go и выполняет SQL-команды используя паттерн ООП Repository.
+    \item \textbf{База данных (PostgreSQL, порт 5432):} Единый источник данных для ЛР №2--4.
 \end{enumerate}
 
 \subsection*{Моделирование репозитория на Python}
 Доступ к данным обеспечен через ORM-библиотеку SQLAlchemy. Сущности соответствуют схеме PostgreSQL (созданной Flyway в ЛР №3 и расширенной под ЛР №2): \texttt{racing\_series}, \texttt{racing\_teams}, \texttt{racing\_drivers}. База данных PostgreSQL является единым источником данных для лабораторных работ 2–4.
 
-
-Для реализации внешних ключей и связей применены \texttt{ForeignKey(..., ondelete='CASCADE')} и \texttt{relationship}:
+Для реализации внешних ключей и связей применены \texttt{ForeignKey} и \texttt{relationship}:
 \begin{itemize}
-  \item \textbf{В классе RacingDriver:} поле \texttt{team\_id = Column(BigInteger, ForeignKey("racing\_teams.id"))} связывает пилота с его командой, \texttt{relationship} позволяет подгружать связанные сущности через механизмы eager-loading.
+  \item \textbf{В классе RacingDriver:} поле \texttt{team\_id = Column(BigInteger, ForeignKey("racing\_teams.id"))} связывает пилота с его командой.
   \item \textbf{В классе RacingTeam:} поле \texttt{series\_id} указывает на гоночный чемпионат (\texttt{RacingSeries}).
 \end{itemize}
 
-Слой API представляет собой приложение на основе Flask, объявляющее роуты (роутинг \texttt{@app.route}) к функциям-репозиториям, скрывающим сложную логику работы с сессиями.
+Слой API представляет собой приложение на основе Flask, объявляющее роуты к функциям-репозиториям.
 
-\subsection*{Бизнес-логика и интерфейс на Go}
-Клиентская логика и веб-интерфейс разработаны в пакете Go при помощи стандартных библиотек \texttt{net/http} и \texttt{html/template}.
+\subsection*{BFF-шлюз на Go: преимущества распределённой системы}
+BFF-шлюз разработан на Go с целью продемонстрировать преимущества языка и распределённой архитектуры.
 
-\textbf{Функции на стороне Go включают:}
+\textbf{1. Параллельный ввод-вывод через горутины (goroutines + sync.WaitGroup):}
+
+В распределённой системе BFF-шлюз часто обращается к нескольким endpoint'ам одновременно. Go позволяет запускать эти запросы \textit{параллельно} через горутины — легковесные потоки, управляемые рантаймом Go. Например, при вычислении статистики (\texttt{/api/stats}) шлюз параллельно запрашивает списки команд и пилотов, сокращая задержку вдвое. Аналогично, при сравнении двух команд (\texttt{/api/teams/compare}) оба запроса выполняются одновременно. Синхронизация обеспечена через \texttt{sync.WaitGroup}.
+
+\textbf{2. Circuit Breaker — отказоустойчивость:}
+
+Паттерн Circuit Breaker защищает от каскадных сбоев: если Python-бэкенд недоступен, Go BFF \textit{не виснет} на таймаутах, а мгновенно возвращает HTTP 503. Реализована конечная машина состояний: \texttt{Closed} (нормальная работа) $\to$ \texttt{Open} (после 5 последовательных ошибок; запросы блокируются) $\to$ \texttt{HalfOpen} (через 30 секунд; одна проба). Потокобезопасность обеспечена через \texttt{sync.Mutex}.
+
+\textbf{3. Middleware-конвейер:}
 \begin{itemize}
-    \item[$-$] \textbf{ООП-методы (ЛР №1):} Функции \texttt{CalculateF1Points}, \texttt{GetWinRate} написаны на Go и вызываются прямо внутри HTML-шаблонов благодаря \texttt{template.FuncMap}.
-    \item[$-$] \textbf{Агрегация и фильтрация:} Функция \texttt{ComputeStats} обходит массивы структур и высчитывает агрегированные данные: среднее количество очков, максимальное количество очков у лидирующего пилота. Функция \texttt{SortDrivers} позволяет клиенту динамически отсортировать результат.
-    \item[$-$] \textbf{Валидация перед отправкой:} Функции проверки бизнес-правил (\texttt{ValidateTeam}, \texttt{ValidateDriver}) исполняются на сервере Go перед отправкой запроса на сервер Python. Таким образом Data-сервер изолирован от "грязных" данных.
-    \item[$-$] \textbf{In-Memory кэширование:} Реализован модуль \texttt{cache.go} с использованием RW-блокировок (\texttt{sync.RWMutex}) и встроенного сборщика мусора на независимой горутине. При частых GET-запросах, результат возвращается мгновенно, минуя Python-сервер (TTL 5 минут).
+    \item[$-$] \textbf{LoggingMiddleware:} Логирует каждый запрос с HTTP-методом, путём, кодом ответа и задержкой (latency). Реализован через оборачивание \texttt{http.ResponseWriter} для перехвата статус-кода.
+    \item[$-$] \textbf{RecoveryMiddleware:} Перехватывает паники (\texttt{panic/recover}) в обработчиках и возвращает HTTP 500 вместо краша всего процесса. Критически важно для шлюза, обслуживающего множество клиентов.
 \end{itemize}
 
-Для добавления или изменения Команд/Пилотов используются HTML-формы с выпадающими списками (загружающими связанные чемпионаты или команды через подгруженные Foreign Keys с Python API), реализуя полноценный CRUD-цикл.
+\textbf{4. In-Memory кэширование с автоинвалидацией:}
 
-Веб-интерфейс использует единый базовый шаблон \texttt{layout.html} с наследованием через \texttt{block} для страниц списков и форм.
+Реализован модуль \texttt{cache.go} с использованием RW-блокировок (\texttt{sync.RWMutex}) и встроенного сборщика мусора на независимой горутине. GET-запросы кэшируются (TTL 5 минут), при любом POST/PUT/DELETE кэш автоматически инвалидируется. Это обеспечивает согласованность данных при сохранении производительности.
+
+\textbf{5. Graceful Shutdown:}
+
+При получении сигналов \texttt{SIGINT}/\texttt{SIGTERM} (Ctrl+C, docker stop) сервер не обрывает соединения, а ожидает завершения текущих запросов (таймаут 5 секунд). Реализовано через \texttt{os/signal} + \texttt{context.WithTimeout}.
+
+\textbf{6. Health Check:}
+
+Endpoint \texttt{GET /api/health} параллельно проверяет доступность Go BFF и Python Data API, возвращая JSON со статусами, задержками и состоянием Circuit Breaker.
 
 \subsection*{Развёртывание в Docker}
 Каждый сервис упакован в отдельный Docker-образ:
 \begin{itemize}
-    \item[$-$] \textbf{Python API} — собран на \texttt{python:3.14-slim}, установлены \texttt{gcc}, \texttt{libc-dev}, \texttt{libpq-dev} для компиляции \texttt{psycopg2-binary} (wheel отсутствует для Python 3.14);
+    \item[$-$] \textbf{Python API} — собран на \texttt{python:3.14-slim}, установлены \texttt{gcc}, \texttt{libc-dev}, \texttt{libpq-dev} для компиляции \texttt{psycopg2-binary};
     \item[$-$] \textbf{Go BFF} — многоступенчатая сборка: \texttt{golang:1.22-alpine} (builder) $\to$ \texttt{alpine:3.19} (runtime) для минимального размера образа.
 \end{itemize}
 Оба контейнера подключены к внешней сети \texttt{racing-net}, разделяя PostgreSQL с лабораторными работами №2 и №3.
 
 \section*{Вывод}
-В результате выполнения лабораторной работы внедрена распределённая клиент-серверная архитектура без изменения исходной схемы базы данных. Перенос операций хранения на Python с использованием ORM-репозиториев в связке с кеширующим сервером на Go позволил получить систему с веб-интерфейсом.
+В результате выполнения лабораторной работы внедрена распределённая клиент-серверная архитектура с акцентом на преимущества Go в распределённых системах: параллельный ввод-вывод через горутины, отказоустойчивость через Circuit Breaker, наблюдаемость через middleware-конвейер логирования и graceful shutdown. Go BFF-шлюз транслирует данные между Python Data API и единым React-дашбордом без изменения фронтенда или схемы базы данных.
 
 \newpage
 
-\section*{Приложение А1. Go: Выделенные предметные модели (models.go)}
-\inputminted{go}{code/go/models.go}
+\section*{Приложение А1. Go: DTO-модели для React GUI (dtos.go)}
+\inputminted{go}{code/go/dtos.go}
 
 \section*{Приложение А2. Go: Бизнес-логика и агрегация (business.go)}
 \inputminted{go}{code/go/business.go}
@@ -192,13 +208,19 @@
 \section*{Приложение А3. Go: Модуль In-Memory кэширования (cache.go)}
 \inputminted{go}{code/go/cache.go}
 
-\section*{Приложение А4. Go: API-клиент (api\_client.go)}
+\section*{Приложение А4. Go: Circuit Breaker (circuit\_breaker.go)}
+\inputminted{go}{code/go/circuit_breaker.go}
+
+\section*{Приложение А5. Go: Middleware-конвейер (middleware.go)}
+\inputminted{go}{code/go/middleware.go}
+
+\section*{Приложение А6. Go: API-клиент с Circuit Breaker (api\_client.go)}
 \inputminted{go}{code/go/api_client.go}
 
-\section*{Приложение А5. Go: Основные HTTP обработчики (handlers.go)}
+\section*{Приложение А7. Go: REST-обработчики с горутинами (handlers.go)}
 \inputminted{go}{code/go/handlers.go}
 
-\section*{Приложение А6. Go: Обертка инициализации (main.go)}
+\section*{Приложение А8. Go: Точка входа с Graceful Shutdown (main.go)}
 \inputminted{go}{code/go/main.go}
 
 \section*{Приложение В1. Python: Модели БД SQLAlchemy (models.py)}
@@ -210,25 +232,5 @@
 \section*{Приложение В3. Python: Flask REST API (app.py)}
 \inputminted{python}{code/python/app.py}
 
-\section*{Приложение С1. Веб-интерфейс: Базовый шаблон (templates/layout.html)}
-\inputminted{html}{code/go/templates/layout.html}
-
-\section*{Приложение С2. Веб-интерфейс: Главная страница (templates/index.html)}
-\inputminted{html}{code/go/templates/index.html}
-
-\section*{Приложение С3. Веб-интерфейс: Список команд (templates/teams.html)}
-\inputminted{html}{code/go/templates/teams.html}
-
-\section*{Приложение С4. Веб-интерфейс: Список пилотов (templates/drivers.html)}
-\inputminted{html}{code/go/templates/drivers.html}
-
-\section*{Приложение С5. Веб-интерфейс: Форма команды (templates/team\_form.html)}
-\inputminted{html}{code/go/templates/team_form.html}
-
-\section*{Приложение С6. Веб-интерфейс: Форма пилота (templates/driver\_form.html)}
-\inputminted{html}{code/go/templates/driver_form.html}
-
-\section*{Приложение С7. Веб-интерфейс: Стили (static/style.css)}
-\inputminted{css}{code/go/static/style.css}
-
 \end{document}
+

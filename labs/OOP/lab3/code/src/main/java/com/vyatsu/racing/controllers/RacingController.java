@@ -26,7 +26,6 @@ public class RacingController {
         return "index";
     }
 
-    // --- SERIES ---
     @GetMapping("/series")
     public String viewSeries(Model model) {
         model.addAttribute("seriesList", racingService.getAllSeriesWithTeams());
@@ -57,7 +56,6 @@ public class RacingController {
         return "redirect:/series";
     }
 
-    // --- TEAMS ---
     @GetMapping("/teams")
     public String viewTeams(Model model) {
         model.addAttribute("seriesList", racingService.getAllSeriesWithTeams());
@@ -90,7 +88,6 @@ public class RacingController {
         return "redirect:/teams";
     }
 
-    // --- DRIVERS ---
     @GetMapping("/drivers")
     public String viewDrivers(Model model) {
         model.addAttribute("seriesList", racingService.getAllSeriesWithTeams());

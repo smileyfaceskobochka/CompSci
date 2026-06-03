@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, BigInteger, ForeignKey
+from sqlalchemy import Column, Integer, String, BigInteger, ForeignKey, Float, Boolean
 from sqlalchemy.orm import relationship, DeclarativeBase
 
 
@@ -46,6 +46,18 @@ class RacingTeam(Base):
     series_id = Column(BigInteger, ForeignKey("racing_series.id"), nullable=False)
     team_color = Column(String(10), default="#FFFFFF")
 
+    # Extra V5/GUI columns matching shared DB
+    wins = Column(Integer, default=0)
+    podiums = Column(Integer, default=0)
+    budget_cap = Column(Float, default=0.0)
+    constructor_pos = Column(Integer, default=0)
+    chassis_model = Column(String(255))
+    graduates = Column(Integer, default=0)
+    is_feeder = Column(Boolean, default=False)
+    energy_partner = Column(String(255))
+    battery_kwh = Column(Float, default=0.0)
+    sustain_score = Column(Integer, default=0)
+
     series = relationship("RacingSeries", back_populates="teams")
     drivers = relationship("RacingDriver", back_populates="team", cascade="all, delete-orphan")
 
@@ -59,6 +71,16 @@ class RacingTeam(Base):
             "points": self.points,
             "series_id": self.series_id,
             "team_color": self.team_color,
+            "wins": self.wins,
+            "podiums": self.podiums,
+            "budget_cap": self.budget_cap,
+            "constructor_pos": self.constructor_pos,
+            "chassis_model": self.chassis_model,
+            "graduates": self.graduates,
+            "is_feeder": self.is_feeder,
+            "energy_partner": self.energy_partner,
+            "battery_kwh": self.battery_kwh,
+            "sustain_score": self.sustain_score,
         }
         if include_series and self.series:
             d["series"] = self.series.to_dict()

@@ -1,0 +1,64 @@
+classDiagram
+    direction TB
+
+    class FormulaDriver {
+        +int Id
+        +int TeamId
+        +string FirstName
+        +string LastName
+        +int RacingNumber
+        +int Points
+        +string FullName
+        +string DisplayString
+        +AddPoints(pts) void
+    }
+
+    class FormulaTeam {
+        <<Abstract>>
+        +int Id
+        +string TeamName
+        +string PrincipalName
+        +string Headquarters
+        +string TeamColor
+        +int ChampionshipPoints
+        +int RaceWins
+        +int Podiums
+        +List~FormulaDriver~ Drivers
+        +AddPoints(pts) void
+        +AddWin() void
+        +AddPodium() void
+        +GetWinRate(totalRaces) double
+        +GetSeriesName() string*
+        +CalculatePoints(position) int*
+        +GetSummary() string
+    }
+
+    class F1Team {
+        +string PowerUnit
+        +double BudgetCapMln
+        +int ConstructorPos
+        +string EngineStatus
+        +CalculateBudgetAllocation(percentage) double
+        +GetPowerUnitStatus() string
+    }
+
+    class F2Team {
+        +string ChassisModel
+        +int F1Graduates
+        +bool IsFeederSeries
+        +string FeederStatusText
+        +GetFeederStatus() string
+    }
+
+    class FormulaETeam {
+        +int SustainabilityScore
+        +double BatteryCapacityKwh
+        +string EnergyPartner
+        +string BatteryRatingText
+        +GetBatteryEfficiencyRating() string
+    }
+
+    FormulaTeam <|-- F1Team
+    FormulaTeam <|-- F2Team
+    FormulaTeam <|-- FormulaETeam
+    FormulaTeam *-- FormulaDriver : Contains

@@ -75,6 +75,9 @@
   pdfauthor={Черкасов А.А.}
 }
 
+% Compile Mermaid diagrams on the fly using shell-escape
+\immediate\write18{bunx @mermaid-js/mermaid-cli -i pics/class_diagram.mmd -o pics/class_diagram.png -b white}
+
 \begin{document}
 
 \newpage

@@ -1,0 +1,47 @@
+classDiagram
+    direction LR
+
+    class RacingSeries {
+        -Long id
+        -String name
+        -String officialName
+        -String headquarters
+        -String governingBody
+        -Integer foundedYear
+        -Integer rounds
+        -List~RacingTeam~ teams
+    }
+
+    class RacingTeam {
+        -Long id
+        -String name
+        -String principalName
+        -String baseLocation
+        -String powerUnit
+        -Integer points
+        -RacingSeries series
+        -List~RacingDriver~ drivers
+        -String teamColor
+        -Integer wins
+        -Integer podiums
+        -Double budgetCap
+        -Integer constructorPos
+        -String chassisModel
+        -Integer graduates
+        -Boolean isFeeder
+        -String energyPartner
+        -Double batteryKwh
+        -Integer sustainScore
+    }
+
+    class RacingDriver {
+        -Long id
+        -RacingTeam team
+        -String firstName
+        -String lastName
+        -Integer racingNumber
+        -Integer points
+    }
+
+    RacingSeries "1" *-- "many" RacingTeam : Contains
+    RacingTeam "1" *-- "many" RacingDriver : Employs

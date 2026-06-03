@@ -80,6 +80,7 @@ export function App() {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [backendInfo, setBackendInfo] = useState<{ lab: string; name: string } | null>(null);
 
   // Active filter tab
   const [seriesFilter, setSeriesFilter] = useState<string>("all");
@@ -149,7 +150,17 @@ export function App() {
     }
   };
 
+  const fetchStatus = async () => {
+    try {
+      const res = await fetch("/api/status");
+      if (res.ok) {
+        setBackendInfo(await res.json());
+      }
+    } catch { /* backend status is best-effort */ }
+  };
+
   useEffect(() => {
+    fetchStatus();
     fetchData();
     const interval = setInterval(() => {
       setTickerIndex((prev) => (prev + 1) % raceControlMessages.length);
@@ -503,6 +514,25 @@ export function App() {
                 Racing Management System
               </p>
             </div>
+
+            {backendInfo && (
+              <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border ${
+                backendInfo.lab === "lab4"
+                  ? "bg-emerald-950/30 border-emerald-800/40"
+                  : "bg-zinc-900/60 border-zinc-700/40"
+              }`}>
+                <span className={`inline-block w-1.5 h-1.5 rounded-full ${
+                  backendInfo.lab === "lab4" ? "bg-emerald-400 animate-pulse" : "bg-orange-400"
+                }`} />
+                <span className="text-[9px] font-bold tracking-widest uppercase leading-none">
+                  <span className={backendInfo.lab === "lab4" ? "text-emerald-300" : "text-orange-300"}>
+                    {backendInfo.lab === "lab4" ? "PYTHON+GO" : backendInfo.lab.toUpperCase()}
+                  </span>
+                  <span className="text-zinc-500 mx-1">|</span>
+                  <span className="text-zinc-400">{backendInfo.name}</span>
+                </span>
+              </div>
+            )}
           </div>
 
           <div className="flex items-center gap-3">

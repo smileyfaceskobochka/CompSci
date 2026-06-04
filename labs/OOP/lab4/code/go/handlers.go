@@ -297,6 +297,33 @@ func handleCreateTeam(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	tType := strings.ToLower(dto.Type)
+	var seriesID int64 = 1
+	if tType == "fe" {
+		seriesID = 3
+	} else if tType == "f2" {
+		seriesID = 2
+	}
+
+	var points int = 0
+	if dto.ChampionshipPoints != nil {
+		points = *dto.ChampionshipPoints
+	}
+
+	t := Team{
+		Name:          dto.TeamName,
+		PrincipalName: dto.PrincipalName,
+		Points:        points,
+		SeriesID:      seriesID,
+	}
+
+	if errs := ValidateTeam(t); len(errs) > 0 {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		_ = json.NewEncoder(w).Encode(map[string]any{"errors": errs})
+		return
+	}
+
 	payload := toPythonTeamMap(dto)
 	resp, err := apiPost("/api/teams", payload)
 	if err != nil {
@@ -325,6 +352,33 @@ func handleUpdateTeam(w http.ResponseWriter, r *http.Request) {
 	var dto FormulaTeamDto
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
 		http.Error(w, err.Error(), 400)
+		return
+	}
+
+	tType := strings.ToLower(dto.Type)
+	var seriesID int64 = 1
+	if tType == "fe" {
+		seriesID = 3
+	} else if tType == "f2" {
+		seriesID = 2
+	}
+
+	var points int = 0
+	if dto.ChampionshipPoints != nil {
+		points = *dto.ChampionshipPoints
+	}
+
+	t := Team{
+		Name:          dto.TeamName,
+		PrincipalName: dto.PrincipalName,
+		Points:        points,
+		SeriesID:      seriesID,
+	}
+
+	if errs := ValidateTeam(t); len(errs) > 0 {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		_ = json.NewEncoder(w).Encode(map[string]any{"errors": errs})
 		return
 	}
 
@@ -395,6 +449,34 @@ func handleCreateDriver(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var racingNumber int = 0
+	if dto.RacingNumber != nil {
+		racingNumber = *dto.RacingNumber
+	}
+	var points int = 0
+	if dto.Points != nil {
+		points = *dto.Points
+	}
+	var teamID int64 = 0
+	if dto.TeamID != nil {
+		teamID = *dto.TeamID
+	}
+
+	d := Driver{
+		FirstName:    dto.FirstName,
+		LastName:     dto.LastName,
+		RacingNumber: racingNumber,
+		Points:       points,
+		TeamID:       teamID,
+	}
+
+	if errs := ValidateDriver(d); len(errs) > 0 {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		_ = json.NewEncoder(w).Encode(map[string]any{"errors": errs})
+		return
+	}
+
 	payload := toPythonDriverMap(dto)
 	resp, err := apiPost("/api/drivers", payload)
 	if err != nil {
@@ -423,6 +505,34 @@ func handleUpdateDriver(w http.ResponseWriter, r *http.Request) {
 	var dto FormulaDriverDto
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
 		http.Error(w, err.Error(), 400)
+		return
+	}
+
+	var racingNumber int = 0
+	if dto.RacingNumber != nil {
+		racingNumber = *dto.RacingNumber
+	}
+	var points int = 0
+	if dto.Points != nil {
+		points = *dto.Points
+	}
+	var teamID int64 = 0
+	if dto.TeamID != nil {
+		teamID = *dto.TeamID
+	}
+
+	d := Driver{
+		FirstName:    dto.FirstName,
+		LastName:     dto.LastName,
+		RacingNumber: racingNumber,
+		Points:       points,
+		TeamID:       teamID,
+	}
+
+	if errs := ValidateDriver(d); len(errs) > 0 {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		_ = json.NewEncoder(w).Encode(map[string]any{"errors": errs})
 		return
 	}
 

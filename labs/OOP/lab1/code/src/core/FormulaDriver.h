@@ -10,6 +10,7 @@ private:
     int points;
 
 public:
+    FormulaDriver();
     FormulaDriver(const std::string& fName, const std::string& lName, int number, int pts = 0);
     
     // Getters

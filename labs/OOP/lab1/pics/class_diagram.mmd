@@ -134,6 +134,22 @@ classDiagram
         -addLog(text) void
     }
 
+    class IDriver {
+        <<Interface>>
+        +addPoints(pts) void
+    }
+
+    class ITeam {
+        <<Interface>>
+        +addPoints(pts) void
+        +addWin() void
+        +addPodium() void
+        +getSummary() string
+    }
+
+    IDriver <|.. FormulaDriver : Implements
+    ITeam <|.. FormulaTeam : Implements
+
     FormulaTeam <|-- F1Team : Public Inheritance
     FormulaTeam <|-- F2Team : Public Inheritance
     FormulaTeam <|-- FormulaETeam : Public Inheritance

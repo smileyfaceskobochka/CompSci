@@ -8,7 +8,7 @@ namespace RacingSystem.Core
     public double BudgetCapMln { get; set; } = 135.0;
     public int ConstructorPos { get; set; }
 
-    public F1Team() : base() { }
+    public F1Team() : this("Unknown", "Unknown", "Unknown", "Unknown") { }
 
     public F1Team(string name, string principal, string hq, string powerUnit)
         : base(name, principal, hq)

@@ -8,7 +8,9 @@ namespace RacingSystem.Database;
 
 public class DatabaseManager
 {
-  public DatabaseManager(string dbPath = "")
+  public DatabaseManager() : this("") { }
+
+  public DatabaseManager(string dbPath)
   { }
 
   public List<FormulaTeam> GetAllTeams()

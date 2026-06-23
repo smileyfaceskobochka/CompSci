@@ -5,12 +5,11 @@
 
 
 F2Team::F2Team()
-    : FormulaTeam(), chassisModel("Dallara F2 2024"), f1Graduates(0), isFeederSeries(true) {}
+    : F2Team("Unknown", "Unknown", "Unknown", "Dallara F2 2024") {}
 
 F2Team::F2Team(const std::string& name, const std::string& principal,
                const std::string& hq,   const std::string& chassis)
-    : FormulaTeam(name, principal, hq),
-      chassisModel(chassis), f1Graduates(0), isFeederSeries(true) {}
+    : F2Team(name, principal, hq, chassis, 0, true, 0, 0, 0) {}
 
 F2Team::F2Team(const std::string& name, const std::string& principal,
                const std::string& hq,   const std::string& chassis,

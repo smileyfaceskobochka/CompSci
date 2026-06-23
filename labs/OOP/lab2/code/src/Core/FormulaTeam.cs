@@ -22,7 +22,7 @@ namespace RacingSystem.Core
     public int Podiums { get; set; }
     public List<FormulaDriver> Drivers { get; set; } = new List<FormulaDriver>();
 
-    protected FormulaTeam() { }
+    protected FormulaTeam() : this("Unknown", "Unknown", "Unknown") { }
 
     protected FormulaTeam(string name, string principal, string hq)
     {

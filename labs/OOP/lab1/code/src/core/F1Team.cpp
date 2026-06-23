@@ -6,13 +6,11 @@
 
 
 F1Team::F1Team()
-    : FormulaTeam(), powerUnit("Unknown"), budgetCapMln(135.0),
-      constructorPos(0) {}
+    : F1Team("Unknown", "Unknown", "Unknown", "Unknown") {}
 
 F1Team::F1Team(const std::string &name, const std::string &principal,
                const std::string &hq, const std::string &pu)
-    : FormulaTeam(name, principal, hq), powerUnit(pu), budgetCapMln(135.0),
-      constructorPos(0) {}
+    : F1Team(name, principal, hq, pu, 135.0, 0, 0, 0, 0) {}
 
 F1Team::F1Team(const std::string &name, const std::string &principal,
                const std::string &hq, const std::string &pu, double budget,

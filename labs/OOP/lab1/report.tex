@@ -1,9 +1,14 @@
 \documentclass[oneside,a4paper,14pt]{extarticle}
-\usepackage[a4paper,letterpaper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\usepackage[a4paper,top=20mm,bottom=20mm,left=30mm,right=15mm]{geometry}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
 \usepackage[russian]{babel}
 \usepackage{indentfirst}
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage{caption}
+\captionsetup[figure]{labelsep=endash, justification=centering, name=Рисунок}
+\captionsetup[table]{labelsep=endash, justification=justified, singlelinecheck=false, name=Таблица}
 \usepackage{titlesec}
 \usepackage{minted, fancyvrb}
 \usepackage{hyperref}
@@ -12,7 +17,7 @@
 \newunicodechar{┌}{+}
 \newunicodechar{─}{-}
 \newunicodechar{┐}{+}
-\newunicodechar{│}{|}
+\newunicodechar{│}{\textbar}
 \newunicodechar{└}{+}
 \newunicodechar{┘}{+}
 \newunicodechar{═}{=}
@@ -20,30 +25,28 @@
 \newunicodechar{╗}{+}
 \newunicodechar{╚}{+}
 \newunicodechar{╝}{+}
-\newunicodechar{║}{|}
-\newunicodechar{▂}{\_}
-\newunicodechar{▃}{\_}
-\newunicodechar{▄}{\_}
-\newunicodechar{▅}{\_}
-\newunicodechar{▆}{\_}
-\newunicodechar{▇}{\_}
-\newunicodechar{█}{\_}
-\newunicodechar{▕}{|}
-\newunicodechar{▏}{|}
+\newunicodechar{║}{\textbar}
+\newunicodechar{▂}{\textunderscore}
+\newunicodechar{▃}{\textunderscore}
+\newunicodechar{▄}{\textunderscore}
+\newunicodechar{▅}{\textunderscore}
+\newunicodechar{▆}{\textunderscore}
+\newunicodechar{▇}{\textunderscore}
+\newunicodechar{█}{\textunderscore}
+\newunicodechar{▕}{\textbar}
+\newunicodechar{▏}{\textbar}
 \newunicodechar{✓}{v}
 \newunicodechar{✗}{x}
 
 
-% Code styling
-\setminted{style = rainbow_dash, fontsize = \small, breaklines}
-
+\setminted{style = rainbow_dash, fontsize = \scriptsize}
 % Header styles
 \titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
 \titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
 \titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{1em}{}
 
 % Spacing
-\renewcommand\baselinestretch{1.33}
+\renewcommand\baselinestretch{1.5}
 
 \setlength{\parindent}{1.25cm}  % длина красной строки
 
@@ -59,6 +62,7 @@
 
 \setlist[itemize]{
   left=\parindent,
+  label=--,
   itemsep=0pt,
   topsep=5pt,
   partopsep=0pt,
@@ -75,8 +79,7 @@
   pdfauthor={Черкасов А.А.}
 }
 
-% Compile Mermaid diagrams on the fly using shell-escape
-\immediate\write18{bunx @mermaid-js/mermaid-cli -i pics/class_diagram.mmd -o pics/class_diagram.png -b white}
+
 
 \begin{document}
 
@@ -157,7 +160,7 @@
 \subsection*{Диаграмма классов}
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{pics/class_diagram.png}
+  \includegraphics[width=0.85\textwidth]{pics/class_diagram.pdf}
   \caption{Диаграмма классов системы управления гоночными командами}
 \end{figure}
 
@@ -167,7 +170,10 @@
   \item[$-$] \texttt{F1Team} $-$ дочерний класс, добавляющий параметры бюджета, позиции в чемпионате и силовой установки.
   \item[$-$] \texttt{F2Team} $-$ дочерний класс, фокусирующийся на подготовке пилотов (выпускники F1) и модели шасси.
   \item[$-$] \texttt{FormulaETeam} $-$ дочерний класс, учитывающий экологический рейтинг, емкость батарей и энергетических партнеров.
+  \item[$-$] \texttt{FormulaDriver} $-$ вспомогательный класс (агрегируется в \texttt{FormulaTeam}), хранящий информацию о гонщике (имя, фамилия, номер, набранные очки).
 \end{itemize}
+
+\input{classes_tables}
 
 \subsection*{Особенности реализации}
 
@@ -180,15 +186,46 @@ virtual std::string getSeriesName() const = 0;
 virtual int calculatePoints(int position) const = 0;
 \end{minted}
 
-\subsubsection*{Полиморфизм и смарт-указатели}
-Для автоматического управления временем жизни объектов в куче используются умные указатели \texttt{std::shared\_ptr\textless FormulaTeam\textgreater}. Это позволяет автоматически освобождать ресурсы при уничтожении контейнера и исключить утечки памяти. Работа с объектами разных гоночных серий происходит через полиморфный вектор родительского типа.
+\subsubsection*{Полиморфизм, векторы и смарт-указатели}
+Для автоматического управления временем жизни объектов в куче используются умные указатели \texttt{std::shared\_ptr} и \texttt{std::unique\_ptr}. В системе используется контейнер \texttt{std::vector} для хранения полиморфных указателей на базовый класс \texttt{FormulaTeam}. Объекты дочерних классов создаются динамически и помещаются в этот вектор (upcasting), что позволяет хранить и обрабатывать их единообразно:
 
 \begin{minted}{cpp}
-std::vector<std::shared_ptr<FormulaTeam>> teams = createTeams();
-for (const auto& team : teams) {
-    team->displayInfo(); // Вызов перекрытого метода
+std::vector<std::unique_ptr<FormulaTeam>> poly_teams;
+
+// Добавление объектов дочерних классов в вектор
+poly_teams.push_back(std::make_unique<F1Team>("McLaren", "Stella", "UK", "Mercedes", 135.0, 2, 291, 5, 12));
+poly_teams.push_back(std::make_unique<F2Team>("Prema", "Rosin", "Italy", "Dallara F2", 0, true, 89, 2, 5));
+
+// Чтение из вектора и вызов виртуальных методов (полиморфизм)
+for (size_t i = 0; i < poly_teams.size(); ++i) {
+    std::string series = poly_teams[i]->getSeriesName(); // Вызов переопределенного метода
+    std::string summary = poly_teams[i]->getSummary();
 }
 \end{minted}
+
+\subsubsection*{Приведение типов (static\_cast и dynamic\_cast)}
+Для вызова специфичных методов дочерних классов, которые отсутствуют в базовом классе \texttt{FormulaTeam}, применяются операции нисходящего приведения типов (downcasting). 
+
+В приложении используется \texttt{dynamic\_cast} для безопасного приведения типов во время выполнения. Он использует механизм RTTI (Run-Time Type Information) и возвращает \texttt{nullptr}, если преобразование невозможно:
+
+\begin{minted}{cpp}
+if (auto *f1 = dynamic_cast<F1Team *>(poly_teams[0].get())) {
+    // Успешно: объект действительно является F1Team
+    std::string puStatus = f1->getPowerUnitStatus();
+} else {
+    // Ошибка приведения типов, объект относится к другой серии
+}
+\end{minted}
+
+Также для случаев, когда тип объекта точно известен программе на этапе компиляции, применяется быстрое статическое приведение типов без дополнительных проверок с помощью \texttt{static\_cast}:
+
+\begin{minted}{cpp}
+if (poly_teams[0]->getSeriesName() == "Formula 1") {
+    F1Team *f1 = static_cast<F1Team *>(poly_teams[0].get());
+    std::string puStatus = f1->getPowerUnitStatus();
+}
+\end{minted}
+
 
 \subsubsection*{Перегрузка операторов}
 Реализована перегрузка операторов для удобной работы с объектами:

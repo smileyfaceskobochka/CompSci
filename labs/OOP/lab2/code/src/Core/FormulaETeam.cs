@@ -8,7 +8,7 @@ namespace RacingSystem.Core
     public double BatteryCapacityKwh { get; set; } = 38.0;
     public string EnergyPartner { get; set; } = "Unknown";
 
-    public FormulaETeam() : base() { }
+    public FormulaETeam() : this("Unknown", "Unknown", "Unknown", "Unknown") { }
 
     public FormulaETeam(string name, string principal, string hq, string energyPartner)
         : base(name, principal, hq)

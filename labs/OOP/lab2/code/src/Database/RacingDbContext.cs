@@ -8,6 +8,10 @@ public class RacingDbContext : DbContext
   public DbSet<FormulaTeam> Teams { get; set; } = null!;
   public DbSet<FormulaDriver> Drivers { get; set; } = null!;
 
+  public RacingDbContext() : this(new DbContextOptions<RacingDbContext>()) { }
+
+  public RacingDbContext(DbContextOptions<RacingDbContext> options) : base(options) { }
+
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
     // Postgres

@@ -1,0 +1,3 @@
+\ProvidesFile{lgrenc.def}[Dummy LGR encoding]
+\DeclareFontEncoding{LGR}{}{}
+\DeclareFontSubstitution{LGR}{cmr}{m}{n}

@@ -11,7 +11,7 @@ namespace RacingSystem.Core
     public int RacingNumber { get; set; }
     public int Points { get; set; }
 
-    public FormulaDriver() { FirstName = string.Empty; LastName = string.Empty; }
+    public FormulaDriver() : this(string.Empty, string.Empty, 0, 0) { }
 
     public FormulaDriver(string firstName, string lastName, int number, int points = 0)
     {

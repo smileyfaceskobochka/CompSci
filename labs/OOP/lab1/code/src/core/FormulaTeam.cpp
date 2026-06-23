@@ -3,13 +3,11 @@
 #include <sstream>
 
 FormulaTeam::FormulaTeam()
-    : teamName("Unknown"), principalName("Unknown"), headquarters("Unknown"),
-      championshipPoints(0), raceWins(0), podiums(0) {}
+    : FormulaTeam("Unknown", "Unknown", "Unknown") {}
 
 FormulaTeam::FormulaTeam(const std::string &name, const std::string &principal,
                          const std::string &hq)
-    : teamName(name), principalName(principal), headquarters(hq),
-      championshipPoints(0), raceWins(0), podiums(0) {}
+    : FormulaTeam(name, principal, hq, 0, 0, 0) {}
 
 FormulaTeam::FormulaTeam(const std::string &name, const std::string &principal,
                          const std::string &hq, int points, int wins, int pods)

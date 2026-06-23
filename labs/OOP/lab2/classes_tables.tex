@@ -1,0 +1,103 @@
+\subsection*{Описание структур классов}
+
+Далее в таблицах 1-5 приведено подробное описание полей и методов разработанных классов предметной области.
+
+\begin{table}[H]
+\centering
+\caption{Описание членов базового класса FormulaTeam (Абстрактный)}
+\begin{tabular}{|p{4.5cm}|p{3.5cm}|p{2cm}|p{5cm}|}
+\hline
+\textbf{Название} & \textbf{Тип} & \textbf{Доступ} & \textbf{Описание} \\ \hline
+\multicolumn{4}{|c|}{\textbf{Свойства}} \\ \hline
+Id & int & public & Уникальный идентификатор \\ \hline
+TeamName & string & public & Название команды \\ \hline
+PrincipalName & string & public & Имя руководителя команды \\ \hline
+Headquarters & string & public & Штаб-квартира команды \\ \hline
+TeamColor & string? & public & Цвет команды \\ \hline
+ChampionshipPoints & int & public & Очки чемпионата \\ \hline
+RaceWins, Podiums & int & public & Победы и подиумы \\ \hline
+Drivers & List<FormulaDriver> & public & Список гонщиков \\ \hline
+\multicolumn{4}{|c|}{\textbf{Методы и Конструкторы}} \\ \hline
+FormulaTeam(...) & - & protected & Конструкторы \\ \hline
+GetSeriesName() & string & public & Абстрактный метод \\ \hline
+CalculatePoints(pos: int) & int & public & Абстрактный метод \\ \hline
+AddPoints(pts: int) & void & public & Добавление очков \\ \hline
+AddWin(), AddPodium() & void & public & Изменение статистики \\ \hline
+GetWinRate(...) & double & public & Расчет процента побед \\ \hline
+GetSummary() & string & public & Сводка по команде (virtual) \\ \hline
+operator >, operator < & bool & public & Сравнение команд по очкам \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Описание членов класса F1Team}
+\begin{tabular}{|p{4.5cm}|p{3.5cm}|p{2cm}|p{5cm}|}
+\hline
+\textbf{Название} & \textbf{Тип} & \textbf{Доступ} & \textbf{Описание} \\ \hline
+\multicolumn{4}{|c|}{\textbf{Свойства}} \\ \hline
+PowerUnit & string & public & Тип силовой установки \\ \hline
+BudgetCapMln & double & public & Лимит бюджета в миллионах \\ \hline
+ConstructorPos & int & public & Позиция в кубке конструкторов \\ \hline
+\multicolumn{4}{|c|}{\textbf{Методы и Конструкторы}} \\ \hline
+F1Team(...) & - & public & Конструкторы \\ \hline
+CalculateBudgetAllocation(...) & double & public & Расчет выделения бюджета \\ \hline
+GetPowerUnitStatus() & string & public & Статус силовой установки \\ \hline
+Переопределенные методы & разный & public & GetSeriesName, CalculatePoints, GetSummary \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Описание членов класса F2Team}
+\begin{tabular}{|p{4.5cm}|p{3.5cm}|p{2cm}|p{5cm}|}
+\hline
+\textbf{Название} & \textbf{Тип} & \textbf{Доступ} & \textbf{Описание} \\ \hline
+\multicolumn{4}{|c|}{\textbf{Свойства}} \\ \hline
+ChassisModel & string & public & Модель шасси \\ \hline
+F1Graduates & int & public & Число выпускников в F1 \\ \hline
+IsFeederSeries & bool & public & Статус молодежной серии \\ \hline
+\multicolumn{4}{|c|}{\textbf{Методы и Конструкторы}} \\ \hline
+F2Team(...) & - & public & Конструкторы \\ \hline
+GetFeederStatus() & string & public & Статус молодежной команды \\ \hline
+Переопределенные методы & разный & public & GetSeriesName, CalculatePoints, GetSummary \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Описание членов класса FormulaETeam}
+\begin{tabular}{|p{4.5cm}|p{3.5cm}|p{2cm}|p{5cm}|}
+\hline
+\textbf{Название} & \textbf{Тип} & \textbf{Доступ} & \textbf{Описание} \\ \hline
+\multicolumn{4}{|c|}{\textbf{Свойства}} \\ \hline
+SustainabilityScore & int & public & Рейтинг экологичности \\ \hline
+BatteryCapacityKwh & double & public & Емкость батареи \\ \hline
+EnergyPartner & string & public & Энергетический партнер \\ \hline
+\multicolumn{4}{|c|}{\textbf{Методы и Конструкторы}} \\ \hline
+FormulaETeam(...) & - & public & Конструкторы \\ \hline
+GetBatteryEfficiencyRating() & string & public & Рейтинг эффективности батареи \\ \hline
+Переопределенные методы & разный & public & GetSeriesName, CalculatePoints, GetSummary \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Описание членов класса FormulaDriver}
+\begin{tabular}{|p{4.5cm}|p{3.5cm}|p{2cm}|p{5cm}|}
+\hline
+\textbf{Название} & \textbf{Тип} & \textbf{Доступ} & \textbf{Описание} \\ \hline
+\multicolumn{4}{|c|}{\textbf{Свойства}} \\ \hline
+Id & int & public & Уникальный идентификатор \\ \hline
+TeamId & int & public & Идентификатор команды (FK) \\ \hline
+FirstName & string & public & Имя гонщика \\ \hline
+LastName & string & public & Фамилия гонщика \\ \hline
+RacingNumber & int & public & Гоночный номер \\ \hline
+Points & int & public & Набранные очки \\ \hline
+FullName & string & public & Полное имя (вычисляемое) \\ \hline
+DisplayString & string & public & Строка для UI (вычисляемая) \\ \hline
+\multicolumn{4}{|c|}{\textbf{Методы и Конструкторы}} \\ \hline
+FormulaDriver(...) & - & public & Конструкторы \\ \hline
+AddPoints(...) & void & public & Увеличение количества очков \\ \hline
+\end{tabular}
+\end{table}

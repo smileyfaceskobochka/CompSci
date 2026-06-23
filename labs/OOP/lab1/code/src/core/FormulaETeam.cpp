@@ -5,14 +5,12 @@
 #include <sstream>
 
 FormulaETeam::FormulaETeam()
-    : FormulaTeam(), sustainabilityScore(50), batteryCapacityKwh(38.0),
-      energyPartner("Unknown") {}
+    : FormulaETeam("Unknown", "Unknown", "Unknown", "Unknown") {}
 
 FormulaETeam::FormulaETeam(const std::string &name,
                            const std::string &principal, const std::string &hq,
                            const std::string &partner)
-    : FormulaTeam(name, principal, hq), sustainabilityScore(50),
-      batteryCapacityKwh(38.0), energyPartner(partner) {}
+    : FormulaETeam(name, principal, hq, partner, 50, 38.0, 0, 0, 0) {}
 
 FormulaETeam::FormulaETeam(const std::string &name,
                            const std::string &principal, const std::string &hq,

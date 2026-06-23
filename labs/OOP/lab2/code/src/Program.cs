@@ -76,7 +76,7 @@ public class Program
     {
       var pathParts = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
 
-      // Routes matching: /api/teams
+      // Routes matching: /api/teams <--
       if (pathParts.Length == 2 && pathParts[0] == "api" && pathParts[1] == "teams")
       {
         if (method == "GET")
@@ -96,7 +96,7 @@ public class Program
         }
       }
 
-      // Routes matching: /api/teams/{id}
+      // Routes matching: /api/teams/{id} <--
       if (pathParts.Length == 3 && pathParts[0] == "api" && pathParts[1] == "teams" && int.TryParse(pathParts[2], out int teamId))
       {
         if (method == "PUT")
@@ -415,4 +415,12 @@ public class DriverPositionResult
 {
   public int DriverId { get; set; }
   public int Position { get; set; }
+
+  public DriverPositionResult() : this(0, 0) { }
+
+  public DriverPositionResult(int driverId, int position)
+  {
+    DriverId = driverId;
+    Position = position;
+  }
 }

@@ -1,10 +1,14 @@
 \documentclass[oneside,a4paper,14pt]{extarticle}
-\usepackage[a4paper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\usepackage[a4paper,top=20mm,bottom=20mm,left=30mm,right=15mm]{geometry}
 \emergencystretch=3em
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
 \usepackage[russian]{babel}
 \usepackage{indentfirst}
 \usepackage{graphicx}
 \usepackage{caption}
+\captionsetup[figure]{labelsep=endash, justification=centering, name=Рисунок}
+\captionsetup[table]{labelsep=endash, justification=justified, singlelinecheck=false, name=Таблица}
 \usepackage{titlesec}
 \usepackage{minted, fancyvrb}
 \usepackage{hyperref}
@@ -20,7 +24,7 @@
 \titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{1em}{}
 
 % Spacing
-\renewcommand\baselinestretch{1.33}
+\renewcommand\baselinestretch{1.5}
 \setlength{\parindent}{1.25cm}
 
 % List styles
@@ -34,6 +38,7 @@
 }
 \setlist[itemize]{
   left=\parindent,
+  label=--,
   itemsep=0pt,
   topsep=5pt,
   partopsep=0pt,
@@ -50,9 +55,7 @@
   pdfauthor={Черкасов А.А.}
 }
 
-% Compile Mermaid diagrams on the fly using shell-escape
-\immediate\write18{bunx @mermaid-js/mermaid-cli -i pics/uml-1.mmd -o pics/uml-1.png -b white}
-\immediate\write18{bunx @mermaid-js/mermaid-cli -i pics/uml-2.mmd -o pics/uml-2.png -b white}
+
 
 \begin{document}
 
@@ -99,155 +102,14 @@
 
 Программа содержит классы <<FormulaTeam>>, представляющий базовый абстрактный класс команды, <<F1Team>>, наследованный от <<FormulaTeam>> и представляющий класс команды Formula 1, <<F2Team>>, наследованный от <<FormulaTeam>> и представляющий класс команды Formula 2, <<FormulaETeam>>, наследованный от <<FormulaTeam>> и представляющий класс команды Formula E, а также вспомогательный класс <<FormulaDriver>> для хранения информации о гонщиках.
 
-Базовый класс <<FormulaTeam>> содержит:
-\begin{itemize}
-  \item[--] Свойства:
-  \begin{itemize}
-    \item[--] public int Id \{ get; set; \} -- свойство, уникальный идентификатор;
-    \item[--] public string TeamName \{ get; set; \} -- свойство, название команды;
-    \item[--] public string PrincipalName \{ get; set; \} -- свойство, имя руководителя команды;
-    \item[--] public string Headquarters \{ get; set; \} -- свойство, штаб-квартира команды;
-    \item[--] public string? TeamColor \{ get; set; \} -- свойство, цвет команды;
-    \item[--] public int ChampionshipPoints \{ get; set; \} -- свойство, очки чемпионата;
-    \item[--] public int RaceWins \{ get; set; \} -- свойство, количество побед;
-    \item[--] public int Podiums \{ get; set; \} -- свойство, количество подиумов;
-    \item[--] public List<FormulaDriver> Drivers \{ get; set; \} -- свойство, список гонщиков;
-  \end{itemize}
-  \item[--] Конструкторы:
-  \begin{itemize}
-    \item[--] protected FormulaTeam() -- защищенный конструктор по умолчанию;
-    \item[--] protected FormulaTeam(string name, string principal, string hq) -- защищенный конструктор, принимает название, имя руководителя и штаб-квартиру;
-    \item[--] protected FormulaTeam(string name, string principal, string hq, int points, int wins, int podiums) -- защищенный конструктор, принимает все основные параметры;
-  \end{itemize}
-  \item[--] Абстрактные методы:
-  \begin{itemize}
-    \item[--] public abstract string GetSeriesName() -- публичный абстрактный метод, возвращающий название серии;
-    \item[--] public abstract int CalculatePoints(int position) -- публичный абстрактный метод, возвращающий очки за занятую позицию;
-  \end{itemize}
-  \item[--] Перегруженные операторы:
-  \begin{itemize}
-    \item[--] public static bool operator >(FormulaTeam a, FormulaTeam b) -- оператор больше, сравнивает очки команд;
-    \item[--] public static bool operator <(FormulaTeam a, FormulaTeam b) -- оператор меньше, сравнивает очки команд;
-  \end{itemize}
-  \item[--] Собственные методы:
-  \begin{itemize}
-    \item[--] public void AddPoints(int pts) -- публичный метод, добавляет очки команде;
-    \item[--] public void AddWin() -- публичный метод, увеличивает количество побед и подиумов;
-    \item[--] public void AddPodium() -- публичный метод, увеличивает количество подиумов;
-    \item[--] public double GetWinRate(int totalRaces) -- публичный метод, рассчитывает процент побед;
-    \item[--] public virtual string GetSummary() -- публичный виртуальный метод, возвращает сводку по команде.
-  \end{itemize}
-\end{itemize}
-
-Класс <<F1Team>>, наследованный от класса <<FormulaTeam>> содержит:
-\begin{itemize}
-  \item[--] Собственные свойства:
-  \begin{itemize}
-    \item[--] public string PowerUnit \{ get; set; \} -- свойство, тип силовой установки;
-    \item[--] public double BudgetCapMln \{ get; set; \} -- свойство, лимит бюджета в миллионах;
-    \item[--] public int ConstructorPos \{ get; set; \} -- свойство, позиция в кубке конструкторов;
-  \end{itemize}
-  \item[--] Конструкторы:
-  \begin{itemize}
-    \item[--] public F1Team() : base() -- публичный конструктор по умолчанию;
-    \item[--] public F1Team(string name, string principal, string hq, string powerUnit) : base(name, principal, hq) -- конструктор, принимающий основные параметры;
-    \item[--] public F1Team(string name, string principal, string hq, string powerUnit, double budget, int ctorPos, int points, int wins, int podiums) : base(name, principal, hq, points, wins, podiums) -- конструктор, принимающий все параметры;
-  \end{itemize}
-  \item[--] Переопределенные методы:
-  \begin{itemize}
-    \item[--] public override string GetSeriesName() -- возвращает <<Formula 1>>;
-    \item[--] public override int CalculatePoints(int position) -- возвращает очки по системе F1 (25-18-15-12-10-8-6-4-2-1);
-    \item[--] public override string GetSummary() -- возвращает сводку с учетом силовой установки и бюджета;
-  \end{itemize}
-  \item[--] Собственные методы:
-  \begin{itemize}
-    \item[--] public double CalculateBudgetAllocation(double percentage) -- метод расчета выделения бюджета;
-    \item[--] public string GetPowerUnitStatus() -- возвращает статус силовой установки (Dominant, Competitive, Development).
-  \end{itemize}
-\end{itemize}
-
-Класс <<F2Team>>, наследованный от класса <<FormulaTeam>> содержит:
-\begin{itemize}
-  \item[--] Собственные свойства:
-  \begin{itemize}
-    \item[--] public string ChassisModel \{ get; set; \} -- свойство, модель шасси;
-    \item[--] public int F1Graduates \{ get; set; \} -- свойство, число выпускников, перешедших в F1;
-    \item[--] public bool IsFeederSeries \{ get; set; \} -- свойство, является ли молодежной серией;
-  \end{itemize}
-  \item[--] Конструкторы:
-  \begin{itemize}
-    \item[--] public F2Team() : base() -- конструктор по умолчанию;
-    \item[--] public F2Team(string name, string principal, string hq, string chassis) : base(name, principal, hq) -- конструктор, принимающий основные параметры;
-    \item[--] public F2Team(string name, string principal, string hq, string chassis, int graduates, bool feeder, int points, int wins, int podiums) : base(name, principal, hq, points, wins, podiums) -- конструктор, принимающий все параметры;
-  \end{itemize}
-  \item[--] Переопределенные методы:
-  \begin{itemize}
-    \item[--] public override string GetSeriesName() -- возвращает <<Formula 2>>;
-    \item[--] public override int CalculatePoints(int position) -- возвращает очки по системе F2 (15-12-10-8-6-5-4-3-2-1);
-    \item[--] public override string GetSummary() -- возвращает сводку с учетом модели шасси и числа выпускников;
-    \item[--] public string GetFeederStatus() -- возвращает статус молодежной команды.
-  \end{itemize}
-\end{itemize}
-
-Класс <<FormulaETeam>>, наследованный от класса <<FormulaTeam>> содержит:
-\begin{itemize}
-  \item[--] Собственные свойства:
-  \begin{itemize}
-    \item[--] public int SustainabilityScore \{ get; set; \} -- свойство, рейтинг экологичности;
-    \item[--] public double BatteryCapacityKwh \{ get; set; \} -- свойство, емкость батареи;
-    \item[--] public string EnergyPartner \{ get; set; \} -- свойство, энергетический партнер;
-  \end{itemize}
-  \item[--] Конструкторы:
-  \begin{itemize}
-    \item[--] public FormulaETeam() : base() -- конструктор по умолчанию;
-    \item[--] public FormulaETeam(string name, string principal, string hq, string energyPartner) : base(name, principal, hq) -- конструктор с основными параметрами;
-    \item[--] public FormulaETeam(string name, string principal, string hq, string energyPartner, int sustainScore, double batteryKwh, int points, int wins, int podiums) : base(name, principal, hq, points, wins, podiums) -- конструктор со всеми параметрами;
-  \end{itemize}
-  \item[--] Переопределенные методы:
-  \begin{itemize}
-    \item[--] public override string GetSeriesName() -- возвращает <<Formula E>>;
-    \item[--] public override int CalculatePoints(int position) -- возвращает очки по системе Formula E;
-    \item[--] public override string GetSummary() -- возвращает сводку с учетом экологичности и емкости батареи;
-  \end{itemize}
-  \item[--] Собственные методы:
-  \begin{itemize}
-    \item[--] public string GetBatteryEfficiencyRating() -- возвращает рейтинг эффективности батареи.
-  \end{itemize}
-\end{itemize}
-
-Класс <<FormulaDriver>> представляет гонщика и содержит:
-\begin{itemize}
-  \item[--] Свойства:
-  \begin{itemize}
-    \item[--] public int Id \{ get; set; \} -- свойство, уникальный идентификатор;
-    \item[--] public int TeamId \{ get; set; \} -- свойство, идентификатор команды (внешний ключ);
-    \item[--] public string FirstName \{ get; set; \} -- свойство, имя гонщика;
-    \item[--] public string LastName \{ get; set; \} -- свойство, фамилия гонщика;
-    \item[--] public int RacingNumber \{ get; set; \} -- свойство, гоночный номер;
-    \item[--] public int Points \{ get; set; \} -- свойство, набранные очки;
-  \end{itemize}
-  \item[--] Конструкторы:
-  \begin{itemize}
-    \item[--] public FormulaDriver() -- публичный конструктор по умолчанию;
-    \item[--] public FormulaDriver(string firstName, string lastName, int number, int points = 0) -- параметризованный конструктор;
-  \end{itemize}
-  \item[--] Собственные методы:
-  \begin{itemize}
-    \item[--] public void AddPoints(int pts) -- увеличивает количество набранных очков;
-  \end{itemize}
-  \item[--] Вычисляемые свойства:
-  \begin{itemize}
-    \item[--] public string FullName \{ get; \} -- возвращает полное имя гонщика;
-    \item[--] public string DisplayString \{ get; \} -- возвращает строку отображения пилота.
-  \end{itemize}
-\end{itemize}
+\input{classes_tables}
 
 Диаграмма классов сущностей представлена на рисунке 1.
 
 \pagebreak
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.95\linewidth,height=0.45\textheight,keepaspectratio]{pics/uml-1.png}
+  \includegraphics[width=0.95\linewidth,height=0.45\textheight,keepaspectratio]{pics/uml-1.pdf}
 \end{figure}
 \begin{center}
   Рисунок 1 – Диаграмма классов сущностей
@@ -324,13 +186,21 @@ public static bool operator >(FormulaTeam a, FormulaTeam b)
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.95\linewidth,height=0.42\textheight,keepaspectratio]{pics/uml-2.png}
+  \includegraphics[width=0.95\linewidth,height=0.42\textheight,keepaspectratio]{pics/uml-2.pdf}
 \end{figure}
 \begin{center}
   Рисунок 2 – Диаграмма классов базы данных и API
 \end{center}
 
-Также разработан веб-интерфейс для взаимодействия с WEB API, экранные формы которого представлены на рисунках 3, 4, 5 и 6.
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.95\linewidth,height=0.42\textheight,keepaspectratio]{pics/erd.pdf}
+\end{figure}
+\begin{center}
+  Рисунок 3 – Диаграмма ERD базы данных (схема)
+\end{center}
+
+Также разработан веб-интерфейс для взаимодействия с WEB API, экранные формы которого представлены на рисунках 4, 5, 6 и 7.
 
 \pagebreak
 \begin{figure}[ht]
@@ -338,7 +208,7 @@ public static bool operator >(FormulaTeam a, FormulaTeam b)
   \includegraphics[width=0.95\linewidth,height=0.35\textheight,keepaspectratio]{pics/form-1.png}
 \end{figure}
 \begin{center}
-  Рисунок 3 – Экранная форма вкладки команд (standings)
+  Рисунок 4 – Экранная форма вкладки команд (standings)
 \end{center}
 
 \begin{figure}[ht]
@@ -346,7 +216,7 @@ public static bool operator >(FormulaTeam a, FormulaTeam b)
   \includegraphics[width=0.95\linewidth,height=0.35\textheight,keepaspectratio]{pics/form-2.png}
 \end{figure}
 \begin{center}
-  Рисунок 4 – Экранная форма вкладки гонщиков
+  Рисунок 5 – Экранная форма вкладки гонщиков
 \end{center}
 
 \pagebreak
@@ -355,7 +225,7 @@ public static bool operator >(FormulaTeam a, FormulaTeam b)
   \includegraphics[width=0.95\linewidth,height=0.35\textheight,keepaspectratio]{pics/form-3.png}
 \end{figure}
 \begin{center}
-  Рисунок 5 – Экранная форма создания и редактирования команд
+  Рисунок 6 – Экранная форма создания и редактирования команд
 \end{center}
 
 \begin{figure}[ht]
@@ -363,7 +233,7 @@ public static bool operator >(FormulaTeam a, FormulaTeam b)
   \includegraphics[width=0.95\linewidth,height=0.35\textheight,keepaspectratio]{pics/form-4.png}
 \end{figure}
 \begin{center}
-  Рисунок 6 – Экранная форма создания и редактирования гонщиков
+  Рисунок 7 – Экранная форма создания и редактирования гонщиков
 \end{center}
 
 \section*{\hspace{12.5mm}Вывод}

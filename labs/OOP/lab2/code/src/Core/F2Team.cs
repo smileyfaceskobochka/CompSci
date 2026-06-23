@@ -8,7 +8,7 @@ namespace RacingSystem.Core
     public int F1Graduates { get; set; }
     public bool IsFeederSeries { get; set; } = true;
 
-    public F2Team() : base() { }
+    public F2Team() : this("Unknown", "Unknown", "Unknown", "Dallara F2 2024") { }
 
     public F2Team(string name, string principal, string hq, string chassis)
         : base(name, principal, hq)

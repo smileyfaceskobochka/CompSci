@@ -1,5 +1,7 @@
 #include "FormulaDriver.h"
 
+FormulaDriver::FormulaDriver() : FormulaDriver("", "", 0, 0) {}
+
 FormulaDriver::FormulaDriver(const std::string& fName, const std::string& lName, int number, int pts)
     : firstName(fName), lastName(lName), racingNumber(number), points(pts) {}
 

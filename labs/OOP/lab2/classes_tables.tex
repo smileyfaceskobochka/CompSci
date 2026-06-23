@@ -16,7 +16,7 @@ Headquarters & string & public & Штаб-квартира команды \\ \hl
 TeamColor & string? & public & Цвет команды \\ \hline
 ChampionshipPoints & int & public & Очки чемпионата \\ \hline
 RaceWins, Podiums & int & public & Победы и подиумы \\ \hline
-Drivers & List<FormulaDriver> & public & Список гонщиков \\ \hline
+Drivers & {\footnotesize List<FormulaDriver>} & public & Список гонщиков \\ \hline
 \multicolumn{4}{|c|}{\textbf{Методы и Конструкторы}} \\ \hline
 FormulaTeam(...) & - & protected & Конструкторы \\ \hline
 GetSeriesName() & string & public & Абстрактный метод \\ \hline
@@ -41,7 +41,7 @@ BudgetCapMln & double & public & Лимит бюджета в миллионах
 ConstructorPos & int & public & Позиция в кубке конструкторов \\ \hline
 \multicolumn{4}{|c|}{\textbf{Методы и Конструкторы}} \\ \hline
 F1Team(...) & - & public & Конструкторы \\ \hline
-CalculateBudgetAllocation(...) & double & public & Расчет выделения бюджета \\ \hline
+{\footnotesize CalculateBudgetAllocation(...)} & double & public & Расчет выделения бюджета \\ \hline
 GetPowerUnitStatus() & string & public & Статус силовой установки \\ \hline
 Переопределенные методы & разный & public & GetSeriesName, CalculatePoints, GetSummary \\ \hline
 \end{tabular}
@@ -76,7 +76,7 @@ BatteryCapacityKwh & double & public & Емкость батареи \\ \hline
 EnergyPartner & string & public & Энергетический партнер \\ \hline
 \multicolumn{4}{|c|}{\textbf{Методы и Конструкторы}} \\ \hline
 FormulaETeam(...) & - & public & Конструкторы \\ \hline
-GetBatteryEfficiencyRating() & string & public & Рейтинг эффективности батареи \\ \hline
+{\footnotesize GetBatteryEfficiencyRating()} & string & public & Рейтинг эффективности батареи \\ \hline
 Переопределенные методы & разный & public & GetSeriesName, CalculatePoints, GetSummary \\ \hline
 \end{tabular}
 \end{table}

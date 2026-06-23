@@ -8,7 +8,7 @@ namespace RacingSystem.Core
   [JsonDerivedType(typeof(F1Team), "f1")]
   [JsonDerivedType(typeof(F2Team), "f2")]
   [JsonDerivedType(typeof(FormulaETeam), "fe")]
-  public abstract class FormulaTeam
+  public abstract class FormulaTeam : ITeam
   {
     // Enforce encapsulation with Properties
     public int Id { get; set; }

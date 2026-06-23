@@ -2,7 +2,7 @@ using System;
 
 namespace RacingSystem.Core
 {
-  public class FormulaDriver
+  public class FormulaDriver : IDriver
   {
     public int Id { get; set; }
     public int TeamId { get; set; }

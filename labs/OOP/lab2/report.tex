@@ -82,7 +82,7 @@
 \noindent
 \begin{tabular}{ll}
   Выполнил студент гр. ИВТб-2301-05-00 \hspace{5mm} & \rule[-1mm]{25mm}{0.10mm}\,/Черкасов А. А./ \\
-  Руководитель преподаватель                        & \rule[-1mm]{25mm}{0.10mm}\,/Шмакова Н. А./ \\
+  Руководитель преподаватель                        & \rule[-1mm]{25mm}{0.10mm}\,/Шмакова Н. А./  \\
 \end{tabular}
 
 \vfill
@@ -107,9 +107,9 @@
 Диаграмма классов сущностей представлена на рисунке 1.
 
 \pagebreak
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\linewidth,height=0.45\textheight,keepaspectratio]{pics/uml-1.pdf}
+  \includegraphics[width=0.95\linewidth,keepaspectratio]{pics/uml-1.png}
 \end{figure}
 \begin{center}
   Рисунок 1 – Диаграмма классов сущностей
@@ -166,7 +166,7 @@ modelBuilder.Entity<FormulaTeam>()
   \item[--] PUT /api/teams/\{id\} -- обновляет существующую команду;
   \item[--] DELETE /api/teams/\{id\} -- удаляет команду и каскадно удаляет привязанных к ней гонщиков;
   \item[--] POST /api/teams/\{id\}/simulate-race -- симулирует гонку для команды, полиморфно вычисляя очки по занятому месту и сохраняя изменения в базе данных:
-\begin{minted}{csharp}
+        \begin{minted}{csharp}
 int points = team.CalculatePoints(position);
 driver.AddPoints(points);
 team.AddPoints(points);
@@ -176,25 +176,129 @@ team.AddPoints(points);
   \item[--] PUT /api/drivers/\{id\} -- обновляет запись о гонщике;
   \item[--] DELETE /api/drivers/\{id\} -- удаляет запись о гонщике по идентификатору;
   \item[--] GET /api/teams/compare -- метод сравнения двух команд по очкам с помощью перегруженных операторов:
-\begin{minted}{csharp}
+        \begin{minted}{csharp}
 public static bool operator >(FormulaTeam a, FormulaTeam b) 
     => a.ChampionshipPoints > b.ChampionshipPoints;
 \end{minted}
 \end{itemize}
 
+\subsection*{Примеры реализации CRUD-операций}
+
+Ниже приведены примеры C\#-кода для каждой из четырех операций CRUD (Create, Read, Update, Delete) на примере сущности гоночной команды (\textbf{FormulaTeam}), реализованных на уровне API-обработчика и менеджера базы данных.
+
+\subsubsection*{1. Create (Создание)}
+Пример маршрутизации POST-запроса для добавления новой команды в \texttt{Program.cs}:
+\begin{minted}{csharp}
+else if (method == "POST")
+{
+    string body = ReadBody(request);
+    var team = JsonSerializer.Deserialize<FormulaTeam>(body, jsonOptions);
+    if (team == null) throw new ArgumentException("Invalid team payload");
+    db.SaveTeam(team);
+    SendJson(response, team, 201);
+    return;
+}
+\end{minted}
+
+Метод \texttt{SaveTeam} в \texttt{DatabaseManager.cs} (добавление новой записи при \texttt{Id == 0}):
+\begin{minted}{csharp}
+public void SaveTeam(FormulaTeam team)
+{
+    using var context = new RacingDbContext();
+    if (team.Id == 0)
+    {
+        context.Teams.Add(team);
+    }
+    else
+    {
+        context.Teams.Update(team);
+    }
+    context.SaveChanges();
+}
+\end{minted}
+
+\subsubsection*{2. Read (Чтение)}
+Пример маршрутизации GET-запроса для получения всех команд в \texttt{Program.cs}:
+\begin{minted}{csharp}
+if (method == "GET")
+{
+    var teams = db.GetAllTeams();
+    SendJson(response, teams);
+    return;
+}
+\end{minted}
+
+Метод \texttt{GetAllTeams} в \texttt{DatabaseManager.cs} с жадной загрузкой (Eager Loading) гонщиков:
+\begin{minted}{csharp}
+public List<FormulaTeam> GetAllTeams()
+{
+    using var context = new RacingDbContext();
+    return context.Teams
+        .Include(t => t.Drivers)
+        .OrderByDescending(t => t.ChampionshipPoints)
+        .ToList();
+}
+\end{minted}
+
+\pagebreak
+\subsubsection*{3. Update (Обновление)}
+Пример маршрутизации PUT-запроса для обновления существующей команды в \texttt{Program.cs}:
+\begin{minted}{csharp}
+if (method == "PUT")
+{
+    string body = ReadBody(request);
+    var team = JsonSerializer.Deserialize<FormulaTeam>(body, jsonOptions);
+    if (team == null) throw new ArgumentException("Invalid team payload");
+    team.Id = teamId;
+    db.SaveTeam(team);
+    SendJson(response, team);
+    return;
+}
+\end{minted}
+
+(Для сохранения изменений используется тот же метод \texttt{SaveTeam} с веткой \texttt{context.Teams.Update(team)} при \texttt{Id != 0}).
+
+\subsubsection*{4. Delete (Удаление)}
+Пример маршрутизации DELETE-запроса в \texttt{Program.cs}:
+\begin{minted}{csharp}
+else if (method == "DELETE")
+{
+    db.DeleteTeam(teamId);
+    response.StatusCode = 204;
+    response.Close();
+    return;
+}
+\end{minted}
+
+Метод \texttt{DeleteTeam} в \texttt{DatabaseManager.cs} с каскадным удалением связанных гонщиков:
+\begin{minted}{csharp}
+public void DeleteTeam(int id)
+{
+    using var context = new RacingDbContext();
+    var team = context.Teams.Include(t => t.Drivers).FirstOrDefault(t => t.Id == id);
+    if (team != null)
+    {
+        context.Drivers.RemoveRange(team.Drivers);
+        context.Teams.Remove(team);
+        context.SaveChanges();
+    }
+}
+\end{minted}
+
 Диаграмма классов контроллеров и конфигураций сущностей представлены на рисунке 2.
 
-\begin{figure}[ht]
+
+\begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\linewidth,height=0.42\textheight,keepaspectratio]{pics/uml-2.pdf}
+  \includegraphics[width=0.95\linewidth,keepaspectratio]{pics/uml-2.png}
 \end{figure}
 \begin{center}
   Рисунок 2 – Диаграмма классов базы данных и API
 \end{center}
 
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\linewidth,height=0.42\textheight,keepaspectratio]{pics/erd.pdf}
+  \includegraphics[width=0.95\linewidth,height=0.5\textheight,keepaspectratio]{pics/erd.png}
 \end{figure}
 \begin{center}
   Рисунок 3 – Диаграмма ERD базы данных (схема)
@@ -203,7 +307,7 @@ public static bool operator >(FormulaTeam a, FormulaTeam b)
 Также разработан веб-интерфейс для взаимодействия с WEB API, экранные формы которого представлены на рисунках 4, 5, 6 и 7.
 
 \pagebreak
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
   \includegraphics[width=0.95\linewidth,height=0.35\textheight,keepaspectratio]{pics/form-1.png}
 \end{figure}
@@ -211,7 +315,7 @@ public static bool operator >(FormulaTeam a, FormulaTeam b)
   Рисунок 4 – Экранная форма вкладки команд (standings)
 \end{center}
 
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
   \includegraphics[width=0.95\linewidth,height=0.35\textheight,keepaspectratio]{pics/form-2.png}
 \end{figure}
@@ -220,7 +324,7 @@ public static bool operator >(FormulaTeam a, FormulaTeam b)
 \end{center}
 
 \pagebreak
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
   \includegraphics[width=0.95\linewidth,height=0.35\textheight,keepaspectratio]{pics/form-3.png}
 \end{figure}
@@ -228,7 +332,7 @@ public static bool operator >(FormulaTeam a, FormulaTeam b)
   Рисунок 6 – Экранная форма создания и редактирования команд
 \end{center}
 
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
   \includegraphics[width=0.95\linewidth,height=0.35\textheight,keepaspectratio]{pics/form-4.png}
 \end{figure}

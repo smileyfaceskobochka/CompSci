@@ -3,14 +3,34 @@ classDiagram
 
     class IDriver {
         <<Interface>>
+        +int Id
+        +int TeamId
+        +string FirstName
+        +string LastName
+        +int RacingNumber
+        +int Points
+        +string FullName
+        +string DisplayString
         +AddPoints(pts) void
     }
 
     class ITeam {
         <<Interface>>
+        +int Id
+        +string TeamName
+        +string PrincipalName
+        +string Headquarters
+        +string TeamColor
+        +int ChampionshipPoints
+        +int RaceWins
+        +int Podiums
+        +List~FormulaDriver~ Drivers
         +AddPoints(pts) void
         +AddWin() void
         +AddPodium() void
+        +GetWinRate(totalRaces) double
+        +GetSeriesName() string*
+        +CalculatePoints(position) int*
         +GetSummary() string
     }
 

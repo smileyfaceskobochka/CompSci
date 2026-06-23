@@ -1,8 +1,6 @@
 package com.vyatsu.racing.controllers;
 
-import com.vyatsu.racing.models.RacingDriver;
-import com.vyatsu.racing.models.RacingSeries;
-import com.vyatsu.racing.models.RacingTeam;
+import com.vyatsu.racing.models.*;
 import com.vyatsu.racing.services.RacingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -64,7 +62,7 @@ public class RacingController {
 
     @GetMapping("/teams/add")
     public String showAddTeamForm(Model model) {
-        model.addAttribute("team", new RacingTeam());
+        model.addAttribute("team", new F1Team());
         model.addAttribute("seriesList", racingService.getAllSeries());
         return "team-form";
     }
@@ -77,7 +75,41 @@ public class RacingController {
     }
 
     @PostMapping("/teams/save")
-    public String saveTeam(@ModelAttribute RacingTeam team) {
+    public String saveTeam(@RequestParam(required = false) Long id,
+                           @RequestParam Long series,
+                           @RequestParam String name,
+                           @RequestParam String principalName,
+                           @RequestParam String baseLocation,
+                           @RequestParam(required = false) String teamColor,
+                           @RequestParam(defaultValue = "0") Integer points,
+                           @RequestParam(defaultValue = "0") Integer wins,
+                           @RequestParam(defaultValue = "0") Integer podiums,
+                           @RequestParam(required = false) String powerUnit) {
+        RacingTeam team;
+        if (id != null) {
+            team = racingService.getTeamById(id);
+        } else {
+            if (series == 2) {
+                team = new F2Team();
+            } else if (series == 3) {
+                team = new FormulaETeam();
+            } else {
+                team = new F1Team();
+            }
+        }
+        team.setName(name);
+        team.setPrincipalName(principalName);
+        team.setBaseLocation(baseLocation);
+        team.setTeamColor(teamColor != null ? teamColor : "#FFFFFF");
+        team.setPoints(points);
+        team.setWins(wins);
+        team.setPodiums(podiums);
+        team.setSeries(racingService.getSeriesById(series));
+
+        if (team instanceof F1Team) {
+            ((F1Team) team).setPowerUnit(powerUnit != null ? powerUnit : "Unknown");
+        }
+
         racingService.saveTeam(team);
         return "redirect:/teams";
     }

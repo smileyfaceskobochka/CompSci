@@ -1,5 +1,5 @@
 classDiagram
-    direction LR
+    direction BT
 
     class RacingSeries {
         -Long id
@@ -13,25 +13,39 @@ classDiagram
     }
 
     class RacingTeam {
+        <<abstract>>
         -Long id
         -String name
         -String principalName
         -String baseLocation
-        -String powerUnit
         -Integer points
         -RacingSeries series
         -List~RacingDriver~ drivers
         -String teamColor
         -Integer wins
         -Integer podiums
+        +calculatePoints(position) int*
+    }
+
+    class F1Team {
+        -String powerUnit
         -Double budgetCap
         -Integer constructorPos
+        +calculatePoints(position) int
+    }
+
+    class F2Team {
         -String chassisModel
         -Integer graduates
         -Boolean isFeeder
+        +calculatePoints(position) int
+    }
+
+    class FormulaETeam {
         -String energyPartner
         -Double batteryKwh
         -Integer sustainScore
+        +calculatePoints(position) int
     }
 
     class RacingDriver {
@@ -45,3 +59,6 @@ classDiagram
 
     RacingSeries "1" *-- "many" RacingTeam : Contains
     RacingTeam "1" *-- "many" RacingDriver : Employs
+    F1Team --|> RacingTeam : Inherits
+    F2Team --|> RacingTeam : Inherits
+    FormulaETeam --|> RacingTeam : Inherits

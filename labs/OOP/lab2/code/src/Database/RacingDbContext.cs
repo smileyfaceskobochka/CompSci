@@ -22,13 +22,13 @@ public class RacingDbContext : DbContext
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
-    // Map Table-per-Hierarchy (TPH)
+    // Map Table-per-Type (TPT)
     modelBuilder.Entity<FormulaTeam>()
-        .ToTable("racing_teams")
-        .HasDiscriminator<long>("series_id") // discriminator column
-        .HasValue<F1Team>(1)
-        .HasValue<F2Team>(2)
-        .HasValue<FormulaETeam>(3);
+        .ToTable("racing_teams");
+
+    modelBuilder.Entity<FormulaTeam>()
+        .Property<long>("series_id")
+        .HasColumnName("series_id");
 
     modelBuilder.Entity<FormulaTeam>()
         .HasQueryFilter(t => EF.Property<long>(t, "series_id") >= 1 && EF.Property<long>(t, "series_id") <= 3);
@@ -53,6 +53,7 @@ public class RacingDbContext : DbContext
     // Map F1Team 
     modelBuilder.Entity<F1Team>(entity =>
     {
+      entity.ToTable("f1_teams");
       entity.Property(t => t.PowerUnit).HasColumnName("power_unit");
       entity.Property(t => t.BudgetCapMln).HasColumnName("budget_cap");
       entity.Property(t => t.ConstructorPos).HasColumnName("constructor_pos");
@@ -61,6 +62,7 @@ public class RacingDbContext : DbContext
     // Map F2Team
     modelBuilder.Entity<F2Team>(entity =>
     {
+      entity.ToTable("f2_teams");
       entity.Property(t => t.ChassisModel).HasColumnName("chassis_model");
       entity.Property(t => t.F1Graduates).HasColumnName("graduates");
       entity.Property(t => t.IsFeederSeries).HasColumnName("is_feeder");
@@ -69,6 +71,7 @@ public class RacingDbContext : DbContext
     // Map FormulaETeam
     modelBuilder.Entity<FormulaETeam>(entity =>
     {
+      entity.ToTable("formula_e_teams");
       entity.Property(t => t.EnergyPartner).HasColumnName("energy_partner");
       entity.Property(t => t.BatteryCapacityKwh).HasColumnName("battery_kwh");
       entity.Property(t => t.SustainabilityScore).HasColumnName("sustain_score");
@@ -86,5 +89,35 @@ public class RacingDbContext : DbContext
       entity.Property(d => d.RacingNumber).HasColumnName("racing_number");
       entity.Property(d => d.Points).HasColumnName("points");
     });
+  }
+
+  public override int SaveChanges()
+  {
+    SetSeriesIds();
+    return base.SaveChanges();
+  }
+
+  public override System.Threading.Tasks.Task<int> SaveChangesAsync(System.Threading.CancellationToken cancellationToken = default)
+  {
+    SetSeriesIds();
+    return base.SaveChangesAsync(cancellationToken);
+  }
+
+  private void SetSeriesIds()
+  {
+    foreach (var entry in ChangeTracker.Entries<FormulaTeam>())
+    {
+      if (entry.State == EntityState.Added || entry.State == EntityState.Modified)
+      {
+        long seriesId = entry.Entity switch
+        {
+          F1Team => 1,
+          F2Team => 2,
+          FormulaETeam => 3,
+          _ => 0
+        };
+        entry.Property("series_id").CurrentValue = seriesId;
+      }
+    }
   }
 }

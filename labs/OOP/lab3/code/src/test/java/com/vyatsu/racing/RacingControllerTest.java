@@ -1,9 +1,7 @@
 package com.vyatsu.racing;
 
 import com.vyatsu.racing.controllers.RacingController;
-import com.vyatsu.racing.models.RacingDriver;
-import com.vyatsu.racing.models.RacingSeries;
-import com.vyatsu.racing.models.RacingTeam;
+import com.vyatsu.racing.models.*;
 import com.vyatsu.racing.services.RacingService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +34,7 @@ public class RacingControllerTest {
         series.setId(1L);
         series.setName("F1");
         series.setHeadquarters("HQ");
-        RacingTeam team = new RacingTeam();
+        RacingTeam team = new F1Team();
         team.setId(1L);
         team.setName("Test Team");
         team.setPrincipalName("Principal");
@@ -70,7 +68,7 @@ public class RacingControllerTest {
         series.setId(1L);
         series.setName("F1");
         series.setHeadquarters("HQ");
-        RacingTeam team = new RacingTeam();
+        RacingTeam team = new F1Team();
         team.setId(1L);
         team.setName("Test Team");
         team.setPrincipalName("Principal");
@@ -91,7 +89,7 @@ public class RacingControllerTest {
         series.setId(1L);
         series.setName("F1");
         series.setHeadquarters("HQ");
-        RacingTeam team = new RacingTeam();
+        RacingTeam team = new F1Team();
         team.setId(1L);
         team.setName("Test Team");
         team.setPrincipalName("Principal");

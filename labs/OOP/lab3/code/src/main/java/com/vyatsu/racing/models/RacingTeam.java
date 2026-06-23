@@ -1,12 +1,12 @@
 package com.vyatsu.racing.models;
 
-import lombok.Data;
 import lombok.ToString;
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "racing_teams")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class RacingTeam {
 
     @Id
@@ -22,14 +22,11 @@ public class RacingTeam {
     @Column(name = "base_location", nullable = false)
     private String baseLocation;
 
-    @Column(name = "power_unit")
-    private String powerUnit;
-
     @Column(nullable = false)
     private Integer points = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "series_id", nullable = false)
+    @JoinColumn(name = "series_id")
     @ToString.Exclude
     private RacingSeries series;
 
@@ -40,36 +37,11 @@ public class RacingTeam {
     @Column(name = "team_color")
     private String teamColor = "#FFFFFF";
 
-    // Lab3 V5: extra fields from lab2
     @Column(nullable = false)
     private Integer wins = 0;
 
     @Column(nullable = false)
     private Integer podiums = 0;
-
-    @Column(name = "budget_cap")
-    private Double budgetCap = 0.0;
-
-    @Column(name = "constructor_pos")
-    private Integer constructorPos = 0;
-
-    @Column(name = "chassis_model")
-    private String chassisModel;
-
-    @Column(nullable = false)
-    private Integer graduates = 0;
-
-    @Column(name = "is_feeder")
-    private Boolean isFeeder = false;
-
-    @Column(name = "energy_partner")
-    private String energyPartner;
-
-    @Column(name = "battery_kwh")
-    private Double batteryKwh = 0.0;
-
-    @Column(name = "sustain_score")
-    private Integer sustainScore = 0;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -82,9 +54,6 @@ public class RacingTeam {
 
     public String getBaseLocation() { return baseLocation; }
     public void setBaseLocation(String baseLocation) { this.baseLocation = baseLocation; }
-
-    public String getPowerUnit() { return powerUnit; }
-    public void setPowerUnit(String powerUnit) { this.powerUnit = powerUnit; }
 
     public Integer getPoints() { return points; }
     public void setPoints(Integer points) { this.points = points; }
@@ -104,27 +73,7 @@ public class RacingTeam {
     public Integer getPodiums() { return podiums; }
     public void setPodiums(Integer podiums) { this.podiums = podiums; }
 
-    public Double getBudgetCap() { return budgetCap; }
-    public void setBudgetCap(Double budgetCap) { this.budgetCap = budgetCap; }
-
-    public Integer getConstructorPos() { return constructorPos; }
-    public void setConstructorPos(Integer constructorPos) { this.constructorPos = constructorPos; }
-
-    public String getChassisModel() { return chassisModel; }
-    public void setChassisModel(String chassisModel) { this.chassisModel = chassisModel; }
-
-    public Integer getGraduates() { return graduates; }
-    public void setGraduates(Integer graduates) { this.graduates = graduates; }
-
-    public Boolean getIsFeeder() { return isFeeder; }
-    public void setIsFeeder(Boolean isFeeder) { this.isFeeder = isFeeder; }
-
-    public String getEnergyPartner() { return energyPartner; }
-    public void setEnergyPartner(String energyPartner) { this.energyPartner = energyPartner; }
-
-    public Double getBatteryKwh() { return batteryKwh; }
-    public void setBatteryKwh(Double batteryKwh) { this.batteryKwh = batteryKwh; }
-
-    public Integer getSustainScore() { return sustainScore; }
-    public void setSustainScore(Integer sustainScore) { this.sustainScore = sustainScore; }
+    public int calculatePoints(int position) {
+        return 0;
+    }
 }

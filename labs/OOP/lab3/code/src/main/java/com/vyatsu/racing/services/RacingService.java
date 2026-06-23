@@ -72,15 +72,29 @@ public class RacingService {
     }
 
     public List<RacingDriver> getDriverStandings() {
-        return driverRepository.findAllByOrderByPointsDesc();
+        List<RacingDriver> drivers = new ArrayList<>();
+        driverRepository.findAll().forEach(drivers::add);
+        drivers.sort((a, b) -> b.getPoints() - a.getPoints());
+        return drivers;
     }
 
     public LinkedHashMap<RacingSeries, List<RacingDriver>> getStandingsBySeries() {
         LinkedHashMap<RacingSeries, List<RacingDriver>> map = new LinkedHashMap<>();
-        List<RacingSeries> series = new ArrayList<>();
-        seriesRepository.findAll().forEach(series::add);
-        for (RacingSeries s : series) {
-            map.put(s, driverRepository.findByTeam_SeriesIdOrderByPointsDesc(s.getId()));
+        List<RacingSeries> seriesList = new ArrayList<>();
+        seriesRepository.findAll().forEach(seriesList::add);
+
+        List<RacingDriver> allDrivers = new ArrayList<>();
+        driverRepository.findAll().forEach(allDrivers::add);
+
+        for (RacingSeries s : seriesList) {
+            List<RacingDriver> seriesDrivers = new ArrayList<>();
+            for (RacingDriver d : allDrivers) {
+                if (d.getTeam() != null && d.getTeam().getSeries() != null && d.getTeam().getSeries().getId().equals(s.getId())) {
+                    seriesDrivers.add(d);
+                }
+            }
+            seriesDrivers.sort((a, b) -> b.getPoints() - a.getPoints());
+            map.put(s, seriesDrivers);
         }
         return map;
     }

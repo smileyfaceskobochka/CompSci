@@ -61,7 +61,15 @@ public class RacingRestController {
 
     @PostMapping("/teams")
     public ResponseEntity<FormulaTeamDto> createTeam(@RequestBody FormulaTeamDto dto) {
-        RacingTeam team = new RacingTeam();
+        String type = dto.type != null ? dto.type.toLowerCase() : "f1";
+        RacingTeam team;
+        if ("f2".equals(type)) {
+            team = new F2Team();
+        } else if ("fe".equals(type)) {
+            team = new FormulaETeam();
+        } else {
+            team = new F1Team();
+        }
         updateTeamFromDto(team, dto);
         RacingTeam saved = teamRepository.save(team);
         return ResponseEntity.status(HttpStatus.CREATED).body(toTeamDto(saved));
@@ -89,6 +97,22 @@ public class RacingRestController {
         // Cascade delete drivers signed under the team (managed by JPA cascade)
         teamRepository.delete(team);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping({"/teams/{id}/drivers", "/teams/{id}/members"})
+    public ResponseEntity<List<FormulaDriverDto>> getTeamDrivers(@PathVariable Long id) {
+        Optional<RacingTeam> optionalTeam = teamRepository.findById(id);
+        if (!optionalTeam.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        RacingTeam team = optionalTeam.get();
+        List<FormulaDriverDto> dtos = new ArrayList<>();
+        if (team.getDrivers() != null) {
+            dtos = team.getDrivers().stream()
+                    .map(this::toDriverDto)
+                    .collect(Collectors.toList());
+        }
+        return ResponseEntity.ok(dtos);
     }
 
     // --- DRIVERS CRUD ---
@@ -144,7 +168,24 @@ public class RacingRestController {
         return ResponseEntity.noContent().build();
     }
 
-    // --- SIMULATION & UTILITIES ---
+    @GetMapping("/drivers/{id}/teams")
+    public ResponseEntity<List<FormulaTeamDto>> getDriverTeams(@PathVariable Long id) {
+        Optional<RacingDriver> optionalDriver = driverRepository.findById(id);
+        if (!optionalDriver.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        RacingDriver driver = optionalDriver.get();
+        List<FormulaTeamDto> teams = new ArrayList<>();
+        for (RacingDriver d : driverRepository.findAll()) {
+            if (d.getFirstName().equalsIgnoreCase(driver.getFirstName())
+                    && d.getLastName().equalsIgnoreCase(driver.getLastName())) {
+                if (d.getTeam() != null) {
+                    teams.add(toTeamDto(d.getTeam()));
+                }
+            }
+        }
+        return ResponseEntity.ok(teams);
+    }
 
     @PostMapping("/teams/{id}/simulate-race")
     public ResponseEntity<?> simulateRace(@PathVariable Long id,
@@ -162,7 +203,7 @@ public class RacingRestController {
         }
         RacingDriver driver = optionalDriver.get();
 
-        int points = calculatePolymorphicPoints(team.getSeries().getId(), position);
+        int points = team.calculatePoints(position);
         
         driver.setPoints(driver.getPoints() + points);
         team.setPoints(team.getPoints() + points);
@@ -230,7 +271,7 @@ public class RacingRestController {
             RacingDriver driver = optionalDriver.get();
             RacingTeam team = driver.getTeam();
 
-            int points = calculatePolymorphicPoints(team.getSeries().getId(), result.getPosition());
+            int points = team.calculatePoints(result.getPosition());
             driver.setPoints(driver.getPoints() + points);
             team.setPoints(team.getPoints() + points);
 
@@ -306,17 +347,6 @@ public class RacingRestController {
         return false;
     }
 
-    private int calculatePolymorphicPoints(long seriesId, int position) {
-        if (position < 1 || position > 10) return 0;
-        if (seriesId == 2) { // Formula 2
-            int[] points = { 15, 12, 10, 8, 6, 5, 4, 3, 2, 1 };
-            return points[position - 1];
-        } else { // Formula 1 or Formula E
-            int[] points = { 25, 18, 15, 12, 10, 8, 6, 4, 2, 1 };
-            return points[position - 1];
-        }
-    }
-
     private FormulaTeamDto toTeamDto(RacingTeam team) {
         FormulaTeamDto dto = new FormulaTeamDto();
         dto.id = team.getId();
@@ -328,31 +358,33 @@ public class RacingRestController {
         dto.raceWins = team.getWins();
         dto.podiums = team.getPodiums();
 
-        long seriesId = team.getSeries().getId();
-        if (seriesId == 1) {
+        if (team instanceof F1Team) {
+            F1Team f1 = (F1Team) team;
             dto.type = "f1";
             dto.seriesName = "Formula 1";
-            dto.powerUnit = team.getPowerUnit();
-            dto.budgetCapMln = team.getBudgetCap();
-            dto.constructorPos = team.getConstructorPos();
-            dto.engine_status = getPowerUnitStatus(team.getWins(), team.getPowerUnit());
+            dto.powerUnit = f1.getPowerUnit();
+            dto.budgetCapMln = f1.getBudgetCap();
+            dto.constructorPos = f1.getConstructorPos();
+            dto.engine_status = getPowerUnitStatus(team.getWins(), f1.getPowerUnit());
             dto.summary = String.format("[Formula 1] %s | Pts: %d | Wins: %d | PU: %s | Budget: $%sM",
                     dto.teamName, dto.championshipPoints, dto.raceWins, dto.powerUnit, dto.budgetCapMln);
-        } else if (seriesId == 2) {
+        } else if (team instanceof F2Team) {
+            F2Team f2 = (F2Team) team;
             dto.type = "f2";
             dto.seriesName = "Formula 2";
-            dto.chassisModel = team.getChassisModel();
-            dto.f1Graduates = team.getGraduates();
-            dto.isFeederSeries = team.getIsFeeder();
+            dto.chassisModel = f2.getChassisModel();
+            dto.f1Graduates = f2.getGraduates();
+            dto.isFeederSeries = f2.getIsFeeder();
             dto.feeder_status_text = getFeederStatus(dto.isFeederSeries, dto.f1Graduates);
             dto.summary = String.format("[Formula 2] %s | Pts: %d | Wins: %d | Chassis: %s | F1 Grads: %d",
                     dto.teamName, dto.championshipPoints, dto.raceWins, dto.chassisModel, dto.f1Graduates);
-        } else if (seriesId == 3) {
+        } else if (team instanceof FormulaETeam) {
+            FormulaETeam fe = (FormulaETeam) team;
             dto.type = "fe";
             dto.seriesName = "Formula E";
-            dto.energyPartner = team.getEnergyPartner();
-            dto.batteryCapacityKwh = team.getBatteryKwh();
-            dto.sustainabilityScore = team.getSustainScore();
+            dto.energyPartner = fe.getEnergyPartner();
+            dto.batteryCapacityKwh = fe.getBatteryKwh();
+            dto.sustainabilityScore = fe.getSustainScore();
             dto.battery_rating_text = getBatteryEfficiencyRating(dto.batteryCapacityKwh);
             dto.summary = String.format("[Formula E] %s | Pts: %d | Wins: %d | Eco: %d/100 | Battery: %s kWh",
                     dto.teamName, dto.championshipPoints, dto.raceWins, dto.sustainabilityScore, dto.batteryCapacityKwh);
@@ -397,18 +429,21 @@ public class RacingRestController {
         long seriesId = "fe".equals(type) ? 3L : ("f2".equals(type) ? 2L : 1L);
         team.setSeries(seriesRepository.findById(seriesId).orElse(null));
 
-        if ("f1".equals(type)) {
-            team.setPowerUnit(dto.powerUnit != null ? dto.powerUnit : "Unknown");
-            team.setBudgetCap(dto.budgetCapMln != null ? dto.budgetCapMln : 135.0);
-            team.setConstructorPos(dto.constructorPos != null ? dto.constructorPos : 1);
-        } else if ("f2".equals(type)) {
-            team.setChassisModel(dto.chassisModel != null ? dto.chassisModel : "Dallara F2 2024");
-            team.setGraduates(dto.f1Graduates != null ? dto.f1Graduates : 0);
-            team.setIsFeeder(dto.isFeederSeries != null ? dto.isFeederSeries : true);
-        } else if ("fe".equals(type)) {
-            team.setEnergyPartner(dto.energyPartner != null ? dto.energyPartner : "Unknown");
-            team.setBatteryKwh(dto.batteryCapacityKwh != null ? dto.batteryCapacityKwh : 38.0);
-            team.setSustainScore(dto.sustainabilityScore != null ? dto.sustainabilityScore : 50);
+        if ("f1".equals(type) && team instanceof F1Team) {
+            F1Team f1 = (F1Team) team;
+            f1.setPowerUnit(dto.powerUnit != null ? dto.powerUnit : "Unknown");
+            f1.setBudgetCap(dto.budgetCapMln != null ? dto.budgetCapMln : 135.0);
+            f1.setConstructorPos(dto.constructorPos != null ? dto.constructorPos : 1);
+        } else if ("f2".equals(type) && team instanceof F2Team) {
+            F2Team f2 = (F2Team) team;
+            f2.setChassisModel(dto.chassisModel != null ? dto.chassisModel : "Dallara F2 2024");
+            f2.setGraduates(dto.f1Graduates != null ? dto.f1Graduates : 0);
+            f2.setIsFeeder(dto.isFeederSeries != null ? dto.isFeederSeries : true);
+        } else if ("fe".equals(type) && team instanceof FormulaETeam) {
+            FormulaETeam fe = (FormulaETeam) team;
+            fe.setEnergyPartner(dto.energyPartner != null ? dto.energyPartner : "Unknown");
+            fe.setBatteryKwh(dto.batteryCapacityKwh != null ? dto.batteryCapacityKwh : 38.0);
+            fe.setSustainScore(dto.sustainabilityScore != null ? dto.sustainabilityScore : 50);
         }
     }
 

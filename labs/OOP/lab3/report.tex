@@ -99,59 +99,113 @@
 
 Программа содержит сущности JPA для отображения таблиц базы данных: <<RacingSeries>>, <<RacingTeam>>, <<RacingDriver>>. Для передачи данных и поддержки полиморфизма на уровне API разработаны объекты передачи данных (DTO): <<FormulaTeamDto>> и <<FormulaDriverDto>>.
 
-Класс <<RacingTeam>> (сущность команды) содержит:
-\begin{itemize}
-  \item[--] Поля:
-  \begin{itemize}
-    \item[--] private Long id -- уникальный идентификатор (первичный ключ);
-    \item[--] private String name -- название команды;
-    \item[--] private String principalName -- имя руководителя;
-    \item[--] private String baseLocation -- штаб-квартира;
-    \item[--] private String teamColor -- фирменный цвет команды;
-    \item[--] private Integer points -- набранные очки;
-    \item[--] private Integer wins -- количество побед;
-    \item[--] private Integer podiums -- количество подиумов;
-    \item[--] private RacingSeries series -- связь со спортивной серией;
-    \item[--] private List<RacingDriver> drivers -- список гонщиков команды;
-    \item[--] Специфичные поля серий: F1 (\texttt{powerUnit}, \texttt{budgetCap}, \texttt{constructorPos}), F2 (\texttt{chassisModel}, \texttt{graduates}, \texttt{isFeeder}), FE (\texttt{energyPartner}, \texttt{batteryKwh}, \texttt{sustainScore});
-  \end{itemize}
-  \item[--] Методы: стандартные геттеры и сеттеры для всех полей.
-\end{itemize}
+Далее в таблицах 1--6 приведено подробное описание полей и методов разработанных классов предметной области (сущностей).
 
-Класс <<RacingDriver>> (сущность гонщика) содержит:
-\begin{itemize}
-  \item[--] Поля:
-  \begin{itemize}
-    \item[--] private Long id -- уникальный идентификатор;
-    \item[--] private String firstName -- имя;
-    \item[--] private String lastName -- фамилия;
-    \item[--] private Integer racingNumber -- стартовый номер гонщика;
-    \item[--] private Integer points -- набранные личные очки;
-    \item[--] private RacingTeam team -- связь с командой;
-  \end{itemize}
-  \item[--] Методы: стандартные геттеры и сеттеры.
-\end{itemize}
+\begin{table}[H]
+\centering
+\caption{Описание членов базового класса RacingTeam}
+\begin{tabular}{|p{4.5cm}|p{3.5cm}|p{2cm}|p{5cm}|}
+\hline
+\textbf{Название} & \textbf{Тип} & \textbf{Доступ} & \textbf{Описание} \\ \hline
+\multicolumn{4}{|c|}{\textbf{Поля}} \\ \hline
+id & Long & private & Уникальный идентификатор \\ \hline
+name & String & private & Название команды \\ \hline
+principalName & String & private & Имя руководителя \\ \hline
+baseLocation & String & private & Штаб-квартира команды \\ \hline
+teamColor & String & private & Цвет команды \\ \hline
+points & Integer & private & Очки команды \\ \hline
+wins & Integer & private & Количество побед \\ \hline
+podiums & Integer & private & Количество подиумов \\ \hline
+series & RacingSeries & private & Ссылка на гоночную серию \\ \hline
+drivers & List<RacingDriver> & private & Список гонщиков команды \\ \hline
+\multicolumn{4}{|c|}{\textbf{Методы}} \\ \hline
+calculatePoints(pos: int) & int & public & Расчет очков за гонку \\ \hline
+\end{tabular}
+\end{table}
 
-Класс <<RacingSeries>> (сущность серии) содержит:
-\begin{itemize}
-  \item[--] Поля:
-  \begin{itemize}
-    \item[--] private Long id -- уникальный идентификатор;
-    \item[--] private String name -- название серии;
-    \item[--] private String officialName -- официальное название;
-    \item[--] private String headquarters -- штаб-квартира руководства;
-    \item[--] private String governingBody -- руководящий орган;
-    \item[--] private Integer foundedYear -- год основания;
-    \item[--] private Integer rounds -- количество этапов в календаре;
-    \item[--] private List<RacingTeam> teams -- список команд серии;
-  \end{itemize}
-  \item[--] Методы: стандартные геттеры и сеттеры.
-\end{itemize}
+\begin{table}[H]
+\centering
+\caption{Описание членов класса F1Team}
+\begin{tabular}{|p{4.5cm}|p{3.5cm}|p{2cm}|p{5cm}|}
+\hline
+\textbf{Название} & \textbf{Тип} & \textbf{Доступ} & \textbf{Описание} \\ \hline
+\multicolumn{4}{|c|}{\textbf{Поля}} \\ \hline
+powerUnit & String & private & Силовая установка \\ \hline
+budgetCap & Double & private & Лимит бюджета в миллионах \\ \hline
+constructorPos & Integer & private & Позиция в кубке конструкторов \\ \hline
+\multicolumn{4}{|c|}{\textbf{Методы}} \\ \hline
+calculatePoints(pos: int) & int & public & Переопределенный расчет очков \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Описание членов класса F2Team}
+\begin{tabular}{|p{4.5cm}|p{3.5cm}|p{2cm}|p{5cm}|}
+\hline
+\textbf{Название} & \textbf{Тип} & \textbf{Доступ} & \textbf{Описание} \\ \hline
+\multicolumn{4}{|c|}{\textbf{Поля}} \\ \hline
+chassisModel & String & private & Модель шасси \\ \hline
+graduates & Integer & private & Количество выпускников в F1 \\ \hline
+isFeeder & Boolean & private & Статус молодежной команды \\ \hline
+\multicolumn{4}{|c|}{\textbf{Методы}} \\ \hline
+calculatePoints(pos: int) & int & public & Переопределенный расчет очков \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Описание членов класса FormulaETeam}
+\begin{tabular}{|p{4.5cm}|p{3.5cm}|p{2cm}|p{5cm}|}
+\hline
+\textbf{Название} & \textbf{Тип} & \textbf{Доступ} & \textbf{Описание} \\ \hline
+\multicolumn{4}{|c|}{\textbf{Поля}} \\ \hline
+energyPartner & String & private & Энергетический партнер \\ \hline
+batteryKwh & Double & private & Емкость батареи \\ \hline
+sustainScore & Integer & private & Рейтинг экологичности \\ \hline
+\multicolumn{4}{|c|}{\textbf{Методы}} \\ \hline
+calculatePoints(pos: int) & int & public & Переопределенный расчет очков \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Описание членов класса RacingDriver}
+\begin{tabular}{|p{4.5cm}|p{3.5cm}|p{2cm}|p{5cm}|}
+\hline
+\textbf{Название} & \textbf{Тип} & \textbf{Доступ} & \textbf{Описание} \\ \hline
+\multicolumn{4}{|c|}{\textbf{Поля}} \\ \hline
+id & Long & private & Уникальный идентификатор \\ \hline
+firstName & String & private & Имя пилота \\ \hline
+lastName & String & private & Фамилия пилота \\ \hline
+racingNumber & Integer & private & Гоночный номер \\ \hline
+points & Integer & private & Очки пилота \\ \hline
+team & RacingTeam & private & Ссылка на команду \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Описание членов класса RacingSeries}
+\begin{tabular}{|p{4.5cm}|p{3.5cm}|p{2cm}|p{5cm}|}
+\hline
+\textbf{Название} & \textbf{Тип} & \textbf{Доступ} & \textbf{Описание} \\ \hline
+\multicolumn{4}{|c|}{\textbf{Поля}} \\ \hline
+id & Long & private & Уникальный идентификатор \\ \hline
+name & String & private & Название серии \\ \hline
+officialName & String & private & Официальное название серии \\ \hline
+headquarters & String & private & Штаб-квартира серии \\ \hline
+governingBody & String & private & Руководящий орган серии \\ \hline
+foundedYear & Integer & private & Год основания серии \\ \hline
+rounds & Integer & private & Количество раундов в сезоне \\ \hline
+teams & List<RacingTeam> & private & Список команд в серии \\ \hline
+\end{tabular}
+\end{table}
 
 Диаграмма классов сущностей представлена на рисунке 1.
 
 \pagebreak
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
   \includegraphics[width=0.95\linewidth,height=0.45\textheight,keepaspectratio]{pics/uml-1.png}
 \end{figure}
@@ -169,7 +223,36 @@
   \item[--] @OneToMany(mappedBy = "...", cascade = CascadeType.ALL) -- настраивает обратную связь <<один ко многим>> с каскадным удалением зависимых записей.
 \end{itemize}
 
+\subsection*{Проектирование и нормализация базы данных}
+
+В соответствии с требованиями к базе данных разработана схема из трех связанных таблиц, находящаяся в третьей нормальной форме (3NF):
+\begin{enumerate}
+  \item \textbf{racing\_series} (гоночные серии) -- содержит общие параметры чемпионатов (название, руководящий орган, год основания, этапы и т.д.);
+  \item \textbf{racing\_teams} (гоночные команды) -- хранит информацию о командах (название, руководитель, база, очки, победы, специфические технические поля);
+  \item \textbf{racing\_drivers} (пилоты) -- хранит персональную информацию и статистику каждого гонщика (имя, фамилия, гоночный номер, очки).
+\end{enumerate}
+
+\subsubsection*{Соответствие требованиям третьей нормальной формы (3NF)}
+Разработанная схема удовлетворяет следующим критериям нормализации:
+\begin{itemize}
+  \item[--] \textbf{1NF (Первая нормальная форма):} Все атрибуты таблиц атомарны (отсутствуют повторяющиеся группы колонок или массивы в ячейках). Каждая запись уникально идентифицируется первичным ключом \texttt{id}.
+  \item[--] \textbf{2NF (Вторая нормальная форма):} Схема находится в 1NF, и все неключевые поля полностью зависят от простого первичного ключа \texttt{id} соответствующей таблицы (отсутствуют частичные функциональные зависимости).
+  \item[--] \textbf{3NF (Третья нормальная форма):} Схема находится в 2NF, и в ней отсутствуют транзитивные функциональные зависимости неключевых полей (каждое неключевое поле зависит непосредственно только от первичного ключа своей таблицы, а не от других неключевых полей).
+\end{itemize}
+
+\subsubsection*{Связи по наследованию и не по наследованию}
+В базе данных и объектной модели реализованы оба типа связей:
+\begin{itemize}
+  \item[--] \textbf{Связи по наследованию (Inheritance):} Базовый класс \texttt{RacingTeam} является родителем для трех наследников: \texttt{F1Team}, \texttt{F2Team} и \texttt{FormulaETeam}. Отображение на базу данных выполнено по стратегии \texttt{JOINED} (Table-per-Type). Это позволяет хранить общие поля сущностей в базовой таблице \texttt{racing\_teams}, а специфические поля наследников — в отдельных таблицах \texttt{f1\_teams}, \texttt{f2\_teams} и \texttt{formula\_e\_teams}, связанных внешними ключами с родительской таблицей.
+  \item[--] \textbf{Связи не по наследованию (One-to-Many / Many-to-One):}
+  \begin{itemize}
+    \item \textbf{Команда -- Пилоты (один ко многим):} связь реализована между сущностями \texttt{RacingTeam} и \texttt{RacingDriver} (не связанными отношением наследования) через аннотацию \texttt{@ManyToOne} / \texttt{@OneToMany} и внешний ключ \texttt{team\_id}. Одна команда содержит множество гонщиков.
+    \item \textbf{Серия -- Команды (один ко многим):} связь реализована через внешний ключ \texttt{series\_id} между таблицами гоночных серий и гоночных команд.
+  \end{itemize}
+\end{itemize}
+
 Подключение к базе данных PostgreSQL настраивается в файле application.properties:
+
 \begin{minted}{properties}
 spring.datasource.url=jdbc:postgresql://localhost:5432/postgres
 spring.datasource.username=postgres
@@ -200,7 +283,7 @@ spring.jpa.hibernate.ddl-auto=validate
 Диаграмма классов базы данных, репозиториев и контроллера представлена на рисунке 2.
 
 \pagebreak
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
   \includegraphics[width=0.95\linewidth,height=0.45\textheight,keepaspectratio]{pics/uml-2.png}
 \end{figure}
@@ -208,42 +291,50 @@ spring.jpa.hibernate.ddl-auto=validate
   Рисунок 2 – Диаграмма классов репозиториев и REST-контроллера
 \end{center}
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\linewidth,height=0.5\textheight,keepaspectratio]{pics/erd.png}
+\end{figure}
+\begin{center}
+  Рисунок 3 – Диаграмма ERD базы данных (схема)
+\end{center}
+
 Для авторизации запросов без необходимости прохождения аутентификации настроена конфигурация Spring Security в классе SecurityConfig.java.
 
-Взаимодействие с веб-интерфейсом React полностью сохранено. Экранные формы представлены на рисунках 3, 4, 5, 6.
+Взаимодействие с веб-интерфейсом React полностью сохранено. Экранные формы представлены на рисунках 4, 5, 6, 7.
 
 \pagebreak
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
   \includegraphics[width=0.95\linewidth,height=0.35\textheight,keepaspectratio]{pics/form-1.png}
 \end{figure}
 \begin{center}
-  Рисунок 3 – Экранная форма вкладки команд (standings)
+  Рисунок 4 – Экранная форма вкладки команд (standings)
 \end{center}
 
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
   \includegraphics[width=0.95\linewidth,height=0.35\textheight,keepaspectratio]{pics/form-2.png}
 \end{figure}
 \begin{center}
-  Рисунок 4 – Экранная форма вкладки гонщиков
+  Рисунок 5 – Экранная форма вкладки гонщиков
 \end{center}
 
 \pagebreak
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
   \includegraphics[width=0.95\linewidth,height=0.35\textheight,keepaspectratio]{pics/form-3.png}
 \end{figure}
 \begin{center}
-  Рисунок 5 – Экранная форма создания и редактирования команд
+  Рисунок 6 – Экранная форма создания и редактирования команд
 \end{center}
 
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
   \includegraphics[width=0.95\linewidth,height=0.35\textheight,keepaspectratio]{pics/form-4.png}
 \end{figure}
 \begin{center}
-  Рисунок 6 – Экранная форма создания и редактирования гонщиков
+  Рисунок 7 – Экранная форма создания и редактирования гонщиков
 \end{center}
 
 \section*{\hspace{12.5mm}Вывод}
@@ -256,6 +347,15 @@ spring.jpa.hibernate.ddl-auto=validate
 
 \section*{Приложение А2. Сущность RacingTeam.java}
 \inputminted{java}{code/src/main/java/com/vyatsu/racing/models/RacingTeam.java}
+
+\section*{Приложение А2.1. Сущность F1Team.java}
+\inputminted{java}{code/src/main/java/com/vyatsu/racing/models/F1Team.java}
+
+\section*{Приложение А2.2. Сущность F2Team.java}
+\inputminted{java}{code/src/main/java/com/vyatsu/racing/models/F2Team.java}
+
+\section*{Приложение А2.3. Сущность FormulaETeam.java}
+\inputminted{java}{code/src/main/java/com/vyatsu/racing/models/FormulaETeam.java}
 
 \section*{Приложение А3. Сущность RacingDriver.java}
 \inputminted{java}{code/src/main/java/com/vyatsu/racing/models/RacingDriver.java}

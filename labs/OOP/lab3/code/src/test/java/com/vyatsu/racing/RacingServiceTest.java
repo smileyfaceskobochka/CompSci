@@ -1,8 +1,6 @@
 package com.vyatsu.racing;
 
-import com.vyatsu.racing.models.RacingDriver;
-import com.vyatsu.racing.models.RacingSeries;
-import com.vyatsu.racing.models.RacingTeam;
+import com.vyatsu.racing.models.*;
 import com.vyatsu.racing.repositories.RacingDriverRepository;
 import com.vyatsu.racing.repositories.RacingSeriesRepository;
 import com.vyatsu.racing.repositories.RacingTeamRepository;
@@ -85,7 +83,7 @@ public class RacingServiceTest {
 
     @Test
     public void testSaveTeam() {
-        RacingTeam t = new RacingTeam();
+        RacingTeam t = new F1Team();
         t.setName("Test Team");
         t.setPrincipalName("TP");
         t.setBaseLocation("Loc");
@@ -129,9 +127,13 @@ public class RacingServiceTest {
         d1.setLastName("Verstappen");
         d1.setPoints(250);
 
+        F1Team team1 = new F1Team();
+        team1.setId(10L);
+        team1.setSeries(s1);
+        d1.setTeam(team1);
+
         when(seriesRepository.findAll()).thenReturn(Collections.singletonList(s1));
-        when(driverRepository.findByTeam_SeriesIdOrderByPointsDesc(1L))
-            .thenReturn(Collections.singletonList(d1));
+        when(driverRepository.findAll()).thenReturn(Collections.singletonList(d1));
 
         LinkedHashMap<RacingSeries, List<RacingDriver>> standings = service.getStandingsBySeries();
         assertEquals(1, standings.size());
@@ -142,27 +144,31 @@ public class RacingServiceTest {
 
     @Test
     public void testTeamV5Fields() {
-        RacingTeam t = new RacingTeam();
-        t.setWins(10);
-        t.setPodiums(25);
-        t.setBudgetCap(145.0);
-        t.setConstructorPos(2);
-        t.setChassisModel("MCL39");
-        t.setGraduates(3);
-        t.setIsFeeder(false);
-        t.setEnergyPartner("Shell");
-        t.setBatteryKwh(50.0);
-        t.setSustainScore(85);
+        F1Team f1 = new F1Team();
+        f1.setWins(10);
+        f1.setPodiums(25);
+        f1.setBudgetCap(145.0);
+        f1.setConstructorPos(2);
 
-        assertEquals(Integer.valueOf(10), t.getWins());
-        assertEquals(Integer.valueOf(25), t.getPodiums());
-        assertEquals(Double.valueOf(145.0), t.getBudgetCap());
-        assertEquals(Integer.valueOf(2), t.getConstructorPos());
-        assertEquals("MCL39", t.getChassisModel());
-        assertEquals(Integer.valueOf(3), t.getGraduates());
-        assertEquals(false, t.getIsFeeder());
-        assertEquals("Shell", t.getEnergyPartner());
-        assertEquals(Double.valueOf(50.0), t.getBatteryKwh());
-        assertEquals(Integer.valueOf(85), t.getSustainScore());
+        F2Team f2 = new F2Team();
+        f2.setChassisModel("MCL39");
+        f2.setGraduates(3);
+        f2.setIsFeeder(false);
+
+        FormulaETeam fe = new FormulaETeam();
+        fe.setEnergyPartner("Shell");
+        fe.setBatteryKwh(50.0);
+        fe.setSustainScore(85);
+
+        assertEquals(Integer.valueOf(10), f1.getWins());
+        assertEquals(Integer.valueOf(25), f1.getPodiums());
+        assertEquals(Double.valueOf(145.0), f1.getBudgetCap());
+        assertEquals(Integer.valueOf(2), f1.getConstructorPos());
+        assertEquals("MCL39", f2.getChassisModel());
+        assertEquals(Integer.valueOf(3), f2.getGraduates());
+        assertEquals(false, f2.getIsFeeder());
+        assertEquals("Shell", fe.getEnergyPartner());
+        assertEquals(Double.valueOf(50.0), fe.getBatteryKwh());
+        assertEquals(Integer.valueOf(85), fe.getSustainScore());
     }
 }

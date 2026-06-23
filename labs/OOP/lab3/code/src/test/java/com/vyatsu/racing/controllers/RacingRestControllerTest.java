@@ -40,7 +40,7 @@ public class RacingRestControllerTest {
     private ObjectMapper objectMapper;
 
     private RacingSeries series;
-    private RacingTeam team;
+    private F1Team team;
     private RacingDriver driver;
 
     @Before
@@ -50,7 +50,7 @@ public class RacingRestControllerTest {
         series.setName("F1");
         series.setHeadquarters("HQ");
 
-        team = new RacingTeam();
+        team = new F1Team();
         team.setId(1L);
         team.setName("Test Team");
         team.setPrincipalName("Principal");
@@ -216,7 +216,7 @@ public class RacingRestControllerTest {
 
     @Test
     public void testCompareTeams() throws Exception {
-        RacingTeam teamB = new RacingTeam();
+        RacingTeam teamB = new F1Team();
         teamB.setId(2L);
         teamB.setName("Team B");
         teamB.setPoints(80);
@@ -230,5 +230,40 @@ public class RacingRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.winnerId").value(1))
                 .andExpect(jsonPath("$.message").value("Test Team is ahead of Team B in the championship."));
+    }
+
+    @Test
+    public void testGetDriverTeams() throws Exception {
+        when(driverRepository.findById(1L)).thenReturn(Optional.of(driver));
+        when(driverRepository.findAll()).thenReturn(Collections.singletonList(driver));
+
+        mockMvc.perform(get("/api/drivers/1/teams"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].teamName").value("Test Team"));
+    }
+
+    @Test
+    public void testGetDriverTeamsNotFound() throws Exception {
+        when(driverRepository.findById(99L)).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/api/drivers/99/teams"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testGetTeamDrivers() throws Exception {
+        when(teamRepository.findById(1L)).thenReturn(Optional.of(team));
+
+        mockMvc.perform(get("/api/teams/1/drivers"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].firstName").value("Max"));
+    }
+
+    @Test
+    public void testGetTeamDriversNotFound() throws Exception {
+        when(teamRepository.findById(99L)).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/api/teams/99/drivers"))
+                .andExpect(status().isNotFound());
     }
 }

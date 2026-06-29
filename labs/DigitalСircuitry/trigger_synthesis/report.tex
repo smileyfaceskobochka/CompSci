@@ -1,0 +1,216 @@
+\documentclass[oneside,a4paper,14pt]{extarticle}
+\usepackage[a4paper,letterpaper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\usepackage[russian]{babel}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{minted, fancyvrb}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage{colortbl}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{float}
+\usepackage{tikz-timing}
+\usepackage{tikz}
+\usetikzlibrary{karnaugh}
+
+% Цвета для карты Карно (чтобы xcolor и tikz их знали)
+\definecolor{LogisimKMapColor0}{RGB}{128,0,0}
+\definecolor{LogisimKMapColor1}{RGB}{230,25,75}
+
+% Настройка автоматических подписей к рисункам
+\DeclareCaptionLabelSeparator{customdash}{~---~}
+\captionsetup[figure]{name=Рисунок, labelsep=customdash, justification=centering}
+
+\setminted{style = rainbow_dash, fontsize = \small}
+
+% Форматирование заголовков
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+% Интерлиньяж и абзац
+\renewcommand\baselinestretch{1.33}
+\setlength{\parindent}{1.25cm}
+
+% Для всех списков
+\setlist[enumerate]{
+  left=0.5\parindent,
+  label=\arabic*.,
+  itemsep=0pt,
+  topsep=5pt,
+  partopsep=0pt,
+  parsep=0pt
+}
+\setlist[itemize]{
+  left=0.5\parindent,
+  itemsep=0pt,
+  topsep=5pt,
+  partopsep=0pt,
+  parsep=0pt
+}
+
+% Гиперссылки
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  pdfborder={0 0 0},
+  pdftitle={Контрольная работа: Структурный синтез универсального JK-триггера},
+  pdfauthor={Черкасов А.А.},
+}
+
+\begin{document}
+
+\newpage
+\thispagestyle{empty}
+\begin{center}
+  МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ\\
+  ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ УЧРЕЖДЕНИЕ ВЫСШЕГО ОБРАЗОВАНИЯ\\
+  <<ВЯТСКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ>>\\
+  Институт математики и информационных систем\\
+  Факультет автоматики и вычислительной техники\\
+  Кафедра электронных вычислительных машин
+\end{center}
+\vspace{10mm}
+
+\hfill
+\begin{tabular}{l}
+  \footnotesize Дата сдачи на проверку:                                          \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2026 г. \\
+  \footnotesize Проверено:                                                       \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2026 г. \\
+\end{tabular}
+\vfill
+
+\begin{center}
+  Отчёт по контрольной работе\\
+  по теме\\
+  <<Синтез JK-триггера на логических элементах>>\\
+  по дисциплине\\
+  <<Цифровая схемотехника>>\\
+\end{center}
+\vspace{25mm}
+\noindent
+\begin{tabular}{ll}
+  Разработал студент гр. ИВТб-2301-05-00 & \hspace{5mm}\rule[-1mm]{30mm}{0.10mm}\,/Черкасов А. А./ \\
+                                           & \hspace{12.5mm}\footnotesize(подпись)                   \\
+  Преподаватель                            & \hspace{5mm}\rule[-1mm]{30mm}{0.10mm}\,/Мельцов В. Ю./  \\
+                                           & \hspace{12.5mm}\footnotesize(подпись)                   \\
+\end{tabular}
+
+\noindent
+\begin{tabular}{lp{58mm}r}
+  Работа защищена &  & \hspace{5mm}<<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{30mm}{0.10mm}\ 2026 г.
+\end{tabular}
+\vfill
+
+\begin{center}
+  Киров\\
+  2026
+\end{center}
+
+\newpage\thispagestyle{plain}
+
+\section{Цель работы}
+Изучить внутреннюю логическую структуру и алгоритмы функционирования бистабильных последовательностных устройств. Выполнить теоретический синтез и моделирование схемы универсального синхронного двухступенчатого JK-триггера со статическими входами асинхронного управления (сброса и установки) на логических вентилях базовых базисов.
+
+\section{Матрица переходов и таблица истинности}
+JK-триггер является универсальным автоматом памяти, преобразующим неопределённые состояния RS-типа в счётный инверсный режим переключения при входной комбинации $J=K=1$. Поведение выходной функции триггера в следующий момент времени $Q(t+1)$ определяется текущим состоянием $Q(t)$ и сигналами на информационных входах.
+
+\begin{center}
+  Таблица 1 --- Полная таблица переходов JK-триггера \\
+  \vspace{3mm}
+  \begin{tabular}{ccc|c|c}
+    $J$ & $K$ & $Q(t)$ & $Q(t+1)$ & Характер перехода / Режим \\
+    \hline
+    0 & 0 & 0 & 0 & Режим хранения логического нуля \\
+    0 & 0 & 1 & 1 & Режим хранения логической единицы \\
+    \hline
+    0 & 1 & 0 & 0 & Принудительный сброс в 0 \\
+    0 & 1 & 1 & 0 & Принудительный сброс в 0 \\
+    \hline
+    1 & 0 & 0 & 1 & Принудительная установка в 1 \\
+    1 & 0 & 1 & 1 & Принудительная установка в 1 \\
+    \hline
+    1 & 1 & 0 & 1 & Инверсия состояния (счётный режим) \\
+    1 & 1 & 1 & 0 & Инверсия состояния (счётный режим) \\
+  \end{tabular}
+\end{center}
+
+\section{Минимизация характеристического уравнения триггера}
+Для нахождения минимального логического выражения, описывающего логику работы синхронного JK-триггера, построим карту Карно для трёх переменных. Переменными карты являются информационные входы $J, K$ и текущее состояние триггера $Q$.
+
+\begin{center}
+  Таблица 2 --- Карта Карно функции переходов $Q(t+1)$ \\
+  \vspace{5mm}
+  \begin{tikzpicture}[x=1.5cm, y=1.5cm]
+    % Сетка карты Карно (2 строки, 4 столбца)
+    \draw[thick] (0,0) rectangle (4,2);
+    \draw[thick] (1,0) -- (1,2);
+    \draw[thick] (2,0) -- (2,2);
+    \draw[thick] (3,0) -- (3,2);
+    \draw[thick] (0,1) -- (4,1);
+
+    % Разделительная угловая линия для шапки переменных
+    \draw[thick] (0,2) -- (-0.6,2.5);
+    \node at (-0.15,2.3) {$\quad J, K$};
+    \node at (-0.4,1.8) {$Q$};
+
+    % Значения переменных по горизонтали (J, K)
+    \node[above] at (0.5,2.05) {00};
+    \node[above] at (1.5,2.05) {01};
+    \node[above] at (2.5,2.05) {11};
+    \node[above] at (3.5,2.05) {10};
+
+    % Значения переменной по вертикали (Q)
+    \node[left] at (-0.1,1.5) {0};
+    \node[left] at (-0.1,0.5) {1};
+
+    % Заполнение ячеек карты Карно (Минтермы переходов)
+    % Строка Q=0
+    \node at (0.5,1.5) {0};
+    \node at (1.5,1.5) {1};
+    \node at (2.5,1.5) {1};
+    \node at (3.5,1.5) {1};
+    
+    % Строка Q=1
+    \node at (0.5,0.5) {0};
+    \node at (1.5,0.5) {0};
+    \node at (2.5,0.5) {0};
+    \node at (3.5,0.5) {1};
+
+    % Контуры минимизации (Склеивание единиц)
+    % 1. Горизонтальный контур для (J * \bar{Q}) — ячейки 01, 11 при Q=0
+    \draw[rounded corners=6pt, fill=LogisimKMapColor1, fill opacity=0.3, draw=LogisimKMapColor1, thick] 
+      (1.1,1.1) rectangle (2.9,1.9);
+
+    % 2. Вертикальный контур для (\bar{K} * Q) — крайний правый столбец 10 для Q=0 и Q=1
+    \draw[rounded corners=6pt, fill=LogisimKMapColor0, fill opacity=0.3, draw=LogisimKMapColor0, thick] 
+      (3.1,0.1) rectangle (3.9,1.9);
+  \end{tikzpicture}
+\end{center}
+
+В результате выделения и склеивания контуров на карте Карно получаем минимальное характеристическое уравнение переходов JK-триггера в базисе <<И, ИЛИ, НЕ>>:
+\begin{equation}
+  Q(t+1) = (J \cdot \overline{Q}) \vee (\overline{K} \cdot Q)
+\end{equation}
+
+Для реализации полноценного приоритетного управления (входы асинхронного сброса $CLR$ и установки $SET$) и перевода схемы в двухступенчатую структуру (устранение сквозных гонок тактового сигнала $CLK$), в каноническую структуру вводятся дополнительные логические блокировки.
+
+\section{Функциональная схема устройства}
+На основании синтезированного уравнения и цепей блокировки была построена и верифицирована функциональная двухступенчатая схема JK-триггера со статическими асинхронными входами установки и сброса.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth,keepaspectratio]{pics/functional_diagram.png}
+  \caption{Функциональная схема двухступенчатого JK-триггера}
+\end{figure}
+
+\section*{Вывод}
+В ходе выполнения контрольной работы были изучены внутренние принципы построения универсальных элементов цифровой памяти. На основе таблицы переходов и аппарата минимизации карт Карно было получено характеристическое уравнение переходов JK-автомата. Спроектированная двухступенчатая функциональная структура полностью подтвердила свою корректность при моделировании, продемонстрировав стабильное переключение без эффекта опасных «гонок» сигналов.
+
+\end{document}

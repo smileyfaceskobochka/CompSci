@@ -114,3 +114,4 @@ racing.db
 # LaTeX minted temp directories
 _minted-*/
 _minted/
+.synctex(busy)

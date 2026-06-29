@@ -1,0 +1,220 @@
+\documentclass[oneside,a4paper,14pt]{extarticle}
+\usepackage[a4paper,letterpaper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\usepackage[russian]{babel}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{minted, fancyvrb}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage{colortbl}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tikz-timing}
+\usepackage{tikz}
+\usetikzlibrary{karnaugh}
+
+% Настройка автоматических подписей к рисункам (Замена Рис. на Рисунок и тире в качестве разделителя)
+\DeclareCaptionLabelSeparator{customdash}{~---~}
+\captionsetup[figure]{name=Рисунок, labelsep=customdash, justification=centering}
+
+\definecolor{LogisimKMapColor0}{RGB}{128,0,0}
+\definecolor{LogisimKMapColor1}{RGB}{230,25,75}
+\definecolor{LogisimKMapColor2}{RGB}{250,190,190}
+\definecolor{LogisimKMapColor3}{RGB}{170,110,40}
+\definecolor{LogisimKMapColor4}{RGB}{245,130,48}
+\definecolor{LogisimKMapColor5}{RGB}{255,215,180}
+\definecolor{LogisimKMapColor6}{RGB}{128,128,0}
+\definecolor{LogisimKMapColor7}{RGB}{255,255,25}
+\definecolor{LogisimKMapColor8}{RGB}{210,245,60}
+\definecolor{LogisimKMapColor9}{RGB}{0,0,128}
+\definecolor{LogisimKMapColor10}{RGB}{145,30,180}
+\definecolor{LogisimKMapColor11}{RGB}{60,180,175}
+\definecolor{LogisimKMapColor12}{RGB}{0,130,203}
+\definecolor{LogisimKMapColor13}{RGB}{230,190,255}
+\definecolor{LogisimKMapColor14}{RGB}{170,255,195}
+\definecolor{LogisimKMapColor15}{RGB}{240,50,230}
+
+% Форматирование листингов с кодом
+\setminted{style = rainbow_dash, fontsize = \small} 
+
+% Форматирование заголовков
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+% Интерлиньяж и абзац
+\renewcommand\baselinestretch{1.33}
+\setlength{\parindent}{1.25cm}  % длина красной строки
+
+% Для всех списков
+\setlist[enumerate]{
+  left=0.5\parindent,       
+  label=\arabic*.,       
+  itemsep=0pt,           
+  topsep=5pt,            
+  partopsep=0pt,         
+  parsep=0pt             
+}
+
+\setlist[itemize]{
+  left=0.5\parindent,       
+  itemsep=0pt,           
+  topsep=5pt,            
+  partopsep=0pt,
+  parsep=0pt
+}
+
+% Гиперссылки
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  pdfborder={0 0 0},
+  pdftitle={Контрольная работа: Синтез комбинационной схемы},
+  pdfauthor={Черкасов А.А.},
+}
+
+\begin{document}
+
+\newpage
+\thispagestyle{empty}
+\begin{center}
+  МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ\\
+  ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ УЧРЕЖДЕНИЕ ВЫСШЕГО ОБРАЗОВАНИЯ\\
+  <<ВЯТСКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ>>\\
+  Институт математики и информационных систем\\
+  Факультет автоматики и вычислительной техники\\
+  Кафедра электронных вычислительных машин
+\end{center}
+\vspace{10mm}
+
+\hfill
+\begin{tabular}{l}
+  \footnotesize Дата сдачи на проверку:                                          \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2026 г. \\
+  \footnotesize Проверено:                                                       \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2026 г. \\
+\end{tabular}
+\vfill
+
+\begin{center}
+  Отчёт по контрольной работе\\
+  <<Синтез комбинационной схемы>>\\
+  по дисциплине\\
+  <<Цифровая схемотехника>>\\
+\end{center}
+\vspace{25mm}
+\noindent
+\begin{tabular}{ll}
+  Разработал студент гр. ИВТб-2301-05-00 & \hspace{5mm}\rule[-1mm]{30mm}{0.10mm}\,/Черкасов А. А./ \\
+                                           & \hspace{12.5mm}\footnotesize(подпись)                   \\
+  Преподаватель                            & \hspace{5mm}\rule[-1mm]{30mm}{0.10mm}\,/Мельцов В. Ю./  \\
+                                           & \hspace{12.5mm}\footnotesize(подпись)                   \\
+\end{tabular}
+
+\noindent
+\begin{tabular}{lp{58mm}r}
+  Работа защищена &  & \hspace{5mm}<<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{30mm}{0.10mm}\ 2026 г.
+\end{tabular}
+\vfill
+
+\begin{center}
+  Киров\\
+  2026
+\end{center}
+
+\newpage\thispagestyle{plain}
+
+\section{Цель работы}
+Получить практические навыки логического проектирования и синтеза комбинационных устройств в определённом дискретном логическом базисе. Синтезировать функциональную и принципиальную логическую схему по заданной таблице истинности, используя функционально полный базис <<И, ИЛИ, НЕ>>.
+
+\section{Таблица истинности}
+Функционирование проектируемого одновыходного комбинационного узла задано дискретным распределением логических состояний для 4 входных переменных.
+
+\begin{center}
+  Таблица 1 --- Таблица истинности комбинационного устройства \\
+  \vspace{5mm}
+  \begin{tabular}{cccc|c}
+    $x_0$ & $x_1$ & $x_2$ & $x_3$ & $F$ \\
+    \hline
+    $0$   & $0$   & $0$   & $0$   & $0$ \\
+    $0$   & $0$   & $0$   & $1$   & $0$ \\
+    $0$   & $0$   & $1$   & $0$   & $0$ \\
+    $0$   & $0$   & $1$   & $1$   & $0$ \\
+    $0$   & $1$   & $0$   & $0$   & $0$ \\
+    $0$   & $1$   & $0$   & $1$   & $1$ \\
+    $0$   & $1$   & $1$   & $0$   & $0$ \\
+    $0$   & $1$   & $1$   & $1$   & $0$ \\
+    $1$   & $0$   & $0$   & $0$   & $0$ \\
+    $1$   & $0$   & $0$   & $1$   & $0$ \\
+    $1$   & $0$   & $1$   & $0$   & $0$ \\
+    $1$   & $0$   & $1$   & $1$   & $0$ \\
+    $1$   & $1$   & $0$   & $0$   & $0$ \\
+    $1$   & $1$   & $0$   & $1$   & $0$ \\
+    $1$   & $1$   & $1$   & $0$   & $1$ \\
+    $1$   & $1$   & $1$   & $1$   & $1$ \\
+  \end{tabular}
+\end{center}
+
+\section{Каноническое уравнение функции $F$}
+На основании таблицы истинности методом фиксации минтермов, соответствующих истинному значению выходной функции ($F=1$), запишем совершенную дизъюнктивную нормальную форму (СДНФ) для искомого устройства:
+\begin{equation*}
+F = (\overline{x_0} \cdot x_1 \cdot \overline{x_2} \cdot x_3) \vee (x_0 \cdot x_1 \cdot x_2 \cdot \overline{x_3}) \vee (x_0 \cdot x_1 \cdot x_2 \cdot x_3)
+\end{equation*}
+
+\section{Минимизация логической функции}
+Для минимизации аппаратных затрат при проектировании комбинационной схемы воспользуемся картой Карно (Вейча) для 4 переменных.
+
+\begin{center}
+  Таблица 2 --- Карта Карно логической функции $F$ \\
+  \vspace{5mm}
+  \begin{tikzpicture}[karnaugh,disable bars,x=1\kmunitlength,y=1\kmunitlength,kmbar left sep=1\kmunitlength,grp/.style n args={4}{#1,fill=#1!30,minimum width= #2\kmunitlength,minimum height=#3\kmunitlength,rounded corners=0.2\kmunitlength,fill opacity=0.6,rectangle,draw}]
+    \karnaughmap{4}{$F$}{{$x_0$}{$x_2$}{$x_1$}{$x_3$}}
+    {0001000000000011}{
+      \draw[kmbox] (-0.5,4.5)
+      node[below left]{$x_0$, $x_1$}
+      node[above right]{$x_2$, $x_3$} +(-0.2,0.2)
+      node[above left]{$F$};\draw (0,4) -- (-0.7,4.7);
+      \foreach \x/\1 in %
+        {0/00,1/01,2/11,3/10} {
+          \node at (\x+0.5,4.2) {\1};
+        }
+      \foreach \y/\1 in %
+        {0/00,1/01,2/11,3/10} {
+          \node at (-0.4,-0.5-\y+4) {\1};
+        }
+      \node[grp={LogisimKMapColor0}{0.8}{0.8}](n0) at(1.5,2.5) {};
+      \node[grp={LogisimKMapColor1}{1.8}{0.8}](n1) at(3,1.5) {};
+    }
+  \end{tikzpicture}
+\end{center}
+В результате выделения и склеивания контуров на карте Карно получаем минимальное дизъюнктивное логическое выражение для функции $F$:
+\begin{equation*}
+  F =  \overline{x_0}  \cdot x_1 \cdot  \overline{x_2}  \cdot x_3+x_0 \cdot x_1 \cdot x_2
+\end{equation*}
+
+\section{Функциональная схема устройства}
+По результирующему тупиковому уравнению построена каноническая функциональная схема устройства в стандартном логическом базисе <<И, ИЛИ, НЕ>>.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{pics/functional_diagram.png}
+  \caption{Функциональная схема устройства в базисе <<И, ИЛИ, НЕ>>}
+\end{figure}
+
+\section{Принципиальная схема устройства}
+Для практической реализации устройства разработана схема электрическая принципиальная с учетом распределения логических связей входных шин и инверторов.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{pics/principle_diagram.png}
+  \caption{Принципиальная схема устройства в базисе <<И, ИЛИ, НЕ>>}
+\end{figure}
+
+\section*{Вывод}
+В ходе выполнения контрольной работы были закреплены практические навыки синтеза одновыходных комбинационных схем в заданном дискретном логическом базисе Шеридана (<<И, ИЛИ, НЕ>>). Была составлена таблица истинности, получено каноническое уравнение СДНФ. С помощью аппарата карт Карно была проведена минимизация исходной функции, что позволило сократить аппаратный объём схемы. На основе минимального выражения спроектированы функциональная и принципиальная схемы узла.
+
+\end{document}

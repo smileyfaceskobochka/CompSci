@@ -1,0 +1,233 @@
+\documentclass[oneside,a4paper,14pt]{extarticle}
+\usepackage[a4paper,letterpaper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\usepackage[russian]{babel}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{minted, fancyvrb}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage{colortbl}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tikz-timing}
+\usepackage{tikz}
+\usetikzlibrary{karnaugh}
+
+% Настройка автоматических подписей к рисункам (Замена Рис. на Рисунок и тире в качестве разделителя)
+\DeclareCaptionLabelSeparator{customdash}{~---~}
+\captionsetup[figure]{name=Рисунок, labelsep=customdash, justification=centering}
+
+% Форматирование листингов с кодом
+\setminted{style = rainbow_dash, fontsize = \small} 
+
+% Форматирование заголовков
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+% Интерлиньяж и абзац
+\renewcommand\baselinestretch{1.33}
+\setlength{\parindent}{1.25cm}  % длина красной строки
+
+% Для всех списков
+\setlist[enumerate]{
+  left=0.5\parindent,    
+  label=\arabic*.,       
+  itemsep=0pt,           
+  topsep=5pt,            
+  partopsep=0pt,         
+  parsep=0pt             
+}
+
+\setlist[itemize]{
+  left=0.5\parindent,    
+  itemsep=0pt,           
+  topsep=5pt,            
+  partopsep=0pt,
+  parsep=0pt
+}
+
+% Гиперссылки
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  pdfborder={0 0 0},
+  pdftitle={Синтез последовательностного устройства: 4-разрядный параллельный регистр},
+  pdfauthor={Черкасов А.А.},
+}
+
+\begin{document}
+
+\newpage
+\thispagestyle{empty}
+\begin{center}
+  МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ\\
+  ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ УЧРЕЖДЕНИЕ ВЫСШЕГО ОБРАЗОВАНИЯ\\
+  <<ВЯТСКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ>>\\
+  Институт математики и информационных систем\\
+  Факультет автоматики и вычислительной техники\\
+  Кафедра электронных вычислительных машин
+\end{center}
+\vspace{10mm}
+
+\hfill
+\begin{tabular}{l}
+  \footnotesize Дата сдачи на проверку:                                          \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2026 г. \\
+  \footnotesize Проверено:                                                       \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2026 г. \\
+\end{tabular}
+\vfill
+
+\begin{center}
+  Отчёт по контрольной работе\\
+  <<Синтез параллельного регистра>>\\
+  по дисциплине\\
+  <<Цифровая схемотехника>>\\
+\end{center}
+\vspace{25mm}
+\noindent
+\begin{tabular}{ll}
+  Разработал студент гр. ИВТб-2301-05-00 & \hspace{20mm}\rule[-1mm]{30mm}{0.10mm}\,/Черкасов А.А./ \\
+                                 & \hspace{27.5mm}\footnotesize(подпись)                   \\
+  Преподаватель                  & \hspace{20mm}\rule[-1mm]{30mm}{0.10mm}\,/Мельцов В. Ю./  \\
+                                 & \hspace{27.5mm}\footnotesize(подпись)                   \\
+\end{tabular}
+
+\noindent
+\begin{tabular}{lp{58mm}r}
+  Работа защищена &  & \hspace{8mm}<<\rule[-1mm]{8mm}{0.10mm}\/>>\rule[-1mm]{38mm}{0.10mm}\ 2026 г.
+\end{tabular}
+\vfill
+
+\begin{center}
+  Киrov\\
+  2026
+\end{center}
+
+\newpage\thispagestyle{plain}
+
+\section{Цель работы}
+Получить практические навыки проектирования последовательностных цифровых устройств. Синтезировать и исследовать функциональную схему 4-разрядного параллельного регистра памяти (памяти типа RG) на базе D-триггеров с общими шинами синхронизации и сброса.
+
+\section{Условно Графическое Обозначение регистра}
+Параллельный регистр предназначен для одновременного приема, хранения и выдачи 4-разрядного слова данных. Устройство содержит информационные входы $D_3 \dots D_0$, синхронизирующий вход записи $C$, асинхронный вход сброса в ноль $R$ и выходы $Q_3 \dots Q_0$.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.4\textwidth,keepaspectratio]{pics/UGO.png}
+  \caption{Условно-графическое обозначение параллельного регистра}
+\end{figure}
+
+\section{Таблица истинности и переходов регистра}
+Состояние выходов регистра в текущий момент времени $Q_n(t)$ зависит от сигналов на информационных входах $D_n$, тактового входа $C$ и управляющего входа сброса $R$. Полная таблица переходов, включающая все возможные комбинации входных данных при активных уровнях управления, представлена ниже.
+
+\begin{center}
+  Таблица 1 --- Полная таблица переходов 4-разрядного параллельного регистра \\
+  \vspace{3mm}
+  \begin{tabular}{cccccc|cccc}
+    $R$ & $C$ & $D_3$ & $D_2$ & $D_1$ & $D_0$ & $Q_3(t)$ & $Q_2(t)$ & $Q_1(t)$ & $Q_0(t)$ \\
+    \hline
+    0 & X & X & X & X & X & 0 & 0 & 0 & 0 \\
+    1 & 0 & X & X & X & X & $Q_3(t-1)$ & $Q_2(t-1)$ & $Q_1(t-1)$ & $Q_0(t-1)$ \\
+    \hline
+    1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+    1 & 1 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 1 \\
+    1 & 1 & 0 & 0 & 1 & 0 & 0 & 0 & 1 & 0 \\
+    1 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 1 & 1 \\
+    1 & 1 & 0 & 1 & 0 & 0 & 0 & 1 & 0 & 0 \\
+    1 & 1 & 0 & 1 & 0 & 1 & 0 & 1 & 0 & 1 \\
+    1 & 1 & 0 & 1 & 1 & 0 & 0 & 1 & 1 & 0 \\
+    1 & 1 & 0 & 1 & 1 & 1 & 0 & 1 & 1 & 1 \\
+    1 & 1 & 1 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
+    1 & 1 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 1 \\
+    1 & 1 & 1 & 0 & 1 & 0 & 1 & 0 & 1 & 0 \\
+    1 & 1 & 1 & 0 & 1 & 1 & 1 & 0 & 1 & 1 \\
+    1 & 1 & 1 & 1 & 0 & 0 & 1 & 1 & 0 & 0 \\
+    1 & 1 & 1 & 1 & 0 & 1 & 1 & 1 & 0 & 1 \\
+    1 & 1 & 1 & 1 & 1 & 0 & 1 & 1 & 1 & 0 \\
+    1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 \\
+  \end{tabular}
+\end{center}
+\textit{Примечание: <<X>> --- любое состояние, $Q_n(t-1)$ --- режим хранения предыдущего состояния.}
+
+\newpage
+\section{Логические уравнения функций возбуждения выходов}
+Полная каноническая форма (КФ) переходов для каждого разряда регистра строится на основании таблицы истинности для наборов, где соответствующий выход принимает значение логической единицы. Логические функции выходов выражаются через конъюнкции управляющих сигналов $C$, $R$ и всех информационных разрядов данных:
+
+\begin{align*}
+  Q_3 = {} & (C \cdot R \cdot D_3 \cdot \overline{D}_2 \cdot \overline{D}_1 \cdot \overline{D}_0) \vee
+             (C \cdot R \cdot D_3 \cdot \overline{D}_2 \cdot \overline{D}_1 \cdot D_0) \vee \\
+           & (C \cdot R \cdot D_3 \cdot \overline{D}_2 \cdot D_1 \cdot \overline{D}_0) \vee
+             (C \cdot R \cdot D_3 \cdot \overline{D}_2 \cdot D_1 \cdot D_0) \vee \\
+           & (C \cdot R \cdot D_3 \cdot D_2 \cdot \overline{D}_1 \cdot \overline{D}_0) \vee
+             (C \cdot R \cdot D_3 \cdot D_2 \cdot \overline{D}_1 \cdot D_0) \vee \\
+           & (C \cdot R \cdot D_3 \cdot D_2 \cdot D_1 \cdot \overline{D}_0) \vee
+             (C \cdot R \cdot D_3 \cdot D_2 \cdot D_1 \cdot D_0) \\[3mm]
+  Q_2 = {} & (C \cdot R \cdot \overline{D}_3 \cdot D_2 \cdot \overline{D}_1 \cdot \overline{D}_0) \vee
+             (C \cdot R \cdot \overline{D}_3 \cdot D_2 \cdot \overline{D}_1 \cdot D_0) \vee \\
+           & (C \cdot R \cdot \overline{D}_3 \cdot D_2 \cdot D_1 \cdot \overline{D}_0) \vee
+             (C \cdot R \cdot \overline{D}_3 \cdot D_2 \cdot D_1 \cdot D_0) \vee \\
+           & (C \cdot R \cdot D_3 \cdot D_2 \cdot \overline{D}_1 \cdot \overline{D}_0) \vee
+             (C \cdot R \cdot D_3 \cdot D_2 \cdot \overline{D}_1 \cdot D_0) \vee \\
+           & (C \cdot R \cdot D_3 \cdot D_2 \cdot D_1 \cdot \overline{D}_0) \vee
+             (C \cdot R \cdot D_3 \cdot D_2 \cdot D_1 \cdot D_0) \\[3mm]
+  Q_1 = {} & (C \cdot R \cdot \overline{D}_3 \cdot \overline{D}_2 \cdot D_1 \cdot \overline{D}_0) \vee
+             (C \cdot R \cdot \overline{D}_3 \cdot \overline{D}_2 \cdot D_1 \cdot D_0) \vee \\
+           & (C \cdot R \cdot \overline{D}_3 \cdot D_2 \cdot D_1 \cdot \overline{D}_0) \vee
+             (C \cdot R \cdot \overline{D}_3 \cdot D_2 \cdot D_1 \cdot D_0) \vee \\
+           & (C \cdot R \cdot D_3 \cdot \overline{D}_2 \cdot D_1 \cdot \overline{D}_0) \vee
+             (C \cdot R \cdot D_3 \cdot \overline{D}_2 \cdot D_1 \cdot D_0) \vee \\
+           & (C \cdot R \cdot D_3 \cdot D_2 \cdot D_1 \cdot \overline{D}_0) \vee
+             (C \cdot R \cdot D_3 \cdot D_2 \cdot D_1 \cdot D_0) \\[3mm]
+  Q_0 = {} & (C \cdot R \cdot \overline{D}_3 \cdot \overline{D}_2 \cdot \overline{D}_1 \cdot D_0) \vee
+             (C \cdot R \cdot \overline{D}_3 \cdot \overline{D}_2 \cdot D_1 \cdot D_0) \vee \\
+           & (C \cdot R \cdot \overline{D}_3 \cdot D_2 \cdot \overline{D}_1 \cdot D_0) \vee
+             (C \cdot R \cdot \overline{D}_3 \cdot D_2 \cdot D_1 \cdot D_0) \vee \\
+           & (C \cdot R \cdot D_3 \cdot \overline{D}_2 \cdot \overline{D}_1 \cdot D_0) \vee
+             (C \cdot R \cdot D_3 \cdot \overline{D}_2 \cdot D_1 \cdot D_0) \vee \\
+           & (C \cdot R \cdot D_3 \cdot D_2 \cdot \overline{D}_1 \cdot D_0) \vee
+             (C \cdot R \cdot D_3 \cdot D_2 \cdot D_1 \cdot D_0)
+\end{align*}
+
+\section{Минимизация логических функций}
+Поскольку разряды параллельного регистра функционируют независимо друг от друга, влияние комбинаций соседних информационных линий взаимно компенсируется (склеивается) при минимизации. Выполним последовательное пошаговое группирование и вынесение общих множителей для каждого уравнения:
+
+\begin{align*}
+  Q_3 &= C \cdot R \cdot D_3 \cdot (\overline{D}_2\overline{D}_1\overline{D}_0 \vee \overline{D}_2\overline{D}_1D_0 \vee \overline{D}_2D_1\overline{D}_0 \vee \overline{D}_2D_1D_0 \vee D_2\overline{D}_1\overline{D}_0 \vee D_2\overline{D}_1D_0 \vee D_2D_1\overline{D}_0 \vee D_2D_1D_0) = \\
+      &= C \cdot R \cdot D_3 \cdot [\overline{D}_2\overline{D}_1(\overline{D}_0 \vee D_0) \vee \overline{D}_2D_1(\overline{D}_0 \vee D_0) \vee D_2\overline{D}_1(\overline{D}_0 \vee D_0) \vee D_2D_1(\overline{D}_0 \vee D_0)] = \\
+      &= C \cdot R \cdot D_3 \cdot [\overline{D}_2\overline{D}_1 \vee \overline{D}_2D_1 \vee D_2\overline{D}_1 \vee D_2D_1] = \\
+      &= C \cdot R \cdot D_3 \cdot [\overline{D}_2(\overline{D}_1 \vee D_1) \vee D_2(\overline{D}_1 \vee D_1)] = C \cdot R \cdot D_3 \cdot [\overline{D}_2 \vee D_2] = C \cdot D_3 \cdot R \\[3mm]
+  Q_2 &= C \cdot R \cdot D_2 \cdot (\overline{D}_3\overline{D}_1\overline{D}_0 \vee \overline{D}_3\overline{D}_1D_0 \vee \overline{D}_3D_1\overline{D}_0 \vee \overline{D}_3D_1D_0 \vee D_3\overline{D}_1\overline{D}_0 \vee D_3\overline{D}_1D_0 \vee D_3D_1\overline{D}_0 \vee D_3D_1D_0) = \\
+      &= C \cdot R \cdot D_2 \cdot [\overline{D}_3\overline{D}_1(\overline{D}_0 \vee D_0) \vee \overline{D}_3D_1(\overline{D}_0 \vee D_0) \vee D_3\overline{D}_1(\overline{D}_0 \vee D_0) \vee D_3D_1(\overline{D}_0 \vee D_0)] = \\
+      &= C \cdot R \cdot D_2 \cdot [\overline{D}_3\overline{D}_1 \vee \overline{D}_3D_1 \vee D_3\overline{D}_1 \vee D_3D_1] = \\
+      &= C \cdot R \cdot D_2 \cdot [\overline{D}_3(\overline{D}_1 \vee D_1) \vee D_3(\overline{D}_1 \vee D_1)] = C \cdot R \cdot D_2 \cdot [\overline{D}_3 \vee D_3] = C \cdot D_2 \cdot R \\[3mm]
+  Q_1 &= C \cdot R \cdot D_1 \cdot (\overline{D}_3\overline{D}_2\overline{D}_0 \vee \overline{D}_3\overline{D}_2D_0 \vee \overline{D}_3D_2\overline{D}_0 \vee \overline{D}_3D_2D_0 \vee D_3\overline{D}_2\overline{D}_0 \vee D_3\overline{D}_2D_0 \vee D_3D_2\overline{D}_0 \vee D_3D_2D_0) = \\
+      &= C \cdot R \cdot D_1 \cdot [\overline{D}_3\overline{D}_2(\overline{D}_0 \vee D_0) \vee \overline{D}_3D_2(\overline{D}_0 \vee D_0) \vee D_3\overline{D}_2(\overline{D}_0 \vee D_0) \vee D_3D_2(\overline{D}_0 \vee D_0)] = \\
+      &= C \cdot R \cdot D_1 \cdot [\overline{D}_3\overline{D}_2 \vee \overline{D}_3D_2 \vee D_3\overline{D}_2 \vee D_3D_2] = \\
+      &= C \cdot R \cdot D_1 \cdot [\overline{D}_3(\overline{D}_2 \vee D_2) \vee D_3(\overline{D}_2 \vee D_2)] = C \cdot R \cdot D_1 \cdot [\overline{D}_3 \vee D_3] = C \cdot D_1 \cdot R \\[3mm]
+  Q_0 &= C \cdot R \cdot D_0 \cdot (\overline{D}_3\overline{D}_2\overline{D}_1 \vee \overline{D}_3\overline{D}_2D_1 \vee \overline{D}_3D_2\overline{D}_1 \vee \overline{D}_3D_2D_1 \vee D_3\overline{D}_2\overline{D}_1 \vee D_3\overline{D}_2D_1 \vee D_3D_2\overline{D}_1 \vee D_3D_2D_1) = \\
+      &= C \cdot R \cdot D_0 \cdot [\overline{D}_3\overline{D}_2(\overline{D}_1 \vee D_1) \vee \overline{D}_3D_2(\overline{D}_1 \vee D_1) \vee D_3\overline{D}_2(\overline{D}_1 \vee D_1) \vee D_3D_2(\overline{D}_1 \vee D_1)] = \\
+      &= C \cdot R \cdot D_0 \cdot [\overline{D}_3\overline{D}_2 \vee \overline{D}_3D_2 \vee D_3\overline{D}_2 \vee D_3D_2] = \\
+      &= C \cdot R \cdot D_0 \cdot [\overline{D}_3(\overline{D}_2 \vee D_2) \vee D_3(\overline{D}_2 \vee D_2)] = C \cdot R \cdot D_0 \cdot [\overline{D}_3 \vee D_3] = C \cdot D_0 \cdot R 
+\end{align*}
+
+Таким образом, каждый разряд регистра реализует независимую функцию перезаписи данных по тактовому сигналу при отсутствии активного сигнала сброса.
+
+\section{Функциональная схема параллельного регистра}
+Синтезированная функциональная схема строится на базе четырёх синхронных D-триггеров, обладающих входами асинхронного сброса. Информационные входы $D_3 \dots D_0$ подключаются напрямую к соответствующим $D$-входам триггеров. Линии тактовой синхронизации $C$ и асинхронного сброса $R$ объединяются параллельно, формируя общие управляющие шины устройства.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth,height=0.95\textheight,keepaspectratio]{pics/functional_diagram.png}
+  \caption{Функциональная схема 4-разрядного параллельного регистра на D-триггерах}
+\end{figure}
+
+\section*{Вывод}
+В ходе выполнения контрольной работы были изучены принципы построения последовательностных цифровых узлов на примере четырёхразрядного параллельного регистра памяти. Была составлена полная таблица переходов устройства, получены и минимизированы канонические уравнения функций возбуждения выходов. На основе проведенного анализа спроектирована схема регистра на базе D-триггеров.
+
+\end{document}

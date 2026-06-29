@@ -1,0 +1,219 @@
+\documentclass[oneside,a4paper,14pt]{extarticle}
+\usepackage[a4paper,letterpaper,top=20mm,bottom=20mm,left=20mm,right=10mm]{geometry}
+\usepackage[russian]{babel}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{minted, fancyvrb}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage{colortbl}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{longtable}
+
+% Настройка автоматических подписей к рисункам
+\DeclareCaptionLabelSeparator{customdash}{~---~}
+\captionsetup[figure]{name=Рисунок, labelsep=customdash, justification=centering}
+
+% Форматирование заголовков
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+
+% Интерлиньяж и абзац
+\renewcommand\baselinestretch{1.33}
+\setlength{\parindent}{1.25cm}
+
+% Гиперссылки
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  pdfborder={0 0 0},
+  pdftitle={Синтез 4-разрядного компаратора},
+  pdfauthor={Черкасов А.А.},
+}
+
+\begin{document}
+
+\newpage
+\thispagestyle{empty}
+\begin{center}
+  МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ\\
+  ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ УЧРЕЖДЕНИЕ ВЫСШЕГО ОБРАЗОВАНИЯ\\
+  <<ВЯТСКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ>>\\
+  Институт математики и информационных систем\\
+  Факультет автоматики и вычислительной техники\\
+  Кафедра электронных вычислительных машин
+\end{center}
+\vspace{10mm}
+
+\hfill
+\begin{tabular}{l}
+  \footnotesize Дата сдачи на проверку:                                          \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2026 г. \\
+  \footnotesize Проверено:                                                       \\
+  \footnotesize <<\rule[-1mm]{5mm}{0.10mm}\/>>\rule[-1mm]{20mm}{0.10mm}\ 2026 г. \\
+\end{tabular}
+\vfill
+
+\begin{center}
+  Отчёт по контрольной работе\\
+  <<Синтез 4-разрядного цифрового компаратора>>\\
+  по дисциплине\\
+  <<Цифровая схемотехника>>\\
+\end{center}
+\vspace{25mm}
+\noindent
+\begin{tabular}{ll}
+  Разработал студент гр. ИВТб-2301-05-00 & \hspace{20mm}\rule[-1mm]{30mm}{0.10mm}\,/Черкасов А.А./ \\
+                                 & \hspace{27.5mm}\footnotesize(подпись)                   \\
+  Преподаватель                  & \hspace{20mm}\rule[-1mm]{30mm}{0.10mm}\,/Мельцов В. Ю./  \\
+                                 & \hspace{27.5mm}\footnotesize(подпись)                   \\
+\end{tabular}
+
+\noindent
+\begin{tabular}{lp{58mm}r}
+  Работа защищена &  & \hspace{8mm}<<\rule[-1mm]{8mm}{0.10mm}\/>>\rule[-1mm]{38mm}{0.10mm}\ 2026 г.
+\end{tabular}
+\vfill
+
+\begin{center}
+  Киров\\
+  2026
+\end{center}
+
+\newpage\thispagestyle{plain}
+
+\section{Цель работы}
+Получить практические навыки проектирования комбинационных логических устройств. Выполнить теоретический логический синтез и разработать принципиальную функциональную схему 4-разрядного цифрового компаратора, осуществляющего сравнение двух двоичных чисел.
+
+\section{Условно-графическое обозначение (УГО)}
+Цифровой компаратор принимает на вход два 4-разрядных слова $X (x_3, x_2, x_1, x_0)$ и $Y (y_3, y_2, y_1, y_0)$. На выходе формируются три взаимно исключающих сигнала: $R$ (Равно, $X=Y$), $B$ (Больше, $X>Y$) и $M$ (Меньше, $X<Y$).
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[thick]
+    \draw (0,-0.4) rectangle (3,4);
+    \node at (1.5, 3.5) {$==$};
+    % Входы X
+    \draw (-0.5, 3.2) -- (0, 3.2) node[right] {$x_3$};
+    \draw (-0.5, 2.8) -- (0, 2.8) node[right] {$x_2$};
+    \draw (-0.5, 2.4) -- (0, 2.4) node[right] {$x_1$};
+    \draw (-0.5, 2.0) -- (0, 2.0) node[right] {$x_0$};
+    % Входы Y
+    \draw (-0.5, 1.2) -- (0, 1.2) node[right] {$y_3$};
+    \draw (-0.5, 0.8) -- (0, 0.8) node[right] {$y_2$};
+    \draw (-0.5, 0.4) -- (0, 0.4) node[right] {$y_1$};
+    \draw (-0.5, 0.0) -- (0, 0.0) node[right] {$y_0$};
+    % Выходы
+    \draw (3, 2.4) -- (3.5, 2.4) node[right] {$R$};
+    \draw (3, 1.6) -- (3.5, 1.6) node[right] {$B$};
+    \draw (3, 0.8) -- (3.5, 0.8) node[right] {$M$};
+  \end{tikzpicture}
+  \caption{УГО 4-разрядного цифрового компаратора}
+\end{figure}
+
+\section{Таблица истинности}
+Полная таблица истинности устройства содержит $2^8 = 256$ строк. Для оптимизации описания использован метод фиксации безразличных состояний (обозначены знаком <<*>>). Сравнение чисел осуществляется поразрядно, начиная с самого старшего бита ($x_3$ и $y_3$).
+
+\begin{center}
+  \begin{longtable}{cccc|cccc|ccc}
+    \caption*{Таблица 1 --- Таблица переходов 4-разрядного компаратора} \\
+    \hline
+    $x_3$ & $x_2$ & $x_1$ & $x_0$ & $y_3$ & $y_2$ & $y_1$ & $y_0$ & $R$ & $B$ & $M$ \\
+    \hline
+    \endfirsthead
+
+    \caption*{(Продолжение таблицы 1)} \\
+    \hline
+    $x_3$ & $x_2$ & $x_1$ & $x_0$ & $y_3$ & $y_2$ & $y_1$ & $y_0$ & $R$ & $B$ & $M$ \\
+    \hline
+    \endhead
+
+    \hline
+    \endfoot
+
+    \hline
+    \endlastfoot
+
+    1 & * & * & * & 0 & * & * & * & 0 & 1 & 0 \\
+    0 & * & * & * & 1 & * & * & * & 0 & 0 & 1 \\
+    0 & 1 & * & * & 0 & 0 & * & * & 0 & 1 & 0 \\
+    0 & 0 & * & * & 0 & 1 & * & * & 0 & 0 & 1 \\
+    1 & 1 & * & * & 1 & 0 & * & * & 0 & 1 & 0 \\
+    1 & 0 & * & * & 1 & 1 & * & * & 0 & 0 & 1 \\
+    0 & 0 & 1 & * & 0 & 0 & 0 & * & 0 & 1 & 0 \\
+    0 & 0 & 0 & * & 0 & 0 & 1 & * & 0 & 0 & 1 \\
+    1 & 1 & 1 & * & 1 & 1 & 0 & * & 0 & 1 & 0 \\
+    1 & 1 & 0 & * & 1 & 1 & 1 & * & 0 & 0 & 1 \\
+    1 & 0 & 1 & * & 1 & 0 & 0 & * & 0 & 1 & 0 \\
+    1 & 0 & 0 & * & 1 & 0 & 1 & * & 0 & 0 & 1 \\
+    0 & 1 & 1 & * & 0 & 1 & 0 & * & 0 & 1 & 0 \\
+    0 & 1 & 0 & * & 0 & 1 & 1 & * & 0 & 0 & 1 \\
+    0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 1 \\
+    1 & 1 & 1 & 1 & 1 & 1 & 1 & 0 & 0 & 1 & 0 \\
+    1 & 1 & 1 & 0 & 1 & 1 & 1 & 1 & 0 & 0 & 1 \\
+    0 & 0 & 1 & 1 & 0 & 0 & 1 & 0 & 0 & 1 & 0 \\
+    0 & 0 & 1 & 0 & 0 & 0 & 1 & 1 & 0 & 0 & 1 \\
+    0 & 1 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 1 & 0 \\
+    0 & 1 & 0 & 0 & 0 & 1 & 0 & 1 & 0 & 0 & 1 \\
+    1 & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 0 & 1 & 0 \\
+    1 & 0 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 1 \\
+    0 & 1 & 1 & 1 & 0 & 1 & 1 & 0 & 0 & 1 & 0 \\
+    0 & 1 & 1 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 1 \\
+    1 & 0 & 1 & 1 & 1 & 0 & 1 & 0 & 0 & 1 & 0 \\
+    1 & 0 & 1 & 0 & 1 & 0 & 1 & 1 & 0 & 0 & 1 \\
+    1 & 1 & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 1 & 0 \\
+    1 & 1 & 0 & 0 & 1 & 1 & 0 & 1 & 0 & 0 & 1 \\
+    0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\
+    1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 0 & 0 \\
+  \end{longtable}
+\end{center}
+
+\section{Канонические уравнения (КУ)}
+На основе таблицы истинности составим систему логических уравнений для выходов $R$, $B$ и $M$. Выражение равенства одноимённых разрядов описывается эквивалентностью $(\overline{x}_i \cdot \overline{y}_i \vee x_i \cdot y_i)$.
+
+Уравнение функции $R$ (Равно):
+\begin{equation}
+  R = (\overline{x}_3\overline{y}_3 \vee x_3y_3) \cdot (\overline{x}_2\overline{y}_2 \vee x_2y_2) \cdot (\overline{x}_1\overline{y}_1 \vee x_1y_1) \cdot (\overline{x}_0\overline{y}_0 \vee x_0y_0)
+\end{equation}
+
+Уравнение функции $B$ (Больше):
+\begin{align*}
+  B = {} & (x_3\overline{y}_3) \vee \\
+         & (\overline{x}_3\overline{y}_3 \vee x_3y_3)(x_2\overline{y}_2) \vee \\
+         & (\overline{x}_3\overline{y}_3 \vee x_3y_3)(\overline{x}_2\overline{y}_2 \vee x_2y_2)(x_1\overline{y}_1) \vee \\
+         & (\overline{x}_3\overline{y}_3 \vee x_3y_3)(\overline{x}_2\overline{y}_2 \vee x_2y_2)(\overline{x}_1\overline{y}_1 \vee x_1y_1)(x_0\overline{y}_0)
+\end{align*}
+
+Уравнение функции $M$ (Меньше):
+\begin{align*}
+  M = {} & (\overline{x}_3y_3) \vee \\
+         & (\overline{x}_3\overline{y}_3 \vee x_3y_3)(\overline{x}_2y_2) \vee \\
+         & (\overline{x}_3\overline{y}_3 \vee x_3y_3)(\overline{x}_2\overline{y}_2 \vee x_2y_2)(\overline{x}_1y_1) \vee \\
+         & (\overline{x}_3\overline{y}_3 \vee x_3y_3)(\overline{x}_2\overline{y}_2 \vee x_2y_2)(\overline{x}_1\overline{y}_1 \vee x_1y_1)(\overline{x}_0y_0)
+\end{align*}
+
+\section{Минимизация логических функций}
+Анализ полученных канонических уравнений показывает, что функции не поддаются дальнейшей алгебраической минимизации. 
+
+Функция $R$ не имеет повторяющихся термов. Для функций $B$ и $M$ невозможно вынести повторяющиеся блоки за скобки, так как условия проверки младших разрядов строго каскадно связаны с эквивалентностью всех предыдущих старших разрядов. Попытка сокращения приведёт к нарушению логики каскадной приоритетной проверки.
+
+\section{Функциональная схема устройства}
+Схема цифрового компаратора спроектирована на основе полученных неминимизированных канонических уравнений.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth,keepaspectratio]{pics/functional_diagram.png}
+  \caption{Схема электрическая функциональная 4-разрядного цифрового компаратора}
+\end{figure}
+
+\section*{Вывод}
+В результате выполнения работы осуществлен структурный логический синтез 4-разрядного цифрового компаратора. На основе таблицы истинности с учетом безразличных состояний были выведены строгие канонические уравнения для функций <<Равно>>, <<Больше>> и <<Меньше>>. Доказано, что каскадный алгоритм поразрядного сравнения исключает возможность глубокой алгебраической минимизации из-за жесткой привязки младших разрядов к результатам проверки старших. Спроектированная функциональная схема полностью реализует заданный математический аппарат.
+\end{document}
